@@ -22,6 +22,7 @@ namespace Engine {
 		void SetView(glm::vec3 direction, glm::vec3 up);
 		void SetProjection(ProjectionType type);
 		void Init(Shader& shader);
+		void RotateCamera();
 		glm::mat4 GetView();
 		glm::mat4 GetProjection();
 		glm::mat4 GetMVP();

@@ -49,6 +49,13 @@ void Camera::Init(Shader& shader){
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(GetProjection()));
 }
 
+void Camera::RotateCamera() {
+	const float radius = 10.0f;
+	float camX = sin(glfwGetTime()) * radius;
+	float camZ = cos(glfwGetTime()) * radius;
+	_view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+}
+
 glm::mat4 Camera::GetView(){
 	return _view;
 }
