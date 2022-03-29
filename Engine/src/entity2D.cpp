@@ -45,7 +45,7 @@ void Engine::Entity2D::RotateX(float angle) {
 }
 
 void Engine::Entity2D::RotateY(float angle) {
-	transform.rotation.x = angle;
+	transform.rotation.y = angle;
 	glm::vec3 axis = glm::vec3(1.0);
 	axis[0] = 0.0f;
 	axis[1] = 1.0f;
@@ -55,7 +55,7 @@ void Engine::Entity2D::RotateY(float angle) {
 }
 
 void Engine::Entity2D::RotateZ(float angle) {
-	transform.rotation.x = angle;
+	transform.rotation.z = angle;
 	glm::vec3 axis = glm::vec3(1.0);
 	axis[0] = 0.0f;
 	axis[1] = 0.0f;

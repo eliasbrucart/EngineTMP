@@ -31,7 +31,7 @@ void Camera::SetProjection(ProjectionType type){
 		_projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, 0.01f, 100.0f);
 		break;
 	case ProjectionType::perspective:
-		_projection = glm::perspective(glm::radians(45.0f), GLfloat(1280.0f) / GLfloat(720.0f), 0.01f, 100.0f);
+		_projection = glm::perspective(glm::radians(45.0f), GLfloat(1280.0f) / GLfloat(720.0f), 1.0f, 100.0f);
 		break;
 	default:
 		break;
@@ -66,5 +66,5 @@ ProjectionType Camera::GetProjectionType(){
 }
 
 void Camera::Draw(Shader& shader){
-	_renderer->DrawCamera(shader, GetModel(), GetView());
+	_renderer->DrawCamera(shader, GetModel(), GetView(), GetProjection());
 }

@@ -27,7 +27,7 @@ namespace Engine {
 		void SetTexAttribPointer(unsigned int shaderID);
 		void Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount);
 		void DrawSprite(Shader &shader, unsigned int &vao, unsigned int &vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model);
-		void DrawCamera(Shader& shader, glm::mat4 model, glm::mat4 view);
+		void DrawCamera(Shader& shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 	};
 }
 

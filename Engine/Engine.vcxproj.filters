@@ -78,9 +78,6 @@
     <ClInclude Include="src\texture_importer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\stb_image.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\animation.h">
       <Filter>Sprite</Filter>
     </ClInclude>
@@ -106,6 +103,9 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

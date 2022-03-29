@@ -11,10 +11,10 @@ private:
 	float angle = 0;
 	float t = 0;
 	glm::vec2 shapePos = glm::vec2(0,0);
-	Sprite* _sprite = NULL;
-	Animation* player = NULL;
-	Tilemap* map = NULL;
-
+	Shape* _shape = NULL;
+	//Sprite* _sprite = NULL;
+	//Animation* player = NULL;
+	//Tilemap* map = NULL;
 public:
 	Game();
 	~Game();
