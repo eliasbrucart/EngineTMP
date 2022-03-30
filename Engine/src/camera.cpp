@@ -14,9 +14,8 @@ Camera::Camera(Renderer* renderer, ProjectionType type){
 	_view = glm::mat4(1.0);
 	_projection = glm::mat4(1.0);
 	_type = type;
-	//_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-	//_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	//_cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	_yaw = -90.0f;
+	_pitch = 0.0f;
 }
 
 Camera::~Camera(){

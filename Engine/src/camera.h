@@ -26,6 +26,11 @@ namespace Engine {
 		glm::vec3 _cameraPos;
 		glm::vec3 _cameraFront;
 		glm::vec3 _cameraUp;
+		float _yaw;
+		float _pitch;
+		float _roll;
+		float _lastX;
+		float _lastY;
 	public:
 		Camera(Renderer* renderer, ProjectionType type);
 		~Camera();
