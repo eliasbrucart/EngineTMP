@@ -48,12 +48,16 @@ int Base::Init(){
 	basicShader.Create("..//Engine//src//Shaders//vertex.vert", "..//Engine//src//Shaders//fragment.frag");
 	textureShader.Create("..//Engine//src//Shaders//texture_vert.vert", "..//Engine//src//Shaders//texture_frag.frag");
 	glEnable(GL_DEPTH_TEST);
-	_camera->transform.position = glm::vec3(0.0f, 0.0f, 3.0f);
-	_camera->SetView(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//_camera->SetView(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	_camera->SetProjection(ProjectionType::perspective);
-	_camera->Init(basicShader);
-	_camera->Init(textureShader);
-
+	_camera->Init(basicShader, _window->GetWindow());
+	//_camera->Init(textureShader, _window->GetWindow());
+	//_camera->SetLookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//_camera->SetCameraPos(glm::vec3(0.0f, 0.0f, 3.0f));
+	_camera->transform.position = glm::vec3(0.0f, 0.0f, 3.0f);
+	_camera->SetCameraPos(_camera->transform.position);
+	_camera->SetCameraFront(glm::vec3(0.0, 0.0, -1.0));
+	_camera->SetCameraUp(glm::vec3(0.0, 1.0, 0.0));
 	input.SetWindow(_window->GetWindow());
 
 	time.Reset();
@@ -68,13 +72,21 @@ void Base::Update(){
 		//_camera->transform.position.x += speed;
 		//std::cout << _camera->transform.position.x << std::endl;
 		UpdateGame();
-		//_camera->transform.position = glm::vec3(0.0f, 0.0f, -3.0f);
-		//_camera->SetView(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-		_camera->RotateCamera();
+		if (input.GetKey(KeyCode::W))
+			_camera->transform.position += speed * _camera->GetCameraFront();
+
+		if (input.GetKey(KeyCode::S))
+			_camera->transform.position -= speed * _camera->GetCameraFront();
+
+		if (input.GetKey(KeyCode::A))
+			_camera->transform.position -= glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed;
+
+		if (input.GetKey(KeyCode::D))
+			_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed;
+		//_camera->MoveCamera();
+		_camera->SetLookAt();
 		_camera->Draw(basicShader);
 		//_camera->Draw(textureShader);
-		//int modelLoc = glGetUniformLocation(textureShader.GetID(), "model");
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		time.CalculateFPS();
 		time.Tick();
 		_renderer->EndFrame(_window->GetWindow());

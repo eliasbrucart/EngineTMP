@@ -14,13 +14,16 @@ Camera::Camera(Renderer* renderer, ProjectionType type){
 	_view = glm::mat4(1.0);
 	_projection = glm::mat4(1.0);
 	_type = type;
+	//_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+	//_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	//_cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
 Camera::~Camera(){
 }
 
 void Camera::SetView(glm::vec3 direction, glm::vec3 up){
-	_view = glm::translate(_view, transform.position);
+	_view = glm::translate(_view, _cameraPos);
 }
 
 void Camera::SetProjection(ProjectionType type){
@@ -39,7 +42,7 @@ void Camera::SetProjection(ProjectionType type){
 }
 
 //Le pasamos las matrices al shader y lo modificamos
-void Camera::Init(Shader& shader){
+void Camera::Init(Shader& shader, GLFWwindow* window){
 	unsigned int transformLoc = glGetUniformLocation(shader.GetID(), "model");
 	unsigned int viewLoc = glGetUniformLocation(shader.GetID(), "view");
 	unsigned int projLoc = glGetUniformLocation(shader.GetID(), "projection");
@@ -47,6 +50,35 @@ void Camera::Init(Shader& shader){
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(GetModel()));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(GetView()));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(GetProjection()));
+	inputCam.SetWindow(window);
+}
+
+void Camera::SetCameraPos(glm::vec3 cameraPos) {
+	_cameraPos = cameraPos;
+}
+
+void Camera::SetCameraFront(glm::vec3 cameraFront) {
+	_cameraFront = cameraFront;
+}
+
+void Camera::SetCameraUp(glm::vec3 cameraUp) {
+	_cameraUp = cameraUp;
+}
+
+glm::vec3 Camera::GetCameraPos() {
+	return _cameraPos;
+}
+
+glm::vec3 Camera::GetCameraFront() {
+	return _cameraFront;
+}
+
+glm::vec3 Camera::GetCameraUp() {
+	return _cameraUp;
+}
+
+void Camera::SetLookAt() {
+	_view = glm::lookAt(transform.position, transform.position + _cameraFront, _cameraUp);
 }
 
 void Camera::RotateCamera() {

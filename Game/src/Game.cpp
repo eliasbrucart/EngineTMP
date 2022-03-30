@@ -16,6 +16,11 @@ Game::~Game() {
 	//	player = NULL;
 	//}
 
+	if (_shape != NULL) {
+		delete _shape;
+		_shape = NULL;
+	}
+
 	//if (map != NULL) {
 	//	delete map;
 	//	map = NULL;
@@ -49,21 +54,20 @@ void Game::InitGame() {
 	//ahora se pueden mover las cosas estilo unity
 	//_sprite->Color(1.0f, 1.0f, 1.0f);
 	//_sprite->transform.position = glm::vec3(400,400,0);
-	_shape->RotateX(1.0f * speed * time.GetDeltaTime());
 }
 void Game::PlayerInputs() {
-	if (input.GetKey(KeyCode::W)) {
-		_shape->transform.position.y += speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::S)) {
-		_shape->transform.position.y -= speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::D)) {
-		_shape->transform.position.x += speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::A)) {
-		_shape->transform.position.x -= speed * time.GetDeltaTime();
-	}
+	//if (input.GetKey(KeyCode::W)) {
+	//	_shape->transform.position.y += speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::S)) {
+	//	_shape->transform.position.y -= speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::D)) {
+	//	_shape->transform.position.x += speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::A)) {
+	//	_shape->transform.position.x -= speed * time.GetDeltaTime();
+	//}
 	//
 	//if (input.GetMouseButton(MouseButtons::LEFT_MOUSE_BUTTON)) {
 	//	player->SetAnimation(0);
