@@ -26,12 +26,13 @@ namespace Engine {
 		glm::vec3 _cameraPos;
 		glm::vec3 _cameraFront;
 		glm::vec3 _cameraUp;
-		float _yaw;
-		float _pitch;
 		float _roll;
 		float _lastX;
 		float _lastY;
 	public:
+		float _yaw;
+		float _pitch;
+		bool _firstMouse;
 		Camera(Renderer* renderer, ProjectionType type);
 		~Camera();
 		void SetView(glm::vec3 direction, glm::vec3 up);
@@ -42,10 +43,20 @@ namespace Engine {
 		void SetCameraPos(glm::vec3 cameraPos);
 		void SetCameraFront(glm::vec3 cameraFront);
 		void SetCameraUp(glm::vec3 cameraUp);
+		void SetYaw(float yaw);
+		void SetPitch(float pitch);
+		void SetLastX(float lastX);
+		void SetLastY(float lastY);
+		float GetYaw();
+		float GetPitch();
+		float GetLastX();
+		float GetLastY();
+		void RotateYaw(float yaw);
+		void RotatePitch(float pitch);
 		glm::vec3 GetCameraPos();
 		glm::vec3 GetCameraFront();
 		glm::vec3 GetCameraUp();
-		void RotateCamera();
+		void UpdateRotation();
 		glm::mat4 GetView();
 		glm::mat4 GetProjection();
 		glm::mat4 GetMVP();

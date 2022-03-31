@@ -39,7 +39,7 @@ void Game::InitGame() {
 	//_sprite->Init();
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
-	_shape->transform.position = glm::vec3(0, 0, -30.0f);
+	_shape->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
 	_shape->transform.scale = glm::vec3(10.0f, 10.0f, 1.0f);
 	//player->Init(_sprite, glm::ivec2(6,3));
 	//   first frame     Last frame   Loop    anim speed
