@@ -147,8 +147,8 @@ void Camera::UpdateRotation() {
 	_cameraFront.y = glm::sin(glm::radians(transform.rotation.x));
 	_cameraFront.z = glm::sin(glm::radians(transform.rotation.y)) * glm::cos(glm::radians(transform.rotation.x));
 	SetCameraFront(glm::normalize(_cameraFront));
-	glm::vec3 _right = glm::normalize(glm::cross(_cameraFront, _cameraUp));
-	_cameraUp = glm::normalize(glm::cross(_right, _cameraFront));
+	//glm::vec3 _right = glm::normalize(glm::cross(_cameraFront, _cameraUp));
+	//_cameraUp = glm::normalize(glm::cross(_right, _cameraFront));
 	//limitamos que el pitch se pase de rotacion
 	if (_pitch > 89.0f)
 		_pitch = 89.0f;
@@ -161,11 +161,11 @@ void Camera::UpdateRotation() {
 }
 
 void Camera::RotateYaw(float yaw) {
-	transform.rotation.y = yaw;
+	transform.rotation.y += yaw;
 }
 
 void Camera::RotatePitch(float pitch) {
-	transform.rotation.x = pitch;
+	transform.rotation.x += pitch;
 }
 
 glm::mat4 Camera::GetView(){

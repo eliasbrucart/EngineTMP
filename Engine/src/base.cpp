@@ -67,7 +67,7 @@ int Base::Init(){
 
 void Base::Update(){
 	float speed = 50.0f;
-	float rotationSpeed = 50.0f;
+	float rotationSpeed = 100.0f; //dejamos como esta
 	while (!glfwWindowShouldClose(_window->GetWindow())){
 		_renderer->BeginFrame(0.0f,0.0f,0.0f);
 		//_camera->transform.position.x += speed;
@@ -86,23 +86,23 @@ void Base::Update(){
 			_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * (speed * time.GetDeltaTime());
 
 		if (input.GetKey(KeyCode::DOWN)) {
-			rotationSpeed += rotationSpeed * time.GetDeltaTime();
-			_camera->RotatePitch(-rotationSpeed);
+			//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+			_camera->RotatePitch(-rotationSpeed * time.GetDeltaTime());
 		}
 
 		if (input.GetKey(KeyCode::UP)) {
-			rotationSpeed += rotationSpeed * time.GetDeltaTime();
-			_camera->RotatePitch(rotationSpeed);
+			//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+			_camera->RotatePitch(rotationSpeed * time.GetDeltaTime());
 		}
 
 		if (input.GetKey(KeyCode::LEFT)) {
-			rotationSpeed += rotationSpeed * time.GetDeltaTime();
-			_camera->RotateYaw(-rotationSpeed);
+			//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+			_camera->RotateYaw(-rotationSpeed * time.GetDeltaTime());
 		}
 
 		if (input.GetKey(KeyCode::RIGHT)) {
-			rotationSpeed += rotationSpeed * time.GetDeltaTime();
-			_camera->RotateYaw(rotationSpeed);
+			//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+			_camera->RotateYaw(rotationSpeed * time.GetDeltaTime());
 		}
 		//_camera->MoveCamera();
 		_camera->UpdateRotation();

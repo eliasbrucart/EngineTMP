@@ -29,10 +29,10 @@ namespace Engine {
 		float _roll;
 		float _lastX;
 		float _lastY;
-	public:
 		float _yaw;
 		float _pitch;
 		bool _firstMouse;
+	public:
 		Camera(Renderer* renderer, ProjectionType type);
 		~Camera();
 		void SetView(glm::vec3 direction, glm::vec3 up);
