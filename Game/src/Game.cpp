@@ -21,6 +21,11 @@ Game::~Game() {
 		_shape = NULL;
 	}
 
+	if (_shape2 != NULL) {
+		delete _shape2;
+		_shape2 = NULL;
+	}
+
 	//if (map != NULL) {
 	//	delete map;
 	//	map = NULL;
@@ -34,13 +39,20 @@ void Game::InitGame() {
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");
 	_shape = new Shape(Type::quad, GetRenderer(), basicShader);
+	_shape2 = new Shape(Type::quad, GetRenderer(), basicShader);
 
 	_shape->Init();
+	_shape2->Init();
 	//_sprite->Init();
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
-	_shape->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
+	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
 	_shape->transform.scale = glm::vec3(10.0f, 10.0f, 1.0f);
+
+	_shape2->Color(0.0f, 0.0f, 1.0f);
+	_shape2->transform.position = glm::vec3(2.0f, 0.0f, -10.0f);
+	_shape2->transform.scale = glm::vec3(10.0f, 10.0f, 1.0f);
+
 	//player->Init(_sprite, glm::ivec2(6,3));
 	//   first frame     Last frame   Loop    anim speed
 	//player->AddAnimation(0, 6, false, 1.f); //ataque
@@ -56,18 +68,18 @@ void Game::InitGame() {
 	//_sprite->transform.position = glm::vec3(400,400,0);
 }
 void Game::PlayerInputs() {
-	//if (input.GetKey(KeyCode::W)) {
-	//	_shape->transform.position.y += speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::S)) {
-	//	_shape->transform.position.y -= speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::D)) {
-	//	_shape->transform.position.x += speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::A)) {
-	//	_shape->transform.position.x -= speed * time.GetDeltaTime();
-	//}
+	if (input.GetKey(KeyCode::W)) {
+		_shape->transform.position.z -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::S)) {
+		_shape->transform.position.z += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::D)) {
+		_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::A)) {
+		_shape->transform.position.x -= speed * time.GetDeltaTime();
+	}
 	//
 	//if (input.GetMouseButton(MouseButtons::LEFT_MOUSE_BUTTON)) {
 	//	player->SetAnimation(0);
@@ -86,7 +98,23 @@ void Game::UpdateGame() {
 	//
 	//_sprite->RotateZ(-55.0f);
 
+	//_camera->SetCameraFront(_shape->transform.position);
+
+	//glm::vec3 thirdPosition = _shape->transform.position + glm::vec3(_shape->transform.position.x, 0.0f, _shape->transform.position.z + 10.0f);
+
+	//_camera->transform.position.x = _shape->transform.position.x;
+	//_camera->transform.position.z = _shape->transform.position.z + 15.0f;
+
+	//_camera->SetLookAt(_shape->transform.position.x, _shape->transform.position.z + 15.0f, _shape->transform.position + glm::vec3(0.0f, 0.0f, 5.0f));
+
+	_camera->FollowTarget(_shape->transform.position);
+
+	//cout << "shape position z: " << _shape->transform.position.z << endl;
+
+	//_camera->UpdateRotation(_shape->transform.position);
+
 	_shape->Draw();
+	_shape2->Draw();
 
 	//map->Draw();
 	
@@ -102,6 +130,11 @@ void Game::UnloadGame() {
 	if (_shape != NULL) {
 		delete _shape;
 		_shape = NULL;
+	}
+
+	if (_shape2 != NULL) {
+		delete _shape2;
+		_shape2 = NULL;
 	}
 
 	//if (_sprite != NULL) {

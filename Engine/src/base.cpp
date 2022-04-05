@@ -8,7 +8,7 @@ using namespace Engine;
 Base::Base(){
 	_renderer = new Renderer();
 	_window = new Window(1280, 720);
-	_camera = new Camera(_renderer, ProjectionType::perspective);
+	_camera = new Camera(_renderer, ProjectionType::perspective, CamMode::thirdPerson);
 	collisionmanager = new CollisionManager();
 }
 
@@ -54,9 +54,9 @@ int Base::Init(){
 	_camera->Init(basicShader, _window->GetWindow());
 	//_camera->Init(textureShader, _window->GetWindow());
 	//_camera->SetLookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	_camera->SetCameraPos(glm::vec3(0.0f, 0.0f, 3.0f));
+	_camera->SetCameraPos(glm::vec3(0.0f, 0.0f, 5.0f));
 	//_camera->transform.position = glm::vec3(0.0f, 0.0f, 3.0f);
-	_camera->SetCameraFront(glm::vec3(0.0, 0.0, -1.0f));
+	_camera->SetCameraFront(glm::vec3(0.0, 0.0, -2.0f));
 	_camera->SetCameraUp(glm::vec3(0.0, 1.0, 0.0));
 	input.SetWindow(_window->GetWindow());
 
@@ -73,17 +73,18 @@ void Base::Update(){
 		//_camera->transform.position.x += speed;
 		//std::cout << _camera->transform.position.x << std::endl;
 		UpdateGame();
-		if (input.GetKey(KeyCode::W))
-			_camera->transform.position += (speed * time.GetDeltaTime()) * _camera->GetCameraFront();
-
-		if (input.GetKey(KeyCode::S))
-			_camera->transform.position -= (speed * time.GetDeltaTime()) * _camera->GetCameraFront();
-
-		if (input.GetKey(KeyCode::A))
-			_camera->transform.position -= glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * (speed * time.GetDeltaTime());
-
-		if (input.GetKey(KeyCode::D))
-			_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * (speed * time.GetDeltaTime());
+		//if (input.GetKey(KeyCode::T))
+		//	_camera->transform.position += (speed * time.GetDeltaTime()) * _camera->GetCameraFront();
+		//
+		//if (input.GetKey(KeyCode::G))
+		//	_camera->transform.position -= (speed * time.GetDeltaTime()) * _camera->GetCameraFront();
+		//
+		//if (input.GetKey(KeyCode::F))
+		//	_camera->transform.position -= glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * (speed * time.GetDeltaTime());
+		//
+		//if (input.GetKey(KeyCode::G))
+		//	_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * (speed * time.GetDeltaTime());
+		
 
 		if (input.GetKey(KeyCode::DOWN)) {
 			//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
@@ -104,9 +105,9 @@ void Base::Update(){
 			//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
 			_camera->RotateYaw(rotationSpeed * time.GetDeltaTime());
 		}
-		//_camera->MoveCamera();
+
 		_camera->UpdateRotation();
-		_camera->SetLookAt();
+		//_camera->SetLookAt();
 		_camera->Draw(basicShader);
 		//_camera->Draw(textureShader);
 		time.CalculateFPS();

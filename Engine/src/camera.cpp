@@ -10,7 +10,7 @@
 using namespace Engine;
 
 
-Camera::Camera(Renderer* renderer, ProjectionType type){
+Camera::Camera(Renderer* renderer, ProjectionType type, CamMode mode){
 	_renderer = renderer;
 	_view = glm::mat4(1.0);
 	_projection = glm::mat4(1.0);
@@ -20,6 +20,7 @@ Camera::Camera(Renderer* renderer, ProjectionType type){
 	_lastX = 1280.0f / 2.0f;
 	_lastY = 720.0f / 2.0f;
 	_firstMouse = true;
+	_mode = mode;
 }
 
 Camera::~Camera(){
@@ -56,6 +57,10 @@ void Camera::Init(Shader& shader, GLFWwindow* window){
 	inputCam.SetWindow(window);
 	
 	//glfwSetCursorPosCallback(window, mouse_callback);
+}
+
+void Camera::SetCameraMode(CamMode mode) {
+	_mode = mode;
 }
 
 void Camera::SetCameraPos(glm::vec3 cameraPos) {
@@ -114,8 +119,33 @@ glm::vec3 Camera::GetCameraUp() {
 	return _cameraUp;
 }
 
-void Camera::SetLookAt() {
-	_view = glm::lookAt(transform.position, transform.position + _cameraFront, _cameraUp);
+void Camera::SetLookAt(glm::vec3 forward) {
+	if(_mode == CamMode::firstPerson)
+		_view = glm::lookAt(transform.position, transform.position + _cameraFront, _cameraUp);
+	else if (_mode == CamMode::thirdPerson) {
+		_view = glm::lookAt(transform.position, forward, _cameraUp);
+	}
+}
+
+void Camera::FollowTarget(glm::vec3 positionTarget) {
+	if (_mode == CamMode::thirdPerson) {
+		//En todos los frames estamos seteando la posicion de la camara
+		transform.position.x = positionTarget.x;
+		transform.position.y = positionTarget.y + 10.0f;
+		transform.position.z = positionTarget.z + 20.0f;
+		//SetCameraFront(positionTarget);
+		RotatePitch(-10.0f);
+		//SetCameraFront(positionTarget);
+		SetLookAt(positionTarget);
+	}
+}
+
+void Camera::RotateAroundTarget(float x, float z) {
+	float radius = 5.0f;
+	float newX = sin(x) * radius;
+	float newZ = cos(z) * radius;
+	transform.position.x = newX;
+	transform.position.z = newZ;
 }
 
 void Camera::UpdateRotation() {
@@ -154,7 +184,7 @@ void Camera::UpdateRotation() {
 		_pitch = 89.0f;
 	if (_pitch < -89.0f)
 		_pitch = -89.0f;
-	//const float radius = 10.0f;
+	
 	//float camX = sin(glfwGetTime()) * radius;
 	//float camZ = cos(glfwGetTime()) * radius;
 	//_view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
