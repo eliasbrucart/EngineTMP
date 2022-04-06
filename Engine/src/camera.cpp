@@ -130,12 +130,11 @@ void Camera::SetLookAt(glm::vec3 forward) {
 void Camera::FollowTarget(glm::vec3 positionTarget) {
 	if (_mode == CamMode::thirdPerson) {
 		//En todos los frames estamos seteando la posicion de la camara
-		transform.position.x = positionTarget.x;
 		transform.position.y = positionTarget.y + 10.0f;
-		transform.position.z = positionTarget.z + 20.0f;
-		//SetCameraFront(positionTarget);
 		RotatePitch(-10.0f);
-		//SetCameraFront(positionTarget);
+		float radius = 10.0f;
+		transform.position.x = positionTarget.x + sin(glfwGetTime()) * radius;
+		transform.position.z = positionTarget.z + cos(glfwGetTime()) * radius;
 		SetLookAt(positionTarget);
 	}
 }
