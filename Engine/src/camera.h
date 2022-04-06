@@ -37,6 +37,7 @@ namespace Engine {
 		float _yaw;
 		float _pitch;
 		bool _firstMouse;
+		float _rotationAngle;
 	public:
 		Camera(Renderer* renderer, ProjectionType type, CamMode mode);
 		~Camera();
@@ -46,7 +47,6 @@ namespace Engine {
 		void SetCameraMode(CamMode mode);
 		void SetLookAt(glm::vec3 forward);
 		void FollowTarget(glm::vec3 positionTarget);
-		void RotateAroundTarget(float x, float z);
 		void SetCameraPos(glm::vec3 cameraPos);
 		void SetCameraFront(glm::vec3 cameraFront);
 		void SetCameraUp(glm::vec3 cameraUp);

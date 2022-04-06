@@ -21,6 +21,7 @@ Camera::Camera(Renderer* renderer, ProjectionType type, CamMode mode){
 	_lastY = 720.0f / 2.0f;
 	_firstMouse = true;
 	_mode = mode;
+	_rotationAngle = 10.0f;
 }
 
 Camera::~Camera(){
@@ -130,21 +131,17 @@ void Camera::SetLookAt(glm::vec3 forward) {
 void Camera::FollowTarget(glm::vec3 positionTarget) {
 	if (_mode == CamMode::thirdPerson) {
 		//En todos los frames estamos seteando la posicion de la camara
+		transform.position.x = positionTarget.x;
 		transform.position.y = positionTarget.y + 10.0f;
+		transform.position.z = positionTarget.z + 20.0f;
 		RotatePitch(-10.0f);
-		float radius = 10.0f;
-		transform.position.x = positionTarget.x + sin(glfwGetTime()) * radius;
-		transform.position.z = positionTarget.z + cos(glfwGetTime()) * radius;
+		float radius = 30.0f;
+		if (inputCam.GetKey(KeyCode::R)) {
+			transform.position.x = positionTarget.x + sin(_rotationAngle * glfwGetTime()) * radius;
+			transform.position.z = positionTarget.z + cos(_rotationAngle * glfwGetTime()) * radius;
+		}
 		SetLookAt(positionTarget);
 	}
-}
-
-void Camera::RotateAroundTarget(float x, float z) {
-	float radius = 5.0f;
-	float newX = sin(x) * radius;
-	float newZ = cos(z) * radius;
-	transform.position.x = newX;
-	transform.position.z = newZ;
 }
 
 void Camera::UpdateRotation() {
