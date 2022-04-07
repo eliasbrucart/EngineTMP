@@ -38,14 +38,14 @@ void Game::InitGame() {
 
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");
-	_shape = new Shape(Type::quad, GetRenderer(), basicShader);
+	_shape = new Shape(Type::cube, GetRenderer(), basicShader);
 	_shape2 = new Shape(Type::quad, GetRenderer(), basicShader);
 
 	_shape->Init();
 	_shape2->Init();
 	//_sprite->Init();
 
-	_shape->Color(1.0f, 0.0f, 0.0f);
+	//_shape->Color(1.0f, 0.0f, 0.0f);
 	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
 	_shape->transform.scale = glm::vec3(10.0f, 10.0f, 1.0f);
 

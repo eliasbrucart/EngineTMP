@@ -88,7 +88,7 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	shader.SetVertexAttributes("position",6); //especificamos como leer los datos del vertice y se lo pasamos al shader
 	shader.SetColorAttributes("color",6);
 	shader.Use(model);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
 void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model) {
