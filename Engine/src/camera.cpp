@@ -121,11 +121,11 @@ glm::vec3 Camera::GetCameraUp() {
 }
 
 void Camera::SetLookAt(glm::vec3 forward) {
-	//if(_mode == CamMode::firstPerson)
+	if(_mode == CamMode::firstPerson)
 		_view = glm::lookAt(transform.position, transform.position +  _cameraFront, _cameraUp);
-	//else if (_mode == CamMode::thirdPerson) {
-		//_view = glm::lookAt(transform.position, forward, _cameraUp);
-	//}
+	else if (_mode == CamMode::thirdPerson) {
+		_view = glm::lookAt(transform.position, forward, _cameraUp);
+	}
 }
 
 void Camera::FollowTarget(glm::vec3 positionTarget) {
