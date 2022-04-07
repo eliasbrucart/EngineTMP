@@ -78,7 +78,7 @@ void Game::PlayerInputs() {
 		_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::A)) {
-		_shape->transform.position.x -= speed * time.GetDeltaTime();
+		_shape->transform.position.z -= speed * time.GetDeltaTime();
 	}
 	//
 	//if (input.GetMouseButton(MouseButtons::LEFT_MOUSE_BUTTON)) {
@@ -109,7 +109,7 @@ void Game::UpdateGame() {
 
 	_camera->FollowTarget(_shape->transform.position);
 
-	//cout << "shape position z: " << _shape->transform.position.z << endl;
+	cout << "shape position z: " << _shape->transform.position.z << endl;
 
 	//_camera->UpdateRotation(_shape->transform.position);
 

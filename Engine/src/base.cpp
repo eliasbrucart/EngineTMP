@@ -106,7 +106,8 @@ void Base::Update(){
 			_camera->RotateYaw(rotationSpeed * time.GetDeltaTime());
 		}
 
-		_camera->UpdateRotation();
+		//metodo para primera persona
+		//_camera->UpdateRotation();
 		//_camera->SetLookAt();
 		_camera->Draw(basicShader);
 		//_camera->Draw(textureShader);

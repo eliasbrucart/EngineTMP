@@ -28,9 +28,6 @@ namespace Engine {
 		glm::mat4 _projection;
 		Input inputCam;
 		Time time;
-		glm::vec3 _cameraPos;
-		glm::vec3 _cameraFront;
-		glm::vec3 _cameraUp;
 		float _roll;
 		float _lastX;
 		float _lastY;
@@ -39,6 +36,10 @@ namespace Engine {
 		bool _firstMouse;
 		float _rotationAngle;
 	public:
+		glm::vec3 _cameraPos;
+		glm::vec3 _cameraFront;
+		glm::vec3 _cameraUp;
+		glm::vec3 _cameraRight;
 		Camera(Renderer* renderer, ProjectionType type, CamMode mode);
 		~Camera();
 		void SetView(glm::vec3 direction, glm::vec3 up);
