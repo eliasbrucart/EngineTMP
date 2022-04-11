@@ -47,7 +47,7 @@ void Game::InitGame() {
 
 	//_shape->Color(1.0f, 0.0f, 0.0f);
 	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
-	_shape->transform.scale = glm::vec3(10.0f, 10.0f, 1.0f);
+	_shape->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
 	_shape2->Color(0.0f, 0.0f, 1.0f);
 	_shape2->transform.position = glm::vec3(2.0f, 0.0f, -10.0f);
@@ -78,7 +78,7 @@ void Game::PlayerInputs() {
 		_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::A)) {
-		_shape->transform.position.z -= speed * time.GetDeltaTime();
+		_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
 	//
 	//if (input.GetMouseButton(MouseButtons::LEFT_MOUSE_BUTTON)) {
@@ -108,8 +108,6 @@ void Game::UpdateGame() {
 	//_camera->SetLookAt(_shape->transform.position.x, _shape->transform.position.z + 15.0f, _shape->transform.position + glm::vec3(0.0f, 0.0f, 5.0f));
 
 	_camera->FollowTarget(_shape->transform.position);
-
-	cout << "shape position z: " << _shape->transform.position.z << endl;
 
 	//_camera->UpdateRotation(_shape->transform.position);
 

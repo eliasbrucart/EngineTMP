@@ -21,7 +21,7 @@ Camera::Camera(Renderer* renderer, ProjectionType type, CamMode mode){
 	_lastY = 720.0f / 2.0f;
 	_firstMouse = true;
 	_mode = mode;
-	_rotationAngle = 10.0f;
+	_rotationAngle = 5.0f;
 }
 
 Camera::~Camera(){
