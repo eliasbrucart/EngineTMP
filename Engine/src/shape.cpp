@@ -53,8 +53,8 @@ void Shape::Init() {
 		BindEBO(_quadIndices, 6);
 		break;
 	case Engine::Type::cube:
-		BindVBO(_cubeVertices2, 48);
-		BindEBO(_cubeIndices, 36);
+		BindVBO(_cubeVertices2, 216);
+		BindEBO(_cubeIndices2, 36);
 		break;
 	}
 	_shader.SetVertexAttributes("position", 6);
@@ -110,7 +110,7 @@ void Shape::Draw() {
 		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _quadVertices, 24, _quadIndices, 6);
 		break;
 	case Engine::Type::cube:
-		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _cubeVertices, 48, _cubeIndices, 36);
+		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 216, _cubeIndices2, 36);
 		break;
 	}
 }
