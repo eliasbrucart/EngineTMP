@@ -40,11 +40,32 @@ void Renderer::GenerateVAO(unsigned int& vao) {
 void Renderer::BindVAO(unsigned int& vao) {
 	glBindVertexArray(vao);
 }
+
+void Renderer::GenerateLightVAO(unsigned int& lightvao) {
+	glGenVertexArrays(1, &lightvao);
+	glBindVertexArray(lightvao);
+}
+
+void Renderer::BindLightVAO(unsigned int& lightvao) {
+	glBindVertexArray(lightvao);
+}
+
+void Renderer::BindBufferLight(unsigned int& vbo) {
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+}
+
 void Renderer::BindVBO(unsigned int& vbo, float* vertices, int verticesAmmount) {
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) * verticesAmmount, vertices, GL_STATIC_DRAW);
 }
+
+void Renderer::BindLightVBO(unsigned int& lightvbo, float* vertices, int verticesAmmount) {
+	glGenBuffers(1, &lightvbo);
+	glBindBuffer(GL_ARRAY_BUFFER, lightvbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+}
+
 void Renderer::BindEBO(unsigned int& ebo, unsigned int* indices, int indicesAmmount) {
 	glGenBuffers(1, &ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -61,6 +82,13 @@ void Renderer::UnbindBuffers() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glUseProgram(0);
 }
+void Renderer::DeleteBuffers(unsigned int& vao, unsigned int& vbo, unsigned int& ebo, unsigned int& lightvao) {
+	glDeleteVertexArrays(1, &vao);
+	glDeleteVertexArrays(1, &lightvao);
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ebo);
+}
+
 void Renderer::DeleteBuffers(unsigned int& vao, unsigned int& vbo, unsigned int& ebo) {
 	glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &vbo);
@@ -87,8 +115,12 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	UpdateBuffers(vbo, vertices, verticesAmount);
 	shader.SetVertexAttributes("position",6); //especificamos como leer los datos del vertice y se lo pasamos al shader
 	shader.SetColorAttributes("color",6);
+	//Le pasamos al shdera la matriz modelo de cada shape
 	shader.Use(model);
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	//Temporal: Le pasamos al fragment shader un color del objeto y color de la luz, esto tiene que estar en la clase lighting cuando este
+	glUniform3f(glGetUniformLocation(shader.GetID(), "objectColor"), 1.0f, 0.5f, 0.31f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "lightColor"), 1.0f, 1.0f, 1.0f);
+	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
 void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model) {
@@ -97,6 +129,17 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	SetTexAttribPointer(shader.GetID());
 	shader.Use(model);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	UnbindBuffers();
+}
+
+void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& lightvao, unsigned int& lightvbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount) {
+	BindVAO(lightvao);
+	UpdateBuffers(lightvbo, vertices, verticesAmount);
+	//Para crear los punteros de atributos de vertices (AttribPointer)
+	shader.SetVertexAttributes("aPos",6);
+	//shader.SetColorAttributes("color",6);
+	shader.Use(model);
+	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
 

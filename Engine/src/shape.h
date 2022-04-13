@@ -8,13 +8,15 @@ namespace Engine {
 
 	enum class ENGINE_API Type
 	{
-		triangle, quad, cube
+		triangle, quad, cube, lightCube
 	};
 
 	class ENGINE_API Shape : public Entity2D {
 	private:
 		unsigned int _vao = 0;
+		unsigned int _lightvao = 0;
 		unsigned int _vbo = 0;
+		unsigned int _lightvbo = 0;
 		unsigned int _ebo = 0;
 
 		float _triVertices[18] = {
@@ -48,12 +50,12 @@ namespace Engine {
 		};
 
 		float _cubeVertices2[216] = {
-			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  //0
-			 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  //1
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  //2
-			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  //3
-			-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  //4
-			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  //5
+			-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  //0
+			 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  //1
+			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  //2
+			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  //3
+			-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  //4
+			-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  //5
 
 			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  //6
 			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  //7
@@ -127,7 +129,11 @@ namespace Engine {
 
 		void GenerateVAO();
 		void BindVAO();
+		void GenerateLightVAO();
+		void BindLightVAO();
+		void BindBufferLight();
 		void BindVBO(float* vertices, int verticesAmmount);
+		void BindLightVBO(float* vertices, int verticesAmmount);
 		void BindEBO(unsigned int* indices, int indicesAmmount);
 		void UnbindBuffers();
 		void DeleteBuffer();

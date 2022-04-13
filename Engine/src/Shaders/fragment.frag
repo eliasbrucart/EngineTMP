@@ -1,8 +1,9 @@
 #version 330 core
 
-in vec3 vertexColor;
+uniform vec3 objectColor;
+uniform vec3 lightColor;
 
 void main()
 {
-    gl_FragColor = vec4(vertexColor, 1.0);
+    gl_FragColor = vec4(lightColor * objectColor, 1.0);
 }
