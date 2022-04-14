@@ -71,8 +71,7 @@ void Renderer::BindEBO(unsigned int& ebo, unsigned int* indices, int indicesAmmo
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices) * indicesAmmount, indices, GL_STATIC_DRAW);
 }
-void Engine::Renderer::UpdateBuffers(unsigned int& vbo, float* vertices, int verticesAmmount)
-{
+void Engine::Renderer::UpdateBuffers(unsigned int& vbo, float* vertices, int verticesAmmount){
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) * verticesAmmount, vertices, GL_STATIC_DRAW);
 }
@@ -132,13 +131,13 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	UnbindBuffers();
 }
 
-void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& lightvao, unsigned int& lightvbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount) {
-	BindVAO(lightvao);
-	UpdateBuffers(lightvbo, vertices, verticesAmount);
+void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount) {
+	BindVAO(vao);
+	UpdateBuffers(vbo, vertices, verticesAmount);
 	//Para crear los punteros de atributos de vertices (AttribPointer)
-	shader.SetVertexAttributes("aPos",6);
-	//shader.SetColorAttributes("color",6);
+	shader.SetVertexAttributes("position",6);
 	shader.Use(model);
+	//shader.SetColorAttributes("color",6);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
@@ -149,7 +148,7 @@ void Renderer::DrawCamera(Shader& shader, glm::mat4 model, glm::mat4 view, glm::
 	unsigned int transformLoc = glGetUniformLocation(shader.GetID(), "model");
 	unsigned int viewLoc = glGetUniformLocation(shader.GetID(), "view");
 	unsigned int projectionLoc = glGetUniformLocation(shader.GetID(), "projection");
-	shader.Use();
+	shader.Use(model);
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));

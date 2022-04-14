@@ -38,11 +38,12 @@ void Game::InitGame() {
 
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");
-	_shape = new Shape(Type::lightCube, GetRenderer(), lightShader);
+	_shape = new Shape(Type::lightCube, GetRenderer(), basicShader);
 	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader);
 
 	_shape->Init();
 	_shape2->Init();
+
 	//_sprite->Init();
 
 	//_shape->Color(1.0f, 0.0f, 0.0f);
@@ -106,6 +107,8 @@ void Game::UpdateGame() {
 	//_camera->transform.position.z = _shape->transform.position.z + 15.0f;
 
 	//_camera->SetLookAt(_shape->transform.position.x, _shape->transform.position.z + 15.0f, _shape->transform.position + glm::vec3(0.0f, 0.0f, 5.0f));
+
+	//_shape->transform.position = glm::vec3(1.2f, 1.0f, -2.0f);
 
 	_camera->FollowTarget(_shape->transform.position);
 

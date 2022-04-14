@@ -83,7 +83,7 @@ void Shape::Init() {
 		//BindLightVAO();
 		BindVBO(_cubeVertices2, 216);
 		BindEBO(_cubeIndices2, 36);
-		_shader.SetVertexAttributes("aPos",6);
+		_shader.SetVertexAttributes("position",6);
 		break;
 	}
 	//Probar si estos se hace para todos los tipos de shape, si se cumple, 
