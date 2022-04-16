@@ -136,7 +136,9 @@ void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& vao, uns
 	UpdateBuffers(vbo, vertices, verticesAmount);
 	//Para crear los punteros de atributos de vertices (AttribPointer)
 	shader.SetVertexAttributes("position",6);
+	//shader.SetColorAttributes("color", 6);
 	shader.Use(model);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "objectColor"), 1.0f, 1.0f, 1.0f);
 	//shader.SetColorAttributes("color",6);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();

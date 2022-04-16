@@ -48,7 +48,6 @@ int Base::Init(){
 
 	basicShader.Create("..//Engine//src//Shaders//vertex.vert", "..//Engine//src//Shaders//fragment.frag");
 	textureShader.Create("..//Engine//src//Shaders//texture_vert.vert", "..//Engine//src//Shaders//texture_frag.frag");
-	lightShader.Create("..//Engine//src//Shaders//lightVertexShader.vert", "..//Engine//src//Shaders//lightFragmentShader.frag");
 	glEnable(GL_DEPTH_TEST);
 	//_camera->SetView(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	_camera->SetProjection(ProjectionType::perspective);

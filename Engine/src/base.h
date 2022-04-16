@@ -26,7 +26,6 @@ namespace Engine {
 		Camera* _camera;
 		Shader basicShader;
 		Shader textureShader;
-		Shader lightShader;
 		Renderer* GetRenderer();
 		Window* GetWindow();
 		CollisionManager* collisionmanager;
