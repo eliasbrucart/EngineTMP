@@ -112,13 +112,17 @@ void Renderer::SetTexAttribPointer(unsigned int shaderID) {
 void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount){
 	BindVAO(vao);
 	UpdateBuffers(vbo, vertices, verticesAmount);
-	shader.SetVertexAttributes("position",6); //especificamos como leer los datos del vertice y se lo pasamos al shader
-	shader.SetColorAttributes("color",6);
+	shader.SetVertexAttributes("position",9); //especificamos como leer los datos del vertice y se lo pasamos al shader
+	shader.SetColorAttributes("color",9);
+	//Crear en la clase shader un metodo para leer los nuevos datos de normales
+	shader.SetNormalAttributes("aNormal",9);
 	//Le pasamos al shdera la matriz modelo de cada shape
 	shader.Use(model);
 	//Temporal: Le pasamos al fragment shader un color del objeto y color de la luz, esto tiene que estar en la clase lighting cuando este
 	glUniform3f(glGetUniformLocation(shader.GetID(), "objectColor"), 1.0f, 0.5f, 0.31f);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "lightColor"), 1.0f, 1.0f, 1.0f);
+	//Aca le estamos seteando la posicion de la luz al uniforme del fragment shader, cuando este la clase light lista pasarlo para ahi.
+	glUniform3f(glGetUniformLocation(shader.GetID(), "lightPos"), 0.0f, 0.0f, -3.0f);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
@@ -135,7 +139,8 @@ void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& vao, uns
 	BindVAO(vao);
 	UpdateBuffers(vbo, vertices, verticesAmount);
 	//Para crear los punteros de atributos de vertices (AttribPointer)
-	shader.SetVertexAttributes("position",6);
+	shader.SetVertexAttributes("position",9);
+	shader.SetNormalAttributes("aNormal", 9);
 	//shader.SetColorAttributes("color", 6);
 	shader.Use(model);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "objectColor"), 1.0f, 1.0f, 1.0f);

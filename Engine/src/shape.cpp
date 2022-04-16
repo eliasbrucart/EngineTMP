@@ -73,17 +73,20 @@ void Shape::Init() {
 		_shader.SetColorAttributes("color", 6);
 		break;
 	case Engine::Type::cube:
-		BindVBO(_cubeVertices2, 216);
+		BindVBO(_cubeVertices2, 324);
 		BindEBO(_cubeIndices2, 36);
-		_shader.SetVertexAttributes("position", 6);
-		_shader.SetColorAttributes("color", 6);
+		_shader.SetVertexAttributes("position", 9);
+		_shader.SetColorAttributes("color", 9);
+		_shader.SetNormalAttributes("aNormal", 9);
 		break;
 	case Engine::Type::lightCube:
 		//GenerateLightVAO();
 		//BindLightVAO();
-		BindVBO(_cubeVertices2, 216);
+		BindVBO(_cubeVertices2, 324);
 		BindEBO(_cubeIndices2, 36);
-		_shader.SetVertexAttributes("position",6);
+		_shader.SetVertexAttributes("position",9);
+		_shader.SetColorAttributes("color", 9);
+		_shader.SetNormalAttributes("aNormal", 9);
 		break;
 	}
 	//Probar si estos se hace para todos los tipos de shape, si se cumple, 
@@ -143,7 +146,7 @@ void Shape::Draw() {
 		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 216, _cubeIndices2, 36);
 		break;
 	case Engine::Type::lightCube:
-		_renderer->DrawLight(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 216, _cubeIndices2, 36);
+		_renderer->DrawLight(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 324, _cubeIndices2, 36);
 		break;
 	}
 }
