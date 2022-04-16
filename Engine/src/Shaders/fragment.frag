@@ -5,5 +5,8 @@ uniform vec3 lightColor;
 
 void main()
 {
-    gl_FragColor = vec4(lightColor * objectColor, 1.0);
+    float ambienStrength = 0.1;
+    vec3 ambient = ambienStrength * lightColor;
+    vec3 result = ambient * objectColor;
+    gl_FragColor = vec4(result, 1.0);
 }
