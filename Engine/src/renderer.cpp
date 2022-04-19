@@ -122,7 +122,7 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	glUniform3f(glGetUniformLocation(shader.GetID(), "objectColor"), 1.0f, 0.5f, 0.31f);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "lightColor"), 1.0f, 1.0f, 1.0f);
 	//Aca le estamos seteando la posicion de la luz al uniforme del fragment shader, cuando este la clase light lista pasarlo para ahi.
-	glUniform3f(glGetUniformLocation(shader.GetID(), "lightPos"), 0.0f, 0.0f, -3.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "lightPos"), 0.0f, 0.0f, 10.0f);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
@@ -149,13 +149,16 @@ void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& vao, uns
 	UnbindBuffers();
 }
 
-void Renderer::DrawCamera(Shader& shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection) {
+void Renderer::DrawCamera(Shader& shader, glm::vec3 camPos, glm::mat4 model, glm::mat4 view, glm::mat4 projection) {
 	//unsigned int projectionLoc = glGetUniformLocation(shader.GetID(), "projection");
 
 	unsigned int transformLoc = glGetUniformLocation(shader.GetID(), "model");
 	unsigned int viewLoc = glGetUniformLocation(shader.GetID(), "view");
 	unsigned int projectionLoc = glGetUniformLocation(shader.GetID(), "projection");
+	//Pasamos la posicion de la camara para calcular la iluminacion specular
+	unsigned int camPosLoc = glGetUniformLocation(shader.GetID(), "viewPos");
 	shader.Use(model);
+	glUniform3fv(camPosLoc, 1, glm::value_ptr(camPos));
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));

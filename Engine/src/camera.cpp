@@ -211,5 +211,5 @@ ProjectionType Camera::GetProjectionType(){
 }
 
 void Camera::Draw(Shader& shader){
-	_renderer->DrawCamera(shader, GetModel(), GetView(), GetProjection());
+	_renderer->DrawCamera(shader, transform.position, GetModel(), GetView(), GetProjection());
 }
