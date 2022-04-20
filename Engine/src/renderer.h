@@ -31,7 +31,8 @@ namespace Engine {
 		void CreateAtribPointers(unsigned int shaderAttribIndex, int dataAmmount, int dataSize, int dataPosition);
 		void SetTexAttribPointer(unsigned int shaderID);
 		void Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount);
-		void DrawLight(Shader& shader, glm::mat4 model, unsigned int& vao , unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount);
+		void DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao , unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount);
+		void DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor);
 		void DrawSprite(Shader &shader, unsigned int &vao, unsigned int &vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model);
 		void DrawCamera(Shader& shader, glm::vec3 camPos, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 	};

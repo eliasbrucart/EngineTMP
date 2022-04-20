@@ -120,12 +120,21 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	shader.Use(model);
 	//Temporal: Le pasamos al fragment shader un color del objeto y color de la luz, esto tiene que estar en la clase lighting cuando este
 	glUniform3f(glGetUniformLocation(shader.GetID(), "objectColor"), 1.0f, 0.5f, 0.31f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "lightColor"), 1.0f, 1.0f, 1.0f);
 	//Aca le estamos seteando la posicion de la luz al uniforme del fragment shader, cuando este la clase light lista pasarlo para ahi.
-	glUniform3f(glGetUniformLocation(shader.GetID(), "lightPos"), 0.0f, 0.0f, 10.0f);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
+
+void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor) {
+	shader.Use();
+	//light pos
+	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "lightPos");
+	glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
+	//light color
+	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
+	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+}
+
 void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model) {
 	BindVAO(vao);
 	UpdateBuffers(vbo,vertices, verticesAmount);
@@ -135,7 +144,7 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	UnbindBuffers();
 }
 
-void Renderer::DrawLight(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount) {
+void Renderer::DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount) {
 	BindVAO(vao);
 	UpdateBuffers(vbo, vertices, verticesAmount);
 	//Para crear los punteros de atributos de vertices (AttribPointer)

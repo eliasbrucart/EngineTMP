@@ -15,6 +15,7 @@
 #include "tile.h"
 #include "tilemap.h"
 #include "xml_lib/tinyxml2.h"
+#include "light.h"
 
 namespace Engine {
 	class ENGINE_API Base {

@@ -146,7 +146,7 @@ void Shape::Draw() {
 		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 216, _cubeIndices2, 36);
 		break;
 	case Engine::Type::lightCube:
-		_renderer->DrawLight(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 324, _cubeIndices2, 36);
+		_renderer->DrawLightCube(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 324, _cubeIndices2, 36);
 		break;
 	}
 }

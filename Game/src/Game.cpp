@@ -26,6 +26,11 @@ Game::~Game() {
 		_shape2 = NULL;
 	}
 
+	if (_light != NULL) {
+		delete _light;
+		_light = NULL;
+	}
+
 	//if (map != NULL) {
 	//	delete map;
 	//	map = NULL;
@@ -40,11 +45,15 @@ void Game::InitGame() {
 	//map->LoadMap("res/tilemap/Map2.tmx");
 	_shape = new Shape(Type::lightCube, GetRenderer(), basicShader);
 	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader);
+	_light = new Light(GetRenderer(), basicShader);
 
 	_shape->Init();
 	_shape2->Init();
 
 	//_sprite->Init();
+
+	_light->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
+	_light->SetColor(1.0f, 1.0f, 0.0f);
 
 	//_shape->Color(1.0f, 0.0f, 0.0f);
 	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
@@ -81,6 +90,19 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::A)) {
 		_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
+	else if (input.GetKey(KeyCode::LEFT)) {
+		_light->transform.position.x -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::RIGHT)) {
+		_light->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::UP)) {
+		_light->transform.position.z -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::DOWN)) {
+		_light->transform.position.z += speed * time.GetDeltaTime();
+	}
+	
 	//
 	//if (input.GetMouseButton(MouseButtons::LEFT_MOUSE_BUTTON)) {
 	//	player->SetAnimation(0);
@@ -116,6 +138,7 @@ void Game::UpdateGame() {
 
 	_shape->Draw();
 	_shape2->Draw();
+	_light->Draw();
 
 	//map->Draw();
 	
@@ -136,6 +159,11 @@ void Game::UnloadGame() {
 	if (_shape2 != NULL) {
 		delete _shape2;
 		_shape2 = NULL;
+	}
+
+	if (_light != NULL) {
+		delete _light;
+		_light = NULL;
 	}
 
 	//if (_sprite != NULL) {
