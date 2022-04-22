@@ -140,6 +140,14 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	glUniform3f(glGetUniformLocation(shader.GetID(), "material.diffuse"), 1.0f, 0.5f, 0.31f);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "material.specular"), 0.5f, 0.5f, 0.5f);
 	glUniform1f(glGetUniformLocation(shader.GetID(), "material.shininess"), 32.0f);
+
+	//Le pasamos a la variable uniforme light la intensidad de cada componente de la fuente de luz
+	//Esto se hace para lograr un resultado mas realista del reflejo de la luz sobre el objeto 
+	//y que tenga sentido el calculo de la luz con el material del mismo
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 0.2f, 0.2f, 0.2f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 0.5f, 0.5f, 0.5f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.specular"), 1.0f, 1.0f, 1.0f);
+
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));
 }
