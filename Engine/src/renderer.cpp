@@ -144,8 +144,20 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//Le pasamos a la variable uniforme light la intensidad de cada componente de la fuente de luz
 	//Esto se hace para lograr un resultado mas realista del reflejo de la luz sobre el objeto 
 	//y que tenga sentido el calculo de la luz con el material del mismo
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 0.2f, 0.2f, 0.2f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 0.5f, 0.5f, 0.5f);
+
+	//jugamos con los valores de los componentes de la luz
+	//Estos efectos extra que generamos y hacemos que la luz reaccione diferente al material del objeto
+	//Pasarlos a Light class
+	glm::vec3 lColor;
+	lColor.x = sin(glfwGetTime() * 0.2f);
+	lColor.y = sin(glfwGetTime() * 0.7f);
+	lColor.z = sin(glfwGetTime() * 0.13f);
+
+	glm::vec3 diffuseColor = lColor * glm::vec3(0.5f);
+	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), ambientColor.x, ambientColor.y, ambientColor.z);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), diffuseColor.x, diffuseColor.y, diffuseColor.z);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "light.specular"), 1.0f, 1.0f, 1.0f);
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
