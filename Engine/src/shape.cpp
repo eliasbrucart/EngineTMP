@@ -7,16 +7,22 @@ using namespace Engine;
 Shape::Shape() : Entity2D() {
 	_type = Type::triangle;
 	_renderer = NULL;
+	_material = new Material(MaterialType::esmerald); //Probando el material esmerald, hacer que el usuario eliga el material
 }
 
 Shape::Shape(Type type, Renderer* renderer, Shader shader) : Entity2D() {
 	_type = type;
 	_renderer = renderer;
 	_shader = shader;
+	_material = new Material(MaterialType::esmerald);
 }
 Shape::~Shape() {
 	UnbindBuffers();
 	DeleteBuffer();
+	if (_material != NULL) {
+		delete _material;
+		_material = NULL;
+	}
 }
 
 void Shape::SetShader(Shader shader) {
@@ -137,13 +143,13 @@ void Shape::Draw() {
 	switch (_type)
 	{
 	case Engine::Type::triangle:
-		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _triVertices, 18, _triIndices, 3);
+		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _triVertices, 18, _triIndices, 3, _material);
 		break;
 	case Engine::Type::quad:
-		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _quadVertices, 24, _quadIndices, 6);
+		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _quadVertices, 24, _quadIndices, 6, _material);
 		break;
 	case Engine::Type::cube:
-		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 216, _cubeIndices2, 36);
+		_renderer->Draw(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 216, _cubeIndices2, 36, _material);
 		break;
 	case Engine::Type::lightCube:
 		_renderer->DrawLightCube(_shader, GetModel(), _vao, _vbo, _cubeVertices2, 324, _cubeIndices2, 36);

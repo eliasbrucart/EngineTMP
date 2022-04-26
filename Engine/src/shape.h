@@ -4,6 +4,8 @@
 #include "entity2D.h"
 #include "shader.h"
 #include "renderer.h"
+#include "material.h"
+
 namespace Engine {
 
 	enum class ENGINE_API Type
@@ -126,6 +128,7 @@ namespace Engine {
 		Type _type;
 		Renderer* _renderer;
 		Shader _shader;
+		Material* _material;
 
 		void GenerateVAO();
 		void BindVAO();

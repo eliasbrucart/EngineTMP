@@ -52,6 +52,9 @@
     <Filter Include="Light">
       <UniqueIdentifier>{52eec3c1-a2af-471f-b5e8-0b09690f9842}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{62732075-5bb3-48d9-bec6-270313e2dcd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity2D.h">
@@ -114,6 +117,9 @@
     <ClInclude Include="src\light.h">
       <Filter>Light</Filter>
     </ClInclude>
+    <ClInclude Include="src\material.h">
+      <Filter>Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base.cpp">
@@ -172,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="src\light.cpp">
       <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\material.cpp">
+      <Filter>Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
