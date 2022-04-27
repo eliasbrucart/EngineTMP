@@ -90,4 +90,22 @@ void Material::ApplyMaterial(Shader shader) {
 		unsigned int esmeraldShininessLoc = glGetUniformLocation(shader.GetID(), "material.shininess");
 		glUniform1f(esmeraldShininessLoc, _shininess);
 	}
+
+	if (_type == MaterialType::pearl) {
+		SetAmbient(glm::vec3(0.25f, 0.20725f, 0.20725f));
+		SetDiffuse(glm::vec3(1.0f, 0.829f, 0.829f));
+		SetSpecular(glm::vec3(0.296648f, 0.296648f, 0.296648f));
+		SetShininess(0.088f * 128.0f);
+		unsigned int esmeraldAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
+		glUniform3fv(esmeraldAmbientLoc, 1, glm::value_ptr(_ambient));
+
+		unsigned int esmeraldDiffuseLoc = glGetUniformLocation(shader.GetID(), "material.diffuse");
+		glUniform3fv(esmeraldDiffuseLoc, 1, glm::value_ptr(_diffuse));
+
+		unsigned int esmeraldSpecularLoc = glGetUniformLocation(shader.GetID(), "material.specular");
+		glUniform3fv(esmeraldSpecularLoc, 1, glm::value_ptr(_specular));
+
+		unsigned int esmeraldShininessLoc = glGetUniformLocation(shader.GetID(), "material.shininess");
+		glUniform1f(esmeraldShininessLoc, _shininess);
+	}
 }

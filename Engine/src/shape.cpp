@@ -14,7 +14,7 @@ Shape::Shape(Type type, Renderer* renderer, Shader shader) : Entity2D() {
 	_type = type;
 	_renderer = renderer;
 	_shader = shader;
-	_material = new Material(MaterialType::esmerald);
+	_material = new Material(MaterialType::pearl);
 }
 Shape::~Shape() {
 	UnbindBuffers();
