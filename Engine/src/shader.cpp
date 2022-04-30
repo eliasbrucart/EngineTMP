@@ -105,11 +105,15 @@ void Shader::SetColorAttributes(const char* name, int vertexSize) {
 }
 void Shader::SetTextureAttributes(const char* name, int vertexSize) {
 	unsigned int attribute = glGetAttribLocation(_id, name);
-	CreateAttribPointer(attribute, 2, vertexSize, 6);
+	CreateAttribPointer(attribute, 2, vertexSize, 9);
 }
 void Shader::SetNormalAttributes(const char* name, int vertexSize) {
 	unsigned int attribute = glGetAttribLocation(_id, name);
 	CreateAttribPointer(attribute, 3, vertexSize, 6);
+}
+void Shader::SetTypeOfshape(const char* name, int type) {
+	unsigned int attribute = glGetUniformLocation(_id, name);
+	glUniform1i(attribute, type);
 }
 unsigned int Shader::GetMatrixAttributes(const char* name) {
 	unsigned int matrixLoc = glGetUniformLocation(_id, name);

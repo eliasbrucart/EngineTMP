@@ -26,7 +26,7 @@ namespace Engine {
 		//void mouse_callback(GLFWwindow* window, double posX, double posY);
 		Camera* _camera;
 		Shader basicShader;
-		Shader textureShader;
+		//Shader textureShader;
 		Renderer* GetRenderer();
 		Window* GetWindow();
 		CollisionManager* collisionmanager;

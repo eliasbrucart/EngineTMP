@@ -100,22 +100,23 @@ void Renderer::CreateAtribPointers(unsigned int shaderAttribIndex, int dataAmmou
 }
 
 void Renderer::SetTexAttribPointer(unsigned int shaderID) {
-	GLuint posAttrib = glGetAttribLocation(shaderID, "aPos");
-	GLuint colorAttrib = glGetAttribLocation(shaderID, "aColor"); // no daba el valor correcto porque no usaba la variable en el main
-	GLuint texAttrib = glGetAttribLocation(shaderID, "aTexCoord");
+	//GLuint posAttrib = glGetAttribLocation(shaderID, "aPos");
+	//GLuint colorAttrib = glGetAttribLocation(shaderID, "aColor"); // no daba el valor correcto porque no usaba la variable en el main
+	//GLuint texAttrib = glGetAttribLocation(shaderID, "aTexCoord");
 	glUniform1i((glGetUniformLocation(shaderID, "mainTexture")), 0);
-	CreateAtribPointers(posAttrib, 3, 8, 0);
-	CreateAtribPointers(colorAttrib, 3, 8, 3);
-	CreateAtribPointers(texAttrib, 2, 8, 6);
+	//CreateAtribPointers(posAttrib, 3, 11, 0);
+	//CreateAtribPointers(colorAttrib, 3, 11, 3);
+	//CreateAtribPointers(texAttrib, 2, 11, 9);
 }
 
 void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, Material* material){
 	BindVAO(vao);
 	UpdateBuffers(vbo, vertices, verticesAmount);
-	shader.SetVertexAttributes("position",9); //especificamos como leer los datos del vertice y se lo pasamos al shader
-	shader.SetColorAttributes("color",9);
+	shader.SetVertexAttributes("position",11); //especificamos como leer los datos del vertice y se lo pasamos al shader
+	shader.SetColorAttributes("color",11);
 	//Crear en la clase shader un metodo para leer los nuevos datos de normales
-	shader.SetNormalAttributes("aNormal",9); //ya esta
+	shader.SetNormalAttributes("aNormal",11); //ya esta
+	shader.SetTypeOfshape("type", 0);
 	//Le pasamos al shder la matriz modelo de cada shape
 	shader.Use(model);
 	//Aplicamos el material de cada shape respectivamente
@@ -153,10 +154,15 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 
 void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model) {
 	BindVAO(vao);
-	UpdateBuffers(vbo,vertices, verticesAmount);
+	UpdateBuffers(vbo,vertices,verticesAmount);
+	shader.SetVertexAttributes("position", 11);
+	shader.SetColorAttributes("color", 11);
+	shader.SetNormalAttributes("aNormal", 11);
+	shader.SetTextureAttributes("uv", 11);
+	shader.SetTypeOfshape("type", 1);
 	SetTexAttribPointer(shader.GetID());
 	shader.Use(model);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }
 
@@ -165,6 +171,7 @@ void Renderer::DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao,
 	UpdateBuffers(vbo, vertices, verticesAmount);
 	//Para crear los punteros de atributos de vertices (AttribPointer)
 	shader.SetVertexAttributes("position",9);
+	//SetTexAttribPointer(shader.GetID());
 	shader.SetNormalAttributes("aNormal", 9);
 	//shader.SetColorAttributes("color", 6);
 	shader.Use(model);

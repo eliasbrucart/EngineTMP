@@ -5,12 +5,13 @@
 #include "shader.h"
 #include "renderer.h"
 #include "material.h"
+#include "texture_importer.h"
 
 namespace Engine {
 
 	enum class ENGINE_API Type
 	{
-		triangle, quad, cube, lightCube
+		triangle, quad, cube, lightCube, textureCube
 	};
 
 	class ENGINE_API Shape : public Entity2D {
@@ -51,6 +52,51 @@ namespace Engine {
 			-1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f
 		};
 
+		float _cubeTextureVertices[396] = {
+			-0.5f, -0.5f, -0.5f,  0.5f, 0.5f, 0.5f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f,//0
+			 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f,	1.0f, 0.0f,//1
+			 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f, 1.0f, 1.0f,//2
+			 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f, 1.0f, 1.0f,//3
+			-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f, 0.0f, 1.0f,//4
+			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f,//5
+
+			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f,//6
+			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f,  1.0f, 0.0f,//7
+			 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f,//8
+			 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f,//9
+			-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 1.0f,  0.0f, 1.0f,//10
+			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f,//11
+
+			-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,//12
+			-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,//13
+			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,//14
+			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,//15
+			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,//16
+			-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,//17
+
+			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f,//18
+			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f,  0.0f,  0.0f, 1.0f, 1.0f,//19
+			 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f,//20
+			 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f,//21
+			 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f,  0.0f,  0.0f, 0.0f, 0.0f,//22
+			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f,//23
+
+			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,  0.0f, 0.0f, 1.0f,//24
+			 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 1.0f,//25
+			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f,//26
+			 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f,//27
+			-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f,//28
+			-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,  0.0f, 0.0f, 1.0f,//29
+
+			-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,  1.0f,  0.0f, 0.0f, 1.0f,//30
+			 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f,  1.0f,  0.0f, 1.0f, 1.0f,//31
+			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f,//32
+			 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f,//33
+			-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f,//34
+			-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f,  1.0f,  0.0f, 0.0f, 1.0f//35
+		};
+
+		//Agregar UV para poder cargar las texturas
 		float _cubeVertices2[324] = {
 			-0.5f, -0.5f, -0.5f,  0.5f, 0.5f, 0.5f, 0.0f,  0.0f, -1.0f,//0
 			 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f,  0.0f, -1.0f,//1
@@ -129,6 +175,16 @@ namespace Engine {
 		Renderer* _renderer;
 		Shader _shader;
 		Material* _material;
+		TextureImporter* _texImporter;
+
+		bool _useTexture;
+		unsigned char* data;
+		int _width;
+		int _height;
+		int _nroChannels;
+		const char* _path;
+		bool _transparency;
+		unsigned int _texture;
 
 		void GenerateVAO();
 		void BindVAO();
@@ -140,9 +196,12 @@ namespace Engine {
 		void BindEBO(unsigned int* indices, int indicesAmmount);
 		void UnbindBuffers();
 		void DeleteBuffer();
+		void BlendSprite();
+		void UnBlendSprite();
 	public:
 		Shape();
 		Shape(Type type, Renderer* renderer, Shader shader);
+		Shape(Type type, Renderer* renderer, Shader shader, const char* texPath, bool isTransparent);
 		~Shape();
 		void SetRenderer(Renderer* renderer);
 		void SetShader(Shader shader);
@@ -150,9 +209,8 @@ namespace Engine {
 		void Color(float r, float g, float b);
 		void Color(glm::vec3 color);
 		void Draw();
-
+		void LoadTexture(const char* texPath, bool transparent);
 	};
 
 }
 #endif // !SHAPE_H
-
