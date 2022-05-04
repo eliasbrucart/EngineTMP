@@ -70,7 +70,8 @@ void Sprite::Init() {
 	shader.SetColorAttributes("color", 11);
 	shader.SetNormalAttributes("aNormal", 11);
 	shader.SetTextureAttributes("uv", 11);
-	_renderer->SetTexAttribPointer(shader.GetID());
+	//_renderer->SetTexAttribPointer(shader.GetID());
+	shader.SetSamplerTexture("mainTexture", 0);
 	shader.SetTypeOfshape("type", 1);
 	//necesario para pasar los datos a la veriable uniforme de textura
 	BindBuffers();
@@ -78,7 +79,7 @@ void Sprite::Init() {
 
 void Sprite::Init(unsigned int texture) {
 	_texture = texture;
-	_renderer->SetTexAttribPointer(shader.GetID());
+	//_renderer->SetTexAttribPointer(shader.GetID());
 	BindBuffers();
 }
 

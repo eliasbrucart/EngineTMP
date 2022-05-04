@@ -26,6 +26,7 @@ namespace Engine {
 		void SetTextureAttributes(const char* name, int vertexSize);
 		void SetNormalAttributes(const char* name, int vertexSize);
 		void SetTypeOfshape(const char* name, int type);
+		void SetSamplerTexture(const char* name, int id);
 		unsigned int GetMatrixAttributes(const char* name);
 		unsigned int GetID();
 	};

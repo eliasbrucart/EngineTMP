@@ -99,15 +99,15 @@ void Renderer::CreateAtribPointers(unsigned int shaderAttribIndex, int dataAmmou
 	glEnableVertexAttribArray(shaderAttribIndex);
 }
 
-void Renderer::SetTexAttribPointer(unsigned int shaderID) {
-	//GLuint posAttrib = glGetAttribLocation(shaderID, "aPos");
-	//GLuint colorAttrib = glGetAttribLocation(shaderID, "aColor"); // no daba el valor correcto porque no usaba la variable en el main
-	//GLuint texAttrib = glGetAttribLocation(shaderID, "aTexCoord");
-	glUniform1i((glGetUniformLocation(shaderID, "mainTexture")), 0);
-	//CreateAtribPointers(posAttrib, 3, 11, 0);
-	//CreateAtribPointers(colorAttrib, 3, 11, 3);
-	//CreateAtribPointers(texAttrib, 2, 11, 9);
-}
+//void Renderer::SetTexAttribPointer(unsigned int shaderID) {
+//	//GLuint posAttrib = glGetAttribLocation(shaderID, "aPos");
+//	//GLuint colorAttrib = glGetAttribLocation(shaderID, "aColor"); // no daba el valor correcto porque no usaba la variable en el main
+//	//GLuint texAttrib = glGetAttribLocation(shaderID, "aTexCoord");
+//	glUniform1i((glGetUniformLocation(shaderID, "mainTexture")), 0);
+//	//CreateAtribPointers(posAttrib, 3, 11, 0);
+//	//CreateAtribPointers(colorAttrib, 3, 11, 3);
+//	//CreateAtribPointers(texAttrib, 2, 11, 9);
+//}
 
 void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, Material* material){
 	BindVAO(vao);
@@ -160,7 +160,8 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	shader.SetNormalAttributes("aNormal", 11);
 	shader.SetTextureAttributes("uv", 11);
 	shader.SetTypeOfshape("type", 1);
-	SetTexAttribPointer(shader.GetID());
+	shader.SetSamplerTexture("mainTexture", 0);
+	//SetTexAttribPointer(shader.GetID());
 	shader.Use(model);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();

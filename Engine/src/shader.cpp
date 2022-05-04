@@ -115,6 +115,10 @@ void Shader::SetTypeOfshape(const char* name, int type) {
 	unsigned int attribute = glGetUniformLocation(_id, name);
 	glUniform1i(attribute, type);
 }
+void Shader::SetSamplerTexture(const char* name, int id) {
+	unsigned int attribute = glGetUniformLocation(_id, name);
+	glUniform1i(attribute, id);
+}
 unsigned int Shader::GetMatrixAttributes(const char* name) {
 	unsigned int matrixLoc = glGetUniformLocation(_id, name);
 	return matrixLoc;
