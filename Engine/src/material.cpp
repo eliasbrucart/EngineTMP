@@ -73,6 +73,25 @@ MaterialType Material::GetMaterialType() {
 }
 
 void Material::ApplyMaterial(Shader shader) {
+
+	if (_type == MaterialType::lambert) {
+		SetAmbient(glm::vec3(1.0f));
+		SetDiffuse(glm::vec3(1.0f));
+		SetSpecular(glm::vec3(1.0f));
+		SetShininess(32.0f);
+		unsigned int esmeraldAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
+		glUniform3fv(esmeraldAmbientLoc, 1, glm::value_ptr(_ambient));
+
+		unsigned int esmeraldDiffuseLoc = glGetUniformLocation(shader.GetID(), "material.diffuse");
+		glUniform3fv(esmeraldDiffuseLoc, 1, glm::value_ptr(_diffuse));
+
+		unsigned int esmeraldSpecularLoc = glGetUniformLocation(shader.GetID(), "material.specular");
+		glUniform3fv(esmeraldSpecularLoc, 1, glm::value_ptr(_specular));
+
+		unsigned int esmeraldShininessLoc = glGetUniformLocation(shader.GetID(), "material.shininess");
+		glUniform1f(esmeraldShininessLoc, _shininess);
+	}
+
 	if (_type == MaterialType::esmerald) {
 		SetAmbient(glm::vec3(0.0125f, 0.1745f, 0.0215f));
 		SetDiffuse(glm::vec3(0.07568f, 0.61424f, 0.07568f));

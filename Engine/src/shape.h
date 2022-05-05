@@ -201,6 +201,7 @@ namespace Engine {
 	public:
 		Shape();
 		Shape(Type type, Renderer* renderer, Shader shader);
+		Shape(Type type, Renderer* renderer, Shader shader, MaterialType materialType);
 		Shape(Type type, Renderer* renderer, Shader shader, const char* texPath, bool isTransparent);
 		~Shape();
 		void SetRenderer(Renderer* renderer);

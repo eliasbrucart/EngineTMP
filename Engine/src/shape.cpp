@@ -14,7 +14,14 @@ Shape::Shape(Type type, Renderer* renderer, Shader shader) : Entity2D() {
 	_type = type;
 	_renderer = renderer;
 	_shader = shader;
-	_material = new Material(MaterialType::esmerald);
+	_material = new Material(MaterialType::lambert);
+}
+
+Shape::Shape(Type type, Renderer* renderer, Shader shader, MaterialType materialType) : Entity2D() {
+	_type = type;
+	_renderer = renderer;
+	_shader = shader;
+	_material = new Material(materialType);
 }
 
 Shape::Shape(Type type, Renderer* renderer, Shader shader, const char* texPath, bool isTransparent) : Entity2D() {
