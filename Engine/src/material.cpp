@@ -97,23 +97,26 @@ void Material::ApplyMaterial(Shader shader) {
 
 	if (_type == MaterialType::lambertPro) {
 		SetAmbient(glm::vec3(1.0f));
-		SetDiffuse(glm::vec3(1.0f));
-		SetSpecular(glm::vec3(1.0f));
+		//SetDiffuse(glm::vec3(0.0f));
+		//SetSpecular(glm::vec3(1.0f));
 		SetShininess(32.0f);
 		unsigned int esmeraldAmbientLoc = glGetUniformLocation(shader.GetID(), "materialPro.ambient");
 		glUniform3fv(esmeraldAmbientLoc, 1, glm::value_ptr(_ambient));
 
-		unsigned int esmeraldDiffuseLoc = glGetUniformLocation(shader.GetID(), "materialPro.diffuse");
-		glUniform3fv(esmeraldDiffuseLoc, 1, glm::value_ptr(_diffuse));
+		unsigned int materialDiffuseLoc = glGetUniformLocation(shader.GetID(), "materialPro.diffuse");
+		glUniform1i(materialDiffuseLoc, 1);
 
-		unsigned int esmeraldSpecularLoc = glGetUniformLocation(shader.GetID(), "materialPro.specular");
-		glUniform3fv(esmeraldSpecularLoc, 1, glm::value_ptr(_specular));
+		unsigned int materialSpecularLoc = glGetUniformLocation(shader.GetID(), "materialPro.specular");
+		glUniform1i(materialSpecularLoc, 2);
+
+		//unsigned int esmeraldDiffuseLoc = glGetUniformLocation(shader.GetID(), "materialPro.diffuse");
+		//glUniform3fv(esmeraldDiffuseLoc, 1, glm::value_ptr(_diffuse));
+		//
+		//unsigned int esmeraldSpecularLoc = glGetUniformLocation(shader.GetID(), "materialPro.specular");
+		//glUniform3fv(esmeraldSpecularLoc, 1, glm::value_ptr(_specular));
 
 		unsigned int esmeraldShininessLoc = glGetUniformLocation(shader.GetID(), "materialPro.shininess");
 		glUniform1f(esmeraldShininessLoc, _shininess);
-
-		unsigned int materialDiffuseLoc = glGetUniformLocation(shader.GetID(), "materialPro.diffuse");
-		glUniform1f(materialDiffuseLoc, 0);
 	}
 
 	if (_type == MaterialType::esmerald) {

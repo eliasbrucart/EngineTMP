@@ -37,11 +37,10 @@ Game::~Game() {
 	//}
 }
 void Game::InitGame() {
-
 	//_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
 	//player = new Animation();
 
-	_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader, MaterialType::lambertPro);
+	_sprite = new Sprite(true, "res/textures/container2.png", "res/textures/container2_specular.png", GetRenderer(), basicShader, MaterialType::lambertPro);
 
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");

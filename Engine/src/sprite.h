@@ -22,9 +22,13 @@ namespace Engine {
 		bool _transparency;
 		Renderer* _renderer;
 		TextureImporter* _texImporter;
+		TextureImporter* _texImporter2;
 		Material* _material;
 		UVs uv[4];
 		unsigned int _texture = 0;
+		unsigned int _textureSpec = 1;
+		const char* _diffPath;
+		const char* _specPath;
 
 		unsigned int _vao = 0;
 		unsigned int _vbo = 0;
@@ -110,6 +114,8 @@ namespace Engine {
 		void DeleteBuffer();
 		void BindBuffers();
 		void BindTexture();
+		//temporal
+		void BindSecondTexture();
 		void BlendSprite();
 		void UnBlendSprite();
 		void LoadSprite();
@@ -122,7 +128,7 @@ namespace Engine {
 		Sprite();
 		Sprite(bool transparency, Renderer* renderer, Shader shader);
 		Sprite(bool transparency, const char* path, Renderer* renderer, Shader shader);
-		Sprite(bool transparency, const char* path, Renderer* renderer, Shader shader, MaterialType materialType);
+		Sprite(bool transparency, const char* path, const char* specPath, Renderer* renderer, Shader shader, MaterialType materialType);
 		~Sprite();
 		void Init();
 		void Init(unsigned int texture);

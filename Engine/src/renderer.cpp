@@ -144,8 +144,8 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//y que tenga sentido el calculo de la luz con el material del mismo
 	//Pasarlos a Light class
 
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 1.0f, 1.0f, 1.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 0.2f, 0.2f, 0.2f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 0.5f, 0.5f, 0.5f);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "light.specular"), 1.0f, 1.0f, 1.0f);
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
@@ -160,7 +160,7 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	shader.SetNormalAttributes("aNormal", 11);
 	shader.SetTextureAttributes("uv", 11);
 	shader.SetTypeOfshape("type", 1);
-	shader.SetSamplerTexture("mainTexture", 0);
+	//shader.SetSamplerTexture("mainTexture", 0);
 	//SetTexAttribPointer(shader.GetID());
 	shader.Use(model);
 	material->ApplyMaterial(shader);
