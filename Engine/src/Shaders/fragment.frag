@@ -18,7 +18,15 @@ struct Material{
     float shininess;
 };
 
+struct MaterialPro{
+    vec3 ambient;
+    sampler2D diffuse;
+    vec3 specular;
+    float shininess;
+};
+
 uniform Material material;
+uniform MaterialPro materialPro;
 
 struct Light{
     vec3 position;
@@ -60,13 +68,13 @@ void main()
     } else if(type == 1){
         //ambient
         float ambienStrength = 0.1;
-        vec3 ambient = light.ambient * material.ambient;
+        vec3 ambient = light.ambient * vec3(texture(materialPro.diffuse, texCoords));;
 
         //diffuse
         vec3 normal = normalize(Normal);
         vec3 lightDir = normalize(lightPos - FragPos);
         float diff = max(dot(normal, lightDir), 0.0);
-        vec3 diffuse = light.diffuse * (diff * material.diffuse);
+        vec3 diffuse = light.diffuse * diff * vec3(texture(materialPro.diffuse, texCoords));
 
         //specular
         float specularStrength = 0.5;
