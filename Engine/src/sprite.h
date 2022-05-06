@@ -4,6 +4,7 @@
 #include"export.h"
 #include"texture_importer.h"
 #include"renderer.h"
+#include"material.h"
 
 namespace Engine {
 	class Animation;
@@ -21,6 +22,7 @@ namespace Engine {
 		bool _transparency;
 		Renderer* _renderer;
 		TextureImporter* _texImporter;
+		Material* _material;
 		UVs uv[4];
 		unsigned int _texture = 0;
 
@@ -116,11 +118,11 @@ namespace Engine {
 		int GetWidth();
 		void SetHeight(int height);
 		int GetHeight();
-
 	public:
 		Sprite();
 		Sprite(bool transparency, Renderer* renderer, Shader shader);
 		Sprite(bool transparency, const char* path, Renderer* renderer, Shader shader);
+		Sprite(bool transparency, const char* path, Renderer* renderer, Shader shader, MaterialType materialType);
 		~Sprite();
 		void Init();
 		void Init(unsigned int texture);

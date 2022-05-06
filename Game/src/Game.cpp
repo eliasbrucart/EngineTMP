@@ -41,12 +41,12 @@ void Game::InitGame() {
 	//_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
 	//player = new Animation();
 
-	_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
+	_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader, MaterialType::lambert);
 
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");
 	_shape = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::gold);
-	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::lambert);
+	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::esmerald);
 	_light = new Light(GetRenderer(), basicShader);
 
 	_shape->Init();

@@ -152,7 +152,7 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));
 }
 
-void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model) {
+void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model, Material* material) {
 	BindVAO(vao);
 	UpdateBuffers(vbo,vertices,verticesAmount);
 	shader.SetVertexAttributes("position", 11);
@@ -163,6 +163,7 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	shader.SetSamplerTexture("mainTexture", 0);
 	//SetTexAttribPointer(shader.GetID());
 	shader.Use(model);
+	material->ApplyMaterial(shader);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }

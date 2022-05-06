@@ -213,7 +213,7 @@ void Shape::Draw() {
 				glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D, _texImporter->GetTexture());
 				glActiveTexture(GL_TEXTURE0);
-				_renderer->DrawSprite(_shader, _vao, _vbo, _cubeTextureVertices, 396, _cubeIndices, 36, GetModel());
+				_renderer->DrawSprite(_shader, _vao, _vbo, _cubeTextureVertices, 396, _cubeIndices, 36, GetModel(), _material);
 				UnBlendSprite();
 				glDisable(GL_TEXTURE_2D);
 
@@ -221,7 +221,7 @@ void Shape::Draw() {
 			else {
 				glBindTexture(GL_TEXTURE_2D, _texImporter->GetTexture());
 				glActiveTexture(GL_TEXTURE0);
-				_renderer->DrawSprite(_shader, _vao, _vbo, _cubeTextureVertices, 396, _cubeIndices, 36, GetModel());
+				_renderer->DrawSprite(_shader, _vao, _vbo, _cubeTextureVertices, 396, _cubeIndices, 36, GetModel(), _material);
 				glDisable(GL_TEXTURE_2D);
 			}
 		}

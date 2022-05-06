@@ -34,17 +34,25 @@ Sprite::Sprite(bool transparency, const char* path, Renderer* renderer, Shader s
 	_texImporter = new TextureImporter();
 	this->shader = shader;
 	_texImporter->SetPath(path);
+}
 
-	//uv[0].u = 1; uv[0].v = 1;
-	//uv[1].u = 1; uv[1].v = 0;
-	//uv[2].u = 0; uv[2].v = 0;
-	//uv[3].u = 0; uv[3].v = 1;
+Sprite::Sprite(bool transparency, const char* path, Renderer* renderer, Shader shader, MaterialType materialType) : Entity2D() {
+	_transparency = transparency;
+	_renderer = renderer;
+	_texImporter = new TextureImporter();
+	this->shader = shader;
+	_texImporter->SetPath(path);
+	_material = new Material(materialType);
 }
 
 Sprite::~Sprite() {
 	if (_texImporter != NULL) {
 		delete _texImporter;
 		_texImporter = NULL;
+	}
+	if (_material != NULL) {
+		delete _material;
+		_material = NULL;
 	}
 }
 
@@ -172,13 +180,13 @@ void Sprite::DrawSprite() {
 	if (_transparency) {
 		BlendSprite();
 		BindTexture();
-		_renderer->DrawSprite(shader, _vao, _vbo, _cubeVertices2, 396, _cubeIndices2, 36, GetModel());
+		_renderer->DrawSprite(shader, _vao, _vbo, _cubeVertices2, 396, _cubeIndices2, 36, GetModel(), _material);
 		UnBlendSprite();
 		glDisable(GL_TEXTURE_2D);
 	}
 	else {
 		BindTexture();
-		_renderer->DrawSprite(shader, _vao, _vbo, _cubeVertices2, 396, _cubeIndices2, 36, GetModel());
+		_renderer->DrawSprite(shader, _vao, _vbo, _cubeVertices2, 396, _cubeIndices2, 36, GetModel(), _material);
 		glDisable(GL_TEXTURE_2D);
 	}
 }
@@ -189,13 +197,13 @@ void Sprite::DrawFromUVs(glm::vec4 uv) {
 	if (_transparency) {
 		BlendSprite();
 		BindTexture();
-		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel());
+		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel(), _material);
 		UnBlendSprite();
 		glDisable(GL_TEXTURE_2D);
 	}
 	else {
 		BindTexture();
-		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel());
+		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel(), _material);
 		glDisable(GL_TEXTURE_2D);
 	}
 }
@@ -206,13 +214,13 @@ void Sprite::DrawAnimation(glm::vec4 uvRect) {
 	if (_transparency) {
 		BlendSprite();
 		BindTexture();
-		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel());
+		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel(), _material);
 		UnBlendSprite();
 		glDisable(GL_TEXTURE_2D);
 	}
 	else {
 		BindTexture();
-		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel());
+		_renderer->DrawSprite(shader, _vao, _vbo, _vertices, 32, _quadIndices, 6, GetModel(), _material);
 		glDisable(GL_TEXTURE_2D);
 	}
 }
