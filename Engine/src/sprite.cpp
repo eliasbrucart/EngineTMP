@@ -133,11 +133,9 @@ void Sprite::BindBuffers() {
 void Sprite::BindTexture() {
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, _texImporter->GetTexture());
-	std::cout << "id del texture0 " << _texImporter->GetTexture() << std::endl;
 
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, _texImporter2->GetTexture());
-	std::cout << "id del texture1 " << _texImporter2->GetTexture() << std::endl;
 }
 
 void Sprite::BindSecondTexture() {

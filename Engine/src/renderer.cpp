@@ -127,7 +127,7 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	UnbindBuffers();
 }
 
-void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor) {
+void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 direction) {
 	shader.Use();
 	//light pos
 	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "lightPos");
@@ -135,6 +135,9 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//light color
 	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
 	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+
+	unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "light.direction");
+	glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
 	//Seteamos los valores del material que queremos lograr, seteamos los vectores del struct uniforme llamado Material
 	//El Shader ahora toma estos valores del material para hacer los calculos pertinentes de la iluminacion
 	//Cuando este la clase material pasarlo a su clase
