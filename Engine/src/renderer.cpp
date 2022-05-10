@@ -138,6 +138,7 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 
 	glUniform3f(glGetUniformLocation(shader.GetID(), "light.direction"), 0.0f, 0.0f, -2.0f);
 	glUniform1f(glGetUniformLocation(shader.GetID(), "light.cutOff"), glm::cos(glm::radians(12.5f)));
+	glUniform1f(glGetUniformLocation(shader.GetID(), "light.outerCutOff"), glm::cos(glm::radians(17.5f)));
 
 	//unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "light.direction");
 	//glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
