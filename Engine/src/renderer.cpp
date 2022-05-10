@@ -130,14 +130,16 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 direction) {
 	shader.Use();
 	//light pos
-	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "lightPos");
+	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
 	glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
 	//light color
 	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
 	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
 
-	unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "light.direction");
-	glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
+	//unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "light.direction");
+	//glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
+
+
 	//Seteamos los valores del material que queremos lograr, seteamos los vectores del struct uniforme llamado Material
 	//El Shader ahora toma estos valores del material para hacer los calculos pertinentes de la iluminacion
 	//Cuando este la clase material pasarlo a su clase
@@ -147,9 +149,13 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//y que tenga sentido el calculo de la luz con el material del mismo
 	//Pasarlos a Light class
 
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 0.2f, 0.2f, 0.2f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 0.5f, 0.5f, 0.5f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 1.0f, 1.0f, 1.0f);
 	glUniform3f(glGetUniformLocation(shader.GetID(), "light.specular"), 1.0f, 1.0f, 1.0f);
+
+	glUniform1f(glGetUniformLocation(shader.GetID(), "light.constant"), 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "light.linear"), 0.09f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "light.quadratic"), 0.032f);
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));

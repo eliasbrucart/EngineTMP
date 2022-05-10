@@ -46,17 +46,18 @@ void Game::InitGame() {
 	//map->LoadMap("res/tilemap/Map2.tmx");
 	_shape = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::gold);
 	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::esmerald);
-	_light = new Light(GetRenderer(), basicShader, LightType::directional);
+	_light = new Light(GetRenderer(), basicShader, LightType::point);
 
 	_shape->Init();
 	_shape2->Init();
 
 	_sprite->Init();
 
+	_light->Init();
+
 	_light->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
 	_light->SetColor(1.0f, 1.0f, 0.0f);
 
-	_light->Init();
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
 	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);

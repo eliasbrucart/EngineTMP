@@ -14,6 +14,9 @@ namespace Engine {
 		Shader _shader;
 		Renderer* _renderer;
 		glm::vec3 _direction;
+		float _constant;
+		float _linear;
+		float _quadratic;
 		glm::vec3 _color;
 		LightType _type;
 	public:

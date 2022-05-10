@@ -31,8 +31,12 @@ void Light::SetRenderer(Renderer* renderer) {
 }
 
 void Light::Init() {
-	if (_type == LightType::directional) {
+	if (_type == LightType::directional)
 		_direction = glm::vec3(-0.2f, -1.0f, -0.3f);
+	if (_type == LightType::point) {
+		_constant = 1.0f;
+		_linear = 0.09f;
+		_quadratic = 0.032f;
 	}
 	//Inicializar la posicion de la light
 }
