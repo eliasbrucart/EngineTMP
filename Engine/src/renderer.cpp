@@ -136,12 +136,9 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
 	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
 
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.direction"), 0.0f, 0.0f, -2.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "light.cutOff"), glm::cos(glm::radians(12.5f)));
-	glUniform1f(glGetUniformLocation(shader.GetID(), "light.outerCutOff"), glm::cos(glm::radians(17.5f)));
-
-	//unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "light.direction");
-	//glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
+	//glUniform3f(glGetUniformLocation(shader.GetID(), "light.direction"), 0.0f, 0.0f, -2.0f);
+	//glUniform1f(glGetUniformLocation(shader.GetID(), "light.cutOff"), glm::cos(glm::radians(12.5f)));
+	//glUniform1f(glGetUniformLocation(shader.GetID(), "light.outerCutOff"), glm::cos(glm::radians(17.5f)));
 
 
 	//Seteamos los valores del material que queremos lograr, seteamos los vectores del struct uniforme llamado Material
@@ -153,13 +150,45 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//y que tenga sentido el calculo de la luz con el material del mismo
 	//Pasarlos a Light class
 
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.ambient"), 1.0f, 1.0f, 1.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.diffuse"), 1.0f, 1.0f, 1.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "light.specular"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.ambient"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.diffuse"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.specular"), 1.0f, 1.0f, 1.0f);
+	unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "dirLight.direction");
+	glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
 
-	glUniform1f(glGetUniformLocation(shader.GetID(), "light.constant"), 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "light.linear"), 0.09f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "light.quadratic"), 0.032f);
+
+	//Valores de spot light
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].position"), 0.0f, 0.0f, -2.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].specular"), 1.0f, 1.0f, 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[0].constant"), 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[0].linear"), 0.09f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[0].quadratic"), 0.032f);
+
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].position"), 5.0f, 0.0f, -2.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].specular"), 1.0f, 1.0f, 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[1].constant"), 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[1].linear"), 0.09f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[1].quadratic"), 0.032f);
+
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].position"), 10.0f, 0.0f, -2.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].specular"), 1.0f, 1.0f, 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[2].constant"), 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[2].linear"), 0.09f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[2].quadratic"), 0.032f);
+
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].position"), 15.0f, 0.05f, -2.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].specular"), 1.0f, 1.0f, 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[3].constant"), 1.0f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[3].linear"), 0.09f);
+	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[3].quadratic"), 0.032f);
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));
