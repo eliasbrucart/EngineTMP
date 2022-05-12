@@ -13,7 +13,7 @@ private:
 	glm::vec2 shapePos = glm::vec2(0,0);
 	Shape* _shape = NULL;
 	Shape* _shape2 = NULL;
-	Light* _light = NULL;
+	Light* _light[4] = {NULL, NULL, NULL, NULL};
 	Sprite* _sprite = NULL;
 	//Animation* player = NULL;
 	//Tilemap* map = NULL;

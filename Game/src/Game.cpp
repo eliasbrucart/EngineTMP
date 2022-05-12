@@ -26,9 +26,11 @@ Game::~Game() {
 		_shape2 = NULL;
 	}
 
-	if (_light != NULL) {
-		delete _light;
-		_light = NULL;
+	for (int i = 0; i < 4; i++) {
+		if (_light[i] != NULL) {
+			delete _light[i];
+			_light[i] = NULL;
+		}
 	}
 
 	//if (map != NULL) {
@@ -46,17 +48,21 @@ void Game::InitGame() {
 	//map->LoadMap("res/tilemap/Map2.tmx");
 	_shape = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::gold);
 	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::esmerald);
-	_light = new Light(GetRenderer(), basicShader, LightType::point);
+	_light[3] = new Light(GetRenderer(), basicShader, LightType::directional);
+
+	for (int i = 0; i < 3; i++) {
+		_light[i] = new Light(GetRenderer(), basicShader, LightType::point);
+	}
 
 	_shape->Init();
 	_shape2->Init();
 
 	_sprite->Init();
 
-	_light->Init();
+	_light[3]->Init();
 
-	_light->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
-	_light->SetColor(1.0f, 1.0f, 0.0f);
+	_light[3]->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
+	_light[3]->SetColor(1.0f, 1.0f, 0.0f);
 
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
@@ -93,18 +99,18 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::A)) {
 		_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
-	else if (input.GetKey(KeyCode::LEFT)) {
-		_light->transform.position.x -= speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::RIGHT)) {
-		_light->transform.position.x += speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::UP)) {
-		_light->transform.position.z -= speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::DOWN)) {
-		_light->transform.position.z += speed * time.GetDeltaTime();
-	}
+	//else if (input.GetKey(KeyCode::LEFT)) {
+	//	_light->transform.position.x -= speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::RIGHT)) {
+	//	_light->transform.position.x += speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::UP)) {
+	//	_light->transform.position.z -= speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::DOWN)) {
+	//	_light->transform.position.z += speed * time.GetDeltaTime();
+	//}
 	else if (input.GetKey(KeyCode::T)) {
 		float value = 10.0f;
 		value += 20.0f * time.GetDeltaTime();
@@ -146,7 +152,12 @@ void Game::UpdateGame() {
 
 	_shape->Draw();
 	_shape2->Draw();
-	_light->Draw();
+	//Directional light
+	_light[3]->Draw();
+
+	for (int i = 0; i < 3; i++) {
+		_light[i]->Draw();
+	}
 
 	_sprite->DrawSprite();
 
@@ -171,11 +182,13 @@ void Game::UnloadGame() {
 		_shape2 = NULL;
 	}
 
-	if (_light != NULL) {
-		delete _light;
-		_light = NULL;
+	for (int i = 0; i < 4; i++) {
+		if (_light[i] != NULL) {
+			delete _light[i];
+			_light[i] = NULL;
+		}
 	}
-
+	
 	if (_sprite != NULL) {
 		delete _sprite;
 		_sprite = NULL;

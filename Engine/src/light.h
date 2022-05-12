@@ -31,6 +31,8 @@ namespace Engine {
 		void SetColor(float r, float g, float b);
 		void Draw();
 	};
+
+	static int _lightCount = 0;
 }
 
 #endif

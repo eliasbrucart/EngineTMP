@@ -10,16 +10,20 @@ Light::Light() : Entity2D(){
 Light::Light(Renderer* renderer, Shader shader) {
 	_renderer = renderer;
 	_shader = shader;
+	_type = LightType::directional;
+	_lightCount++;
 }
 
 Light::Light(Renderer* renderer, Shader shader, LightType type) {
 	_renderer = renderer;
 	_shader = shader;
 	_type = type;
+	if(_lightCount < 4)
+		_lightCount++;
 }
 
 Light::~Light() {
-
+	_lightCount--;
 }
 
 void Light::SetShader(Shader shader) {
@@ -55,5 +59,9 @@ void Light::Draw() {
 	//Pasarle al draw light de renderer el tipo de luz a mostrar
 	//Dependiendo del tipo de luz, el renderer o clase shader manda a determinados uniforms
 	//determinados datos para el uso del shader.
-	_renderer->DrawBasicLight(_shader, transform.position, _color, _direction);
+	std::cout << "cantidad de luces: " << _lightCount << std::endl;
+	if(_type == LightType::directional)
+		_renderer->DrawDirectionalLight(_shader, transform.position, _color, _direction);
+	if(_type == LightType::point)
+		_renderer->DrawPointLight(_shader, transform.position, _color);
 }

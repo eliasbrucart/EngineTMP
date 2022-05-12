@@ -127,14 +127,14 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	UnbindBuffers();
 }
 
-void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 direction) {
+void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor) {
 	shader.Use();
 	//light pos
-	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
-	glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
-	//light color
-	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
-	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+	//unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
+	//glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
+	////light color
+	//unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
+	//glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
 
 	//glUniform3f(glGetUniformLocation(shader.GetID(), "light.direction"), 0.0f, 0.0f, -2.0f);
 	//glUniform1f(glGetUniformLocation(shader.GetID(), "light.cutOff"), glm::cos(glm::radians(12.5f)));
@@ -150,11 +150,11 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 	//y que tenga sentido el calculo de la luz con el material del mismo
 	//Pasarlos a Light class
 
-	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.ambient"), 1.0f, 1.0f, 1.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.diffuse"), 1.0f, 1.0f, 1.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.specular"), 1.0f, 1.0f, 1.0f);
-	unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "dirLight.direction");
-	glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
+	//glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.ambient"), 1.0f, 1.0f, 1.0f);
+	//glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.diffuse"), 1.0f, 1.0f, 1.0f);
+	//glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.specular"), 1.0f, 1.0f, 1.0f);
+	//unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "dirLight.direction");
+	//glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
 
 
 	//Valores de spot light
@@ -192,6 +192,22 @@ void Renderer::DrawBasicLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));
+}
+
+void Renderer::DrawDirectionalLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 direction) {
+	shader.Use();
+	//light pos
+	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
+	glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
+	//light color
+	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
+	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));
+
+	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.ambient"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.diffuse"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(shader.GetID(), "dirLight.specular"), 1.0f, 1.0f, 1.0f);
+	unsigned int lightDirectionLoc = glGetUniformLocation(shader.GetID(), "dirLight.direction");
+	glUniform3fv(lightDirectionLoc, 1, glm::value_ptr(direction));
 }
 
 void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model, Material* material) {
