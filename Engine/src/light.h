@@ -14,6 +14,9 @@ namespace Engine {
 		Shader _shader;
 		Renderer* _renderer;
 		glm::vec3 _direction;
+		glm::vec3 _ambient;
+		glm::vec3 _diffuse;
+		glm::vec3 _specular;
 		float _constant;
 		float _linear;
 		float _quadratic;
@@ -29,6 +32,12 @@ namespace Engine {
 		void Init();
 		void SetDirection(glm::vec3 direction);
 		void SetColor(float r, float g, float b);
+		void SetAmbient(glm::vec3 ambient);
+		void SetDiffuse(glm::vec3 diffuse);
+		void SetSpecular(glm::vec3 specular);
+		void SetConstant(float constant);
+		void SetLinear(float linear);
+		void SetQuadratic(float quadratic);
 		void Draw();
 	};
 

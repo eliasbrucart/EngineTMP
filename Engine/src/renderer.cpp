@@ -5,6 +5,7 @@
 #include "shader.h"
 
 #include <iostream>
+#include "string"
 
 using namespace Engine;
 
@@ -127,7 +128,7 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	UnbindBuffers();
 }
 
-void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor) {
+void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, int cantOfLights) {
 	shader.Use();
 	//light pos
 	//unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
@@ -158,37 +159,39 @@ void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 
 
 	//Valores de spot light
+
+	for (int i = 0; i < cantOfLights; i++) {
+		//std::string uniformPointLightPosition = "pointLight[" + std::to_string(i) + "].position";
+		std::string uniformPointLightAmbient = "pointLight[" + std::to_string(i) + "].ambient";
+		std::string uniformPointLightDiffuse = "pointLight[" + std::to_string(i) + "].diffuse";
+		std::string uniformPointLightSpecular = "pointLight[" + std::to_string(i) + "].specular";
+		std::string uniformPointLightConstant = "pointLight[" + std::to_string(i) + "].constant";
+		std::string uniformPointLightLinear = "pointLight[" + std::to_string(i) + "].linear";
+		std::string uniformPointLightQuadratic = "pointLight[" + std::to_string(i) + "].quadratic";
+
+		//glUniform3f(glGetUniformLocation(shader.GetID(), uniformPointLightPosition.c_str()), 0.0f, 0.0f, -2.0f);
+		unsigned int pointLightAmbientLoc = glGetUniformLocation(shader.GetID(), uniformPointLightAmbient.c_str());
+		glUniform3fv(pointLightAmbientLoc, 1, glm::value_ptr(ambient));
+		unsigned int pointLightDiffuseLoc = glGetUniformLocation(shader.GetID(), uniformPointLightDiffuse.c_str());
+		glUniform3fv(pointLightDiffuseLoc, 1, glm::value_ptr(diffuse));
+		unsigned int pointLightSpecularLoc = glGetUniformLocation(shader.GetID(), uniformPointLightSpecular.c_str());
+		glUniform3fv(pointLightSpecularLoc, 1, glm::value_ptr(specular));
+
+		unsigned int pointLightConstantLoc = glGetUniformLocation(shader.GetID(), uniformPointLightConstant.c_str());
+		glUniform1f(pointLightConstantLoc, constant);
+		unsigned int pointLightLinearLoc = glGetUniformLocation(shader.GetID(), uniformPointLightLinear.c_str());
+		glUniform1f(pointLightLinearLoc, linear);
+		unsigned int pointLightQuadraticLoc = glGetUniformLocation(shader.GetID(), uniformPointLightQuadratic.c_str());
+		glUniform1f(pointLightQuadraticLoc, quadratic);
+	}
+
 	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].position"), 0.0f, 0.0f, -2.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].diffuse"), 0.8f, 0.8f, 0.8f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].specular"), 1.0f, 1.0f, 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[0].constant"), 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[0].linear"), 0.09f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[0].quadratic"), 0.032f);
-
+	//
 	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].position"), 5.0f, 0.0f, -2.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].diffuse"), 0.8f, 0.8f, 0.8f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].specular"), 1.0f, 1.0f, 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[1].constant"), 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[1].linear"), 0.09f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[1].quadratic"), 0.032f);
-
+	//
 	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].position"), 10.0f, 0.0f, -2.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].diffuse"), 0.8f, 0.8f, 0.8f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].specular"), 1.0f, 1.0f, 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[2].constant"), 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[2].linear"), 0.09f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[2].quadratic"), 0.032f);
-
+	//
 	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].position"), 15.0f, 0.05f, -2.0f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].diffuse"), 0.8f, 0.8f, 0.8f);
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].specular"), 1.0f, 1.0f, 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[3].constant"), 1.0f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[3].linear"), 0.09f);
-	glUniform1f(glGetUniformLocation(shader.GetID(), "pointLight[3].quadratic"), 0.032f);
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));

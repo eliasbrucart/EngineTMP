@@ -52,12 +52,20 @@ void Game::InitGame() {
 
 	for (int i = 0; i < 3; i++) {
 		_light[i] = new Light(GetRenderer(), basicShader, LightType::point);
+		_light[i]->SetAmbient(glm::vec3(0.2f));
+		_light[i]->SetDiffuse(glm::vec3(0.5f));
+		_light[i]->SetSpecular(glm::vec3(1.0f));
+		_light[i]->SetConstant(1.0f);
+		_light[i]->SetLinear(0.09f);
+		_light[i]->SetQuadratic(0.032f);
 	}
 
 	_shape->Init();
 	_shape2->Init();
 
 	_sprite->Init();
+
+	//Crear un array de posiciones para las luces y array de ambient, diffuse, specular, eviar hardcodeo.
 
 	_light[3]->Init();
 

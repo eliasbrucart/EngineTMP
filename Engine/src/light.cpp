@@ -49,6 +49,32 @@ void Light::SetDirection(glm::vec3 direction) {
 	_direction = direction;
 }
 
+void Light::SetAmbient(glm::vec3 ambient) {
+	_ambient = ambient;
+}
+
+void Light::SetDiffuse(glm::vec3 diffuse) {
+	_diffuse = diffuse;
+}
+
+void Light::SetSpecular(glm::vec3 specular) {
+	_specular = specular;
+}
+
+void Light::SetConstant(float constant) {
+	_constant = constant;
+}
+
+void Light::SetLinear(float linear) {
+	_linear = linear;
+}
+
+void Light::SetQuadratic(float quadratic) {
+	_quadratic = quadratic;
+}
+
+//Agregar seters de constant, linear y quadratic para las luces point
+
 void Light::SetColor(float r, float g, float b) {
 	_color = glm::vec3(r, g, b);
 	//crear un metodo en la clase shader para setear el color de la variable uniforme lightColor
@@ -59,9 +85,8 @@ void Light::Draw() {
 	//Pasarle al draw light de renderer el tipo de luz a mostrar
 	//Dependiendo del tipo de luz, el renderer o clase shader manda a determinados uniforms
 	//determinados datos para el uso del shader.
-	std::cout << "cantidad de luces: " << _lightCount << std::endl;
 	if(_type == LightType::directional)
 		_renderer->DrawDirectionalLight(_shader, transform.position, _color, _direction);
 	if(_type == LightType::point)
-		_renderer->DrawPointLight(_shader, transform.position, _color);
+		_renderer->DrawPointLight(_shader, transform.position, _color, _ambient, _diffuse, _specular, _constant, _linear, _quadratic ,_lightCount);
 }
