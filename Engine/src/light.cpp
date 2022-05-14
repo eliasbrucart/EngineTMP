@@ -7,14 +7,14 @@ Light::Light() : Entity2D(){
 	_renderer = NULL;
 }
 
-Light::Light(Renderer* renderer, Shader shader) {
+Light::Light(Renderer* renderer, Shader shader) : Entity2D() {
 	_renderer = renderer;
 	_shader = shader;
 	_type = LightType::directional;
 	_lightCount++;
 }
 
-Light::Light(Renderer* renderer, Shader shader, LightType type) {
+Light::Light(Renderer* renderer, Shader shader, LightType type) : Entity2D() {
 	_renderer = renderer;
 	_shader = shader;
 	_type = type;
@@ -43,6 +43,10 @@ void Light::Init() {
 		_quadratic = 0.032f;
 	}
 	//Inicializar la posicion de la light
+}
+
+void Light::SetPosition(glm::vec3 position) {
+	_position = position;
 }
 
 void Light::SetDirection(glm::vec3 direction) {
@@ -81,12 +85,18 @@ void Light::SetColor(float r, float g, float b) {
 	//glUniform3f(glGetUniformLocation(_shader.GetID(), "lightColor"), r, g, b);
 }
 
-void Light::Draw() {
+void Light::DrawDirectionalLight() {
+	if (_type == LightType::directional)
+		_renderer->DrawDirectionalLight(_shader, _position, _color, _direction);
+}
+
+void Light::DrawPointLight(int numberOfLight) {
 	//Pasarle al draw light de renderer el tipo de luz a mostrar
 	//Dependiendo del tipo de luz, el renderer o clase shader manda a determinados uniforms
 	//determinados datos para el uso del shader.
-	if(_type == LightType::directional)
-		_renderer->DrawDirectionalLight(_shader, transform.position, _color, _direction);
-	if(_type == LightType::point)
-		_renderer->DrawPointLight(_shader, transform.position, _color, _ambient, _diffuse, _specular, _constant, _linear, _quadratic ,_lightCount);
+	//if(_type == LightType::directional)
+	//	_renderer->DrawDirectionalLight(_shader, _position, _color, _direction);
+	if (_type == LightType::point) {
+		_renderer->DrawPointLight(_shader, _position, _color, _ambient, _diffuse, _specular, _constant, _linear, _quadratic, _lightCount, numberOfLight);
+	}
 }

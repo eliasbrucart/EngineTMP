@@ -9,10 +9,11 @@ namespace Engine {
 	enum class ENGINE_API LightType {
 		directional, point, spot
 	};
-	class ENGINE_API Light : public Entity2D {
+	class ENGINE_API Light: public Entity2D{
 	private:
 		Shader _shader;
 		Renderer* _renderer;
+		glm::vec3 _position;
 		glm::vec3 _direction;
 		glm::vec3 _ambient;
 		glm::vec3 _diffuse;
@@ -30,6 +31,7 @@ namespace Engine {
 		void SetShader(Shader shader);
 		void SetRenderer(Renderer* renderer);
 		void Init();
+		void SetPosition(glm::vec3 position);
 		void SetDirection(glm::vec3 direction);
 		void SetColor(float r, float g, float b);
 		void SetAmbient(glm::vec3 ambient);
@@ -38,7 +40,8 @@ namespace Engine {
 		void SetConstant(float constant);
 		void SetLinear(float linear);
 		void SetQuadratic(float quadratic);
-		void Draw();
+		void DrawDirectionalLight();
+		void DrawPointLight(int numberOfLight);
 	};
 
 	static int _lightCount = 0;

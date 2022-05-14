@@ -128,7 +128,7 @@ void Renderer::Draw(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned
 	UnbindBuffers();
 }
 
-void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, int cantOfLights) {
+void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, int cantOfLights, int numberOfLight) {
 	shader.Use();
 	//light pos
 	//unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
@@ -160,38 +160,29 @@ void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 
 	//Valores de spot light
 
-	for (int i = 0; i < cantOfLights; i++) {
-		//std::string uniformPointLightPosition = "pointLight[" + std::to_string(i) + "].position";
-		std::string uniformPointLightAmbient = "pointLight[" + std::to_string(i) + "].ambient";
-		std::string uniformPointLightDiffuse = "pointLight[" + std::to_string(i) + "].diffuse";
-		std::string uniformPointLightSpecular = "pointLight[" + std::to_string(i) + "].specular";
-		std::string uniformPointLightConstant = "pointLight[" + std::to_string(i) + "].constant";
-		std::string uniformPointLightLinear = "pointLight[" + std::to_string(i) + "].linear";
-		std::string uniformPointLightQuadratic = "pointLight[" + std::to_string(i) + "].quadratic";
-
-		//glUniform3f(glGetUniformLocation(shader.GetID(), uniformPointLightPosition.c_str()), 0.0f, 0.0f, -2.0f);
-		unsigned int pointLightAmbientLoc = glGetUniformLocation(shader.GetID(), uniformPointLightAmbient.c_str());
-		glUniform3fv(pointLightAmbientLoc, 1, glm::value_ptr(ambient));
-		unsigned int pointLightDiffuseLoc = glGetUniformLocation(shader.GetID(), uniformPointLightDiffuse.c_str());
-		glUniform3fv(pointLightDiffuseLoc, 1, glm::value_ptr(diffuse));
-		unsigned int pointLightSpecularLoc = glGetUniformLocation(shader.GetID(), uniformPointLightSpecular.c_str());
-		glUniform3fv(pointLightSpecularLoc, 1, glm::value_ptr(specular));
-
-		unsigned int pointLightConstantLoc = glGetUniformLocation(shader.GetID(), uniformPointLightConstant.c_str());
-		glUniform1f(pointLightConstantLoc, constant);
-		unsigned int pointLightLinearLoc = glGetUniformLocation(shader.GetID(), uniformPointLightLinear.c_str());
-		glUniform1f(pointLightLinearLoc, linear);
-		unsigned int pointLightQuadraticLoc = glGetUniformLocation(shader.GetID(), uniformPointLightQuadratic.c_str());
-		glUniform1f(pointLightQuadraticLoc, quadratic);
-	}
-
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[0].position"), 0.0f, 0.0f, -2.0f);
-	//
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[1].position"), 5.0f, 0.0f, -2.0f);
-	//
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[2].position"), 10.0f, 0.0f, -2.0f);
-	//
-	glUniform3f(glGetUniformLocation(shader.GetID(), "pointLight[3].position"), 15.0f, 0.05f, -2.0f);
+	std::string uniformPointLightPosition = "pointLight[" + std::to_string(numberOfLight) + "].position";
+	std::string uniformPointLightAmbient = "pointLight[" + std::to_string(numberOfLight) + "].ambient";
+	std::string uniformPointLightDiffuse = "pointLight[" + std::to_string(numberOfLight) + "].diffuse";
+	std::string uniformPointLightSpecular = "pointLight[" + std::to_string(numberOfLight) + "].specular";
+	std::string uniformPointLightConstant = "pointLight[" + std::to_string(numberOfLight) + "].constant";
+	std::string uniformPointLightLinear = "pointLight[" + std::to_string(numberOfLight) + "].linear";
+	std::string uniformPointLightQuadratic = "pointLight[" + std::to_string(numberOfLight) + "].quadratic";
+	
+	unsigned int pointLightPositionLoc = glGetUniformLocation(shader.GetID(), uniformPointLightPosition.c_str());
+	glUniform3fv(pointLightPositionLoc, 1, glm::value_ptr(lightPos));
+	unsigned int pointLightAmbientLoc = glGetUniformLocation(shader.GetID(), uniformPointLightAmbient.c_str());
+	glUniform3fv(pointLightAmbientLoc, 1, glm::value_ptr(ambient));
+	unsigned int pointLightDiffuseLoc = glGetUniformLocation(shader.GetID(), uniformPointLightDiffuse.c_str());
+	glUniform3fv(pointLightDiffuseLoc, 1, glm::value_ptr(diffuse));
+	unsigned int pointLightSpecularLoc = glGetUniformLocation(shader.GetID(), uniformPointLightSpecular.c_str());
+	glUniform3fv(pointLightSpecularLoc, 1, glm::value_ptr(specular));
+	
+	unsigned int pointLightConstantLoc = glGetUniformLocation(shader.GetID(), uniformPointLightConstant.c_str());
+	glUniform1f(pointLightConstantLoc, constant);
+	unsigned int pointLightLinearLoc = glGetUniformLocation(shader.GetID(), uniformPointLightLinear.c_str());
+	glUniform1f(pointLightLinearLoc, linear);
+	unsigned int pointLightQuadraticLoc = glGetUniformLocation(shader.GetID(), uniformPointLightQuadratic.c_str());
+	glUniform1f(pointLightQuadraticLoc, quadratic);
 
 	//unsigned int materialAmbientLoc = glGetUniformLocation(shader.GetID(), "material.ambient");
 	//glUniform3fv(materialAmbientLoc, 1, glm::vec3(1.0f, 0.5f, 0.31f));
@@ -200,8 +191,8 @@ void Renderer::DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 ligh
 void Renderer::DrawDirectionalLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 direction) {
 	shader.Use();
 	//light pos
-	unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
-	glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
+	//unsigned int lightPosLoc = glGetUniformLocation(shader.GetID(), "light.position");
+	//glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
 	//light color
 	unsigned int lightColorLoc = glGetUniformLocation(shader.GetID(), "lightColor");
 	glUniform3fv(lightColorLoc, 1, glm::value_ptr(lightColor));

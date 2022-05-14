@@ -2,6 +2,13 @@
 
 float speed = 100.0f;
 
+glm::vec3 pointLightPositions[4] = {
+		glm::vec3(0.0f, 0.0f, -2.0f),
+		glm::vec3(5.0f, 0.0f, -2.0f),
+		glm::vec3(10.0f, 0.0f, -2.0f),
+		glm::vec3(15.0f, 0.05f, -2.0f)
+};
+
 Game::Game() {
 
 }
@@ -33,6 +40,21 @@ Game::~Game() {
 		}
 	}
 
+	//if (_point1 != NULL) {
+	//	delete _point1;
+	//	_point1 = NULL;
+	//}
+	//
+	//if (_point2 != NULL) {
+	//	delete _point2;
+	//	_point2 = NULL;
+	//}
+
+	if (_dirLight != NULL) {
+		delete _dirLight;
+		_dirLight = NULL;
+	}
+
 	//if (map != NULL) {
 	//	delete map;
 	//	map = NULL;
@@ -48,10 +70,14 @@ void Game::InitGame() {
 	//map->LoadMap("res/tilemap/Map2.tmx");
 	_shape = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::gold);
 	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::esmerald);
-	_light[3] = new Light(GetRenderer(), basicShader, LightType::directional);
+	_dirLight = new Light(GetRenderer(), basicShader, LightType::directional);
+	//_point1 = new Light(GetRenderer(), basicShader, LightType::point);
+	//_point2 = new Light(GetRenderer(), basicShader, LightType::point);
 
-	for (int i = 0; i < 3; i++) {
+
+	for (int i = 0; i < 4; i++) {
 		_light[i] = new Light(GetRenderer(), basicShader, LightType::point);
+		_light[i]->SetPosition(pointLightPositions[i]);
 		_light[i]->SetAmbient(glm::vec3(0.2f));
 		_light[i]->SetDiffuse(glm::vec3(0.5f));
 		_light[i]->SetSpecular(glm::vec3(1.0f));
@@ -60,6 +86,12 @@ void Game::InitGame() {
 		_light[i]->SetQuadratic(0.032f);
 	}
 
+	//_light[3]->transform.position = pointLightPositions[3];
+	//
+	//for (int i = 0; i < 3; i++) {
+	//	_light[i]->transform.position = pointLightPositions[i];
+	//}
+
 	_shape->Init();
 	_shape2->Init();
 
@@ -67,10 +99,10 @@ void Game::InitGame() {
 
 	//Crear un array de posiciones para las luces y array de ambient, diffuse, specular, eviar hardcodeo.
 
-	_light[3]->Init();
+	_dirLight->Init();
 
-	_light[3]->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
-	_light[3]->SetColor(1.0f, 1.0f, 0.0f);
+	//_light[3]->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
+	_dirLight->SetColor(1.0f, 1.0f, 0.0f);
 
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
@@ -161,11 +193,14 @@ void Game::UpdateGame() {
 	_shape->Draw();
 	_shape2->Draw();
 	//Directional light
-	_light[3]->Draw();
+	_dirLight->DrawDirectionalLight();
 
-	for (int i = 0; i < 3; i++) {
-		_light[i]->Draw();
-	}
+	//_point1->Draw();
+	//_point2->Draw();
+
+
+	for (int i = 0; i < 4; i++)
+		_light[i]->DrawPointLight(i);
 
 	_sprite->DrawSprite();
 
@@ -201,7 +236,22 @@ void Game::UnloadGame() {
 		delete _sprite;
 		_sprite = NULL;
 	}
+
+	if (_dirLight != NULL) {
+		delete _dirLight;
+		_dirLight = NULL;
+	}
+
+	//if (_point1 != NULL) {
+	//	delete _point1;
+	//	_point1 = NULL;
+	//}
 	//
+	//if (_point2 != NULL) {
+	//	delete _point2;
+	//	_point2 = NULL;
+	//}
+
 	//if (player != NULL) {
 	//	delete player;
 	//	player = NULL;

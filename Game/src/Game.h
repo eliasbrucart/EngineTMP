@@ -14,6 +14,9 @@ private:
 	Shape* _shape = NULL;
 	Shape* _shape2 = NULL;
 	Light* _light[4] = {NULL, NULL, NULL, NULL};
+	//Light* _point1 = NULL;
+	//Light* _point2 = NULL;
+	Light* _dirLight = NULL;
 	Sprite* _sprite = NULL;
 	//Animation* player = NULL;
 	//Tilemap* map = NULL;

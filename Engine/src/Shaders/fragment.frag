@@ -68,6 +68,7 @@ struct PointLight{
 
 uniform DirLight dirLight;
 uniform PointLight pointLight[CANT_POINT_LIGHT];
+//uniform PointLight pointLight;
 
 uniform int type;
 
@@ -96,6 +97,8 @@ void main()
         for(int i=0;i<CANT_POINT_LIGHT;i++){
             result += CalculatePointLight(pointLight[i], norm, FragPos, viewDir);
         }
+
+        //result += CalculatePointLight(pointLight, norm, FragPos, viewDir);
 
         FragColor = vec4(result, 1.0);
 
@@ -149,6 +152,8 @@ void main()
         for(int i=0;i<CANT_POINT_LIGHT;i++){
             result += CalculatePointLightPro(pointLight[i], norm, FragPos, viewDir);
         }
+
+        //result += CalculatePointLightPro(pointLight, norm, FragPos, viewDir);
 
         FragColor = vec4(result, 1.0);
 
