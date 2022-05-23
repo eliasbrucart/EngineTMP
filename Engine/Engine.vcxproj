@@ -93,7 +93,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -147,13 +147,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\glew-2.1.0\include;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\glew-2.1.0\include;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\include;$(SolutionDir)Engine\lib\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\Win32;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)Engine\lib\VLD\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\Win32;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)Engine\lib\VLD\lib\Win32;$(SolutionDir)Engine\lib\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>"$(SolutionDir)Engine\EngineDLLCopy.bat" "$(SolutionDir)Engine\bin\Debug\Engine.dll" "$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\Win32\glew32.dll" "$(SolutionDir)Game"</Command>
