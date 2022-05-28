@@ -100,6 +100,14 @@ void Renderer::CreateAtribPointers(unsigned int shaderAttribIndex, int dataAmmou
 	glEnableVertexAttribArray(shaderAttribIndex);
 }
 
+void Renderer::SetShader(Shader& shader) {
+	_shader = shader;
+}
+
+Shader& Renderer::GetShader() {
+	return _shader;
+}
+
 //void Renderer::SetTexAttribPointer(unsigned int shaderID) {
 //	//GLuint posAttrib = glGetAttribLocation(shaderID, "aPos");
 //	//GLuint colorAttrib = glGetAttribLocation(shaderID, "aColor"); // no daba el valor correcto porque no usaba la variable en el main

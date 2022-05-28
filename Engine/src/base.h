@@ -16,12 +16,14 @@
 #include "tilemap.h"
 #include "xml_lib/tinyxml2.h"
 #include "light.h"
+#include "modelimp.h"
 
 namespace Engine {
 	class ENGINE_API Base {
 	private:
 		Renderer* _renderer;
 		Window* _window;
+		ModelImp* _model;
 	protected:
 		//void mouse_callback(GLFWwindow* window, double posX, double posY);
 		Camera* _camera;

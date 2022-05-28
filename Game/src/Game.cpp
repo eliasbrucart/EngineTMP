@@ -2,6 +2,8 @@
 
 float speed = 100.0f;
 
+using namespace Engine;
+
 glm::vec3 pointLightPositions[4] = {
 		glm::vec3(0.0f, 0.0f, -2.0f),
 		glm::vec3(5.0f, 0.0f, -2.0f),
@@ -85,6 +87,10 @@ void Game::InitGame() {
 		_light[i]->SetLinear(0.09f);
 		_light[i]->SetQuadratic(0.032f);
 	}
+
+	_model = new ModelImp("res/models/backpack/backpack.obj");
+	_model->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
+	_model->transform.scale = glm::vec3(10.0f);
 
 	//_light[3]->transform.position = pointLightPositions[3];
 	//
@@ -192,6 +198,7 @@ void Game::UpdateGame() {
 
 	_shape->Draw();
 	_shape2->Draw();
+	_model->Draw(basicShader);
 	//Directional light
 	_dirLight->DrawDirectionalLight();
 

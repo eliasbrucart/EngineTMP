@@ -18,6 +18,7 @@ private:
 	//Light* _point2 = NULL;
 	Light* _dirLight = NULL;
 	Sprite* _sprite = NULL;
+	ModelImp* _model = NULL;
 	//Animation* player = NULL;
 	//Tilemap* map = NULL;
 public:
