@@ -5,10 +5,9 @@
 using namespace Engine;
 
 ModelImp::ModelImp(string path) : Entity2D(){
-    stbi_set_flip_vertically_on_load(true);
     LoadModel(path);
+    //_directory = directory;
     //_shader.SetTypeOfshape("type", 2);
-    //_texImporter = new TextureImporter(directory);
     //int width, height;
     //_texImporter->LoadImage(width, height, false);
 }
@@ -44,8 +43,6 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene) {
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
         ProcessNode(node->mChildren[i], scene);
     }
-
-
 }
 
 Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
@@ -122,7 +119,7 @@ Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     std::cout << "Entro en ProcessMesh!!!" << std::endl;
 
-    return Mesh(vertices, indices, textures);
+    return Mesh(vertices, indices, textures, _shader);
 }
 
 vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName) {
@@ -141,8 +138,10 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
         if (!skip) {
             Texture texture;
             texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
+            //texture.id = _texImporter->GetTexture();
             texture.type = typeName;
             texture.path = str.C_Str();
+            //texture.path = "res/models/backpack2/textures/1001_albedo.jpg";
             textures.push_back(texture);
             _textures_loaded.push_back(texture);
         }
@@ -158,9 +157,9 @@ void ModelImp::Draw(Shader& shader) {
         _meshes[i].Draw(shader);
 }
 
-unsigned int ModelImp::TextureFromFile(const char* path, const string &directory, bool gamma) {
+unsigned int ModelImp::TextureFromFile(const char* path, string const &directory,bool gamma) {
     string filename = string(path);
-    filename = directory + '/' + filename;
+    filename = directory + '/' + path;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);

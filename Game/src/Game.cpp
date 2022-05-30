@@ -88,9 +88,9 @@ void Game::InitGame() {
 		_light[i]->SetQuadratic(0.032f);
 	}
 
-	_model = new ModelImp("res/models/backpack/backpack.obj");
-	_model->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
-	_model->transform.scale = glm::vec3(10.0f);
+	//std::string modelPath = "res/models/backpack2/source/Survival_BackPack_2.fbx";
+	_model = new ModelImp("res/models/backpack2/source/backpack.fbx");
+	//_model->SetShader(GetRenderer()->GetShader());
 
 	//_light[3]->transform.position = pointLightPositions[3];
 	//

@@ -4,10 +4,12 @@
 
 using namespace Engine;
 
-Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures) : Entity2D() {
+Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader shader) : Entity2D() {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
+
+	_shader = shader;
 
 	SetUpMesh();
 }

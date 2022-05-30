@@ -37,7 +37,7 @@ namespace Engine {
 		Shader _shader;
 		void SetUpMesh();
 	public:
-		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
+		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader shader);
 		~Mesh();
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;

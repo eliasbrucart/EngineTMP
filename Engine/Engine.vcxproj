@@ -151,12 +151,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\glew-2.1.0\include;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\include;C:\Users\Usuario\Desktop\ImageCampus\Cuatrimestre 7\Programacion de graficos 2\Proyectos\EngineTMP\Engine\lib\assimp\1.4.0\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\glew-2.1.0\include;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\include;$(SolutionDir)Engine\lib\assimp\1.4.0\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\Win32;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)Engine\lib\VLD\lib\Win32;C:\Users\Usuario\Desktop\ImageCampus\Cuatrimestre 7\Programacion de graficos 2\Proyectos\EngineTMP\Engine\lib\assimp\1.4.0\Assimp\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\Win32;$(SolutionDir)Engine\lib\glfw-3.3.2.bin.WIN32\lib-vc2019;$(SolutionDir)Engine\lib\VLD\lib\Win32;$(SolutionDir)Engine\lib\assimp\1.4.0\Assimp\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;opengl32.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -191,13 +191,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\glew-2.1.0\include;$(SolutionDir)Engine\lib\glfw-3.3.6.bin.WIN64\include;$(SolutionDir)Engine\lib\assimp\1.4.3\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\glew-2.1.0\include;$(SolutionDir)Engine\lib\glfw-3.3.6.bin.WIN64\include;$(SolutionDir)Engine\lib\assimp\1.4.0\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\x64;$(SolutionDir)Engine\lib\glfw-3.3.6.bin.WIN64\lib-vc2019;$(SolutionDir)Engine\lib\VLD\lib\Win32;$(SolutionDir)Engine\lib\assimp\1.4.3\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;opengl32.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\x64;$(SolutionDir)Engine\lib\glfw-3.3.6.bin.WIN64\lib-vc2019;$(SolutionDir)Engine\lib\VLD\lib\Win32;$(SolutionDir)Engine\lib\assimp\1.4.0\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;opengl32.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>"$(SolutionDir)Engine\EngineDLLCopy.bat" "$(SolutionDir)Engine\bin\Debug\$(Platform)\Engine.dll" "$(SolutionDir)Engine\lib\glew-2.1.0\lib\RLibs\x64\glew32.dll" "$(SolutionDir)Game"</Command>

@@ -9,6 +9,7 @@
 
 #include "shader.h"
 #include "mesh.h"
+#include "entity2D.h"
 
 #include <string>
 #include <fstream>
@@ -22,11 +23,12 @@
 using namespace std;
 
 namespace Engine {
-	class ENGINE_API ModelImp : public Entity2D {
+	class ENGINE_API ModelImp : public Entity2D{
 	private:
 		vector<Texture> _textures_loaded;
 		vector<Mesh> _meshes;
 		string _directory;
+		//const string* _modelTexture;
 		void LoadModel(string path);
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
@@ -36,7 +38,7 @@ namespace Engine {
 
 		Shader _shader;
 
-		unsigned int TextureFromFile(const char* path, const string &directory, bool gamma);
+		unsigned int TextureFromFile(const char* path, const string &directory,bool gamma);
 	public:
 		ModelImp(string path);
 		~ModelImp();
