@@ -11,6 +11,8 @@ glm::vec3 pointLightPositions[4] = {
 		glm::vec3(15.0f, 0.05f, -2.0f)
 };
 
+float rotationSpeed = 100.0f; //dejamos como esta
+
 Game::Game() {
 
 }
@@ -89,7 +91,8 @@ void Game::InitGame() {
 	}
 
 	//std::string modelPath = "res/models/backpack2/source/Survival_BackPack_2.fbx";
-	_model = new ModelImp("res/models/backpack2/source/backpack.fbx");
+	_model = new ModelImp("res/models/cyborg/cyborg.obj");
+	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());
 
 	//_light[3]->transform.position = pointLightPositions[3];
@@ -133,18 +136,22 @@ void Game::InitGame() {
 	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 }
 void Game::PlayerInputs() {
-	if (input.GetKey(KeyCode::W)) {
-		_shape->transform.position.z -= speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::S)) {
-		_shape->transform.position.z += speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::D)) {
-		_shape->transform.position.x += speed * time.GetDeltaTime();
-	}
-	else if (input.GetKey(KeyCode::A)) {
-		_shape->transform.position.x -= speed * time.GetDeltaTime();
-	}
+	//if (input.GetKey(KeyCode::W)) {
+	//	_camera->transform.position.z -= speed * time.GetDeltaTime();
+	//	//_shape->transform.position.z -= speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::S)) {
+	//	_camera->transform.position.z += speed * time.GetDeltaTime();
+	//	//_shape->transform.position.z += speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::D)) {
+	//	_camera->transform.position.x += speed * time.GetDeltaTime();
+	//	//_shape->transform.position.x += speed * time.GetDeltaTime();
+	//}
+	//else if (input.GetKey(KeyCode::A)) {
+	//	_camera->transform.position.x -= speed * time.GetDeltaTime();
+	//	//_shape->transform.position.x -= speed * time.GetDeltaTime();
+	//}
 	//else if (input.GetKey(KeyCode::LEFT)) {
 	//	_light->transform.position.x -= speed * time.GetDeltaTime();
 	//}
@@ -157,10 +164,47 @@ void Game::PlayerInputs() {
 	//else if (input.GetKey(KeyCode::DOWN)) {
 	//	_light->transform.position.z += speed * time.GetDeltaTime();
 	//}
-	else if (input.GetKey(KeyCode::T)) {
-		float value = 10.0f;
-		value += 20.0f * time.GetDeltaTime();
-		_shape2->RotateZ(value);
+	//else if (input.GetKey(KeyCode::T)) {
+	//	float value = 10.0f;
+	//	value += 20.0f * time.GetDeltaTime();
+	//	_shape2->RotateZ(value);
+	//}
+
+	if (input.GetKey(KeyCode::W)) {
+		_camera->transform.position -= speed * time.GetDeltaTime() * _camera->GetCameraFront();
+	}
+
+	else if (input.GetKey(KeyCode::S)) {
+		_camera->transform.position += speed * time.GetDeltaTime() * _camera->GetCameraFront();
+	}
+
+	else if (input.GetKey(KeyCode::A)) {
+		_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed * time.GetDeltaTime();
+	}
+
+	else if (input.GetKey(KeyCode::D)) {
+		_camera->transform.position -= glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed * time.GetDeltaTime();
+
+	}
+
+	if (input.GetKey(KeyCode::DOWN)) {
+		//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+		_camera->RotatePitch(-rotationSpeed * time.GetDeltaTime());
+	}
+
+	if (input.GetKey(KeyCode::UP)) {
+		//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+		_camera->RotatePitch(rotationSpeed * time.GetDeltaTime());
+	}
+
+	if (input.GetKey(KeyCode::LEFT)) {
+		//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+		_camera->RotateYaw(-rotationSpeed * time.GetDeltaTime());
+	}
+
+	if (input.GetKey(KeyCode::RIGHT)) {
+		//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
+		_camera->RotateYaw(rotationSpeed * time.GetDeltaTime());
 	}
 	
 	//
@@ -192,9 +236,13 @@ void Game::UpdateGame() {
 
 	//_shape->transform.position = glm::vec3(1.2f, 1.0f, -2.0f);
 
-	_camera->FollowTarget(_shape->transform.position);
+	//_camera->FollowTarget(_shape->transform.position);
 
 	//_camera->UpdateRotation(_shape->transform.position);
+
+	_camera->UpdateRotation();
+	_camera->SetLookAt(_camera->GetCameraFront());
+	_camera->Draw(basicShader);
 
 	_shape->Draw();
 	_shape2->Draw();

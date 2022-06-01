@@ -4,6 +4,11 @@
 
 using namespace Engine;
 
+ModelImp::ModelImp() {
+    _path = "";
+    _directory = "";
+}
+
 ModelImp::ModelImp(string path) : Entity2D(){
     LoadModel(path);
     //_directory = directory;
@@ -19,7 +24,7 @@ ModelImp::~ModelImp() {
     //}
 }
 
-void ModelImp::LoadModel(string path) {
+void ModelImp::LoadModel(string const &path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
@@ -138,10 +143,10 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
         if (!skip) {
             Texture texture;
             texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
-            //texture.id = _texImporter->GetTexture();
+            //texture.id = TextureModel(this->_directory);
             texture.type = typeName;
             texture.path = str.C_Str();
-            //texture.path = "res/models/backpack2/textures/1001_albedo.jpg";
+            //texture.path = this->_directory;
             textures.push_back(texture);
             _textures_loaded.push_back(texture);
         }
@@ -151,6 +156,14 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
 
     return textures;
 }
+
+//void ModelImp::SetModelPath(string path) {
+//    _path = path;
+//}
+//
+//void ModelImp::SetTexturePath(const char* texturePath) {
+//    _directory = texturePath;
+//}
 
 void ModelImp::Draw(Shader& shader) {
     for (unsigned int i = 0; i < _meshes.size(); i++)
@@ -190,6 +203,42 @@ unsigned int ModelImp::TextureFromFile(const char* path, string const &directory
     else
     {
         std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
+}
+
+unsigned int ModelImp::TextureModel(const char* texture) {
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char* data = stbi_load(texture, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << texture << std::endl;
         stbi_image_free(data);
     }
 

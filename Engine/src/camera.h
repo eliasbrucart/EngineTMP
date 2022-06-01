@@ -7,6 +7,8 @@
 #include "input.h"
 #include "time_manager.h"
 
+using namespace std;
+
 struct GLFWwindow;
 
 namespace Engine {

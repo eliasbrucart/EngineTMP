@@ -27,9 +27,11 @@ namespace Engine {
 	private:
 		vector<Texture> _textures_loaded;
 		vector<Mesh> _meshes;
+		string _path;
 		string _directory;
+		//const char* _directory;
 		//const string* _modelTexture;
-		void LoadModel(string path);
+		void LoadModel(string const &path);
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 		vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
@@ -39,9 +41,13 @@ namespace Engine {
 		Shader _shader;
 
 		unsigned int TextureFromFile(const char* path, const string &directory,bool gamma);
+		unsigned int TextureModel(const char* texture);
 	public:
+		ModelImp();
 		ModelImp(string path);
 		~ModelImp();
+		//void SetModelPath(string path);
+		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader);
 	};
 }

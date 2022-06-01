@@ -102,12 +102,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Iker\Desktop\NewEngine\Engine\src\xml_lib;$(SolutionDir)Engine\src;$(SolutionDir)Engine\lib\glm;C:\Users\Usuario\Desktop\ImageCampus\Cuatrimestre 7\Programacion de graficos 2\Proyectos\EngineTMP\Engine\lib\assimp\1.4.0\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\src\xml_lib;$(SolutionDir)Engine\src;$(SolutionDir)Engine\lib\glm;$(SolutionDir)Engine\lib\assimp\1.4.0\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\bin\Debug;$(SolutionDir)Game;C:\Users\Usuario\Desktop\ImageCampus\Cuatrimestre 7\Programacion de graficos 2\Proyectos\EngineTMP\Engine\lib\assimp\1.4.0\Assimp\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Engine\bin\Debug;$(SolutionDir)Game;$(SolutionDir)Engine\lib\assimp\1.4.0\Assimp\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc140-mt.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
