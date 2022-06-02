@@ -9,12 +9,14 @@ ModelImp::ModelImp() {
     _directory = "";
 }
 
-ModelImp::ModelImp(string path) : Entity2D(){
+ModelImp::ModelImp(string path, const char* modelTexture, Shader shader) : Entity2D(){
     LoadModel(path);
+    _directory = modelTexture;
     //_directory = directory;
     //_shader.SetTypeOfshape("type", 2);
-    //int width, height;
-    //_texImporter->LoadImage(width, height, false);
+    _shader = shader;
+    //_texImporter = new TextureImporter(modelTexture);
+    //LoadTexture();
 }
 
 ModelImp::~ModelImp() {
@@ -33,7 +35,7 @@ void ModelImp::LoadModel(string const &path) {
         cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
         return;
     }
-    _directory = path.substr(0, path.find_last_of('/'));
+    //_directory = path.substr(0, path.find_last_of('/'));
 
     ProcessNode(scene->mRootNode, scene);
 }
@@ -110,6 +112,7 @@ Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     //    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     //}
 
+
     vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     // 2. specular maps
@@ -142,11 +145,11 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
         }
         if (!skip) {
             Texture texture;
-            texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
-            //texture.id = TextureModel(this->_directory);
+            //texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
+            texture.id = TextureModel(this->_directory);
             texture.type = typeName;
-            texture.path = str.C_Str();
-            //texture.path = this->_directory;
+            //texture.path = str.C_Str();
+            texture.path = this->_directory;
             textures.push_back(texture);
             _textures_loaded.push_back(texture);
         }
@@ -207,6 +210,20 @@ unsigned int ModelImp::TextureFromFile(const char* path, string const &directory
     }
 
     return textureID;
+}
+
+void ModelImp::LoadTexture() {
+    if (_texImporter) {
+        _texImporter->LoadImage(_width, _height, _transparency);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _texImporter->GetTexture());
+
+        unsigned int textureDiffuseLoc = glGetUniformLocation(_shader.GetID(), "texture_diffuse1");
+        glUniform1i(textureDiffuseLoc, _texImporter->GetTexture());
+
+        glDisable(GL_TEXTURE_2D);
+    }
 }
 
 unsigned int ModelImp::TextureModel(const char* texture) {

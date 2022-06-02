@@ -91,7 +91,7 @@ void Game::InitGame() {
 	}
 
 	//std::string modelPath = "res/models/backpack2/source/Survival_BackPack_2.fbx";
-	_model = new ModelImp("res/models/cyborg/cyborg.obj");
+	_model = new ModelImp("res/models/backpack2/source/backpack.fbx", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());
 
@@ -171,20 +171,19 @@ void Game::PlayerInputs() {
 	//}
 
 	if (input.GetKey(KeyCode::W)) {
-		_camera->transform.position -= speed * time.GetDeltaTime() * _camera->GetCameraFront();
-	}
-
-	else if (input.GetKey(KeyCode::S)) {
 		_camera->transform.position += speed * time.GetDeltaTime() * _camera->GetCameraFront();
 	}
 
+	else if (input.GetKey(KeyCode::S)) {
+		_camera->transform.position -= speed * time.GetDeltaTime() * _camera->GetCameraFront();
+	}
+
 	else if (input.GetKey(KeyCode::A)) {
-		_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed * time.GetDeltaTime();
+		_camera->transform.position -= glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed * time.GetDeltaTime();
 	}
 
 	else if (input.GetKey(KeyCode::D)) {
-		_camera->transform.position -= glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed * time.GetDeltaTime();
-
+		_camera->transform.position += glm::normalize(glm::cross(_camera->GetCameraFront(), _camera->GetCameraUp())) * speed * time.GetDeltaTime();
 	}
 
 	if (input.GetKey(KeyCode::DOWN)) {
