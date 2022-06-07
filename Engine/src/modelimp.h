@@ -31,15 +31,15 @@ namespace Engine {
 		vector<Texture> _textures_loaded;
 		vector<Mesh> _meshes;
 		string _path;
-		const char* _directory;
-		//const char* _directory;
+		const char* _modelTexture;
+		string _directory;
 		//const string* _modelTexture;
-		void LoadModel(string const &path);
+		void LoadModel(string path);
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 		vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
-		TextureImporter* _texImporter;
+		TextureImporter* _texImporter = NULL;
 
 		Shader _shader;
 
@@ -49,6 +49,7 @@ namespace Engine {
 	public:
 		ModelImp();
 		ModelImp(string path, const char* modelTexture, Shader shader);
+		ModelImp(string path);
 		~ModelImp();
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);

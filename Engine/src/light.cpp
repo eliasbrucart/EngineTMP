@@ -77,7 +77,13 @@ void Light::SetQuadratic(float quadratic) {
 	_quadratic = quadratic;
 }
 
-//Agregar seters de constant, linear y quadratic para las luces point
+void Light::SetCutOff(float cutOff) {
+	_cutOff = cutOff;
+}
+
+void Light::SetOuterCutOff(float outerCutOff) {
+	_outerCutOff = outerCutOff;
+}
 
 void Light::SetColor(float r, float g, float b) {
 	_color = glm::vec3(r, g, b);
@@ -98,5 +104,11 @@ void Light::DrawPointLight(int numberOfLight) {
 	//	_renderer->DrawDirectionalLight(_shader, _position, _color, _direction);
 	if (_type == LightType::point) {
 		_renderer->DrawPointLight(_shader, _position, _color, _ambient, _diffuse, _specular, _constant, _linear, _quadratic, _lightCount, numberOfLight);
+	}
+}
+
+void Light::DrawSpotLight() {
+	if (_type == LightType::spot) {
+		_renderer->DrawSpotLight(_shader, transform.position, _direction, _ambient, _diffuse, _specular, _constant, _linear, _quadratic, _cutOff, _outerCutOff);
 	}
 }

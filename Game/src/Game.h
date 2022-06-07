@@ -17,6 +17,7 @@ private:
 	//Light* _point1 = NULL;
 	//Light* _point2 = NULL;
 	Light* _dirLight = NULL;
+	Light* _spotLight = NULL;
 	Sprite* _sprite = NULL;
 	ModelImp* _model = NULL;
 	//Animation* player = NULL;

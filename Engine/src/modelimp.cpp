@@ -10,8 +10,8 @@ ModelImp::ModelImp() {
 }
 
 ModelImp::ModelImp(string path, const char* modelTexture, Shader shader) : Entity2D(){
+    _modelTexture = modelTexture;
     LoadModel(path);
-    _directory = modelTexture;
     //_directory = directory;
     //_shader.SetTypeOfshape("type", 2);
     _shader = shader;
@@ -19,14 +19,18 @@ ModelImp::ModelImp(string path, const char* modelTexture, Shader shader) : Entit
     //LoadTexture();
 }
 
-ModelImp::~ModelImp() {
-    //if (_texImporter != NULL) {
-    //    delete _texImporter;
-    //    _texImporter = NULL;
-    //}
+ModelImp::ModelImp(string path) {
+    LoadModel(path);
 }
 
-void ModelImp::LoadModel(string const &path) {
+ModelImp::~ModelImp() {
+    if (_texImporter != NULL) {
+        delete _texImporter;
+        _texImporter = NULL;
+    }
+}
+
+void ModelImp::LoadModel(string path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
@@ -35,7 +39,7 @@ void ModelImp::LoadModel(string const &path) {
         cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
         return;
     }
-    //_directory = path.substr(0, path.find_last_of('/'));
+    _directory = path.substr(0, path.find_last_of('/'));
 
     ProcessNode(scene->mRootNode, scene);
 }
@@ -145,11 +149,11 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
         }
         if (!skip) {
             Texture texture;
-            //texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
-            texture.id = TextureModel(this->_directory);
+            texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
+            //texture.id = TextureModel(_modelTexture);
             texture.type = typeName;
-            //texture.path = str.C_Str();
-            texture.path = this->_directory;
+            texture.path = str.C_Str();
+            //texture.path = _modelTexture;
             textures.push_back(texture);
             _textures_loaded.push_back(texture);
         }

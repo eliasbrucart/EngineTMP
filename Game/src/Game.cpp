@@ -44,6 +44,11 @@ Game::~Game() {
 		}
 	}
 
+	if (_model != NULL) {
+		delete _model;
+		_model = NULL;
+	}
+
 	//if (_point1 != NULL) {
 	//	delete _point1;
 	//	_point1 = NULL;
@@ -57,6 +62,11 @@ Game::~Game() {
 	if (_dirLight != NULL) {
 		delete _dirLight;
 		_dirLight = NULL;
+	}
+
+	if (_spotLight != NULL) {
+		delete _spotLight;
+		_spotLight = NULL;
 	}
 
 	//if (map != NULL) {
@@ -75,6 +85,7 @@ void Game::InitGame() {
 	_shape = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::gold);
 	_shape2 = new Shape(Type::cube, GetRenderer(), basicShader, MaterialType::esmerald);
 	_dirLight = new Light(GetRenderer(), basicShader, LightType::directional);
+	_spotLight = new Light(GetRenderer(), basicShader, LightType::spot);
 	//_point1 = new Light(GetRenderer(), basicShader, LightType::point);
 	//_point2 = new Light(GetRenderer(), basicShader, LightType::point);
 
@@ -90,8 +101,9 @@ void Game::InitGame() {
 		_light[i]->SetQuadratic(0.032f);
 	}
 
-	//std::string modelPath = "res/models/backpack2/source/Survival_BackPack_2.fbx";
-	_model = new ModelImp("res/models/backpack2/source/backpack.fbx", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
+	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", "res/models/pandemic/textures/color_1.png", basicShader);
+	_model = new ModelImp("res/models/cyborg/cyborg.obj");
+	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());
 
@@ -113,13 +125,24 @@ void Game::InitGame() {
 	//_light[3]->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
 	_dirLight->SetColor(1.0f, 1.0f, 0.0f);
 
+	_spotLight->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
+	_spotLight->SetDirection(_camera->GetCameraFront());
+	_spotLight->SetAmbient(glm::vec3(0.0f));
+	_spotLight->SetDiffuse(glm::vec3(1.0f));
+	_spotLight->SetSpecular(glm::vec3(1.0f));
+	_spotLight->SetConstant(1.0f);
+	_spotLight->SetLinear(0.09f);
+	_spotLight->SetQuadratic(0.032f);
+	_spotLight->SetCutOff(glm::cos(glm::radians(12.5f)));
+	_spotLight->SetOuterCutOff(glm::cos(glm::radians(15.0f)));
+
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
 	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
 	_shape->transform.scale = glm::vec3(3.0f, 3.0f, 3.0f);
 
 	_shape2->Color(0.0f, 0.0f, 1.0f);
-	_shape2->transform.position = glm::vec3(2.0f, 0.0f, -10.0f);
+	_shape2->transform.position = glm::vec3(-12.0f, 0.0f, -10.0f);
 	_shape2->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
 	//player->Init(_sprite, glm::ivec2(6,3));
@@ -136,9 +159,9 @@ void Game::InitGame() {
 	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 }
 void Game::PlayerInputs() {
-	//if (input.GetKey(KeyCode::W)) {
-	//	_camera->transform.position.z -= speed * time.GetDeltaTime();
-	//	//_shape->transform.position.z -= speed * time.GetDeltaTime();
+	//if (input.GetKey(KeyCode::I)) {
+	//	//_camera->transform.position.z -= speed * time.GetDeltaTime();
+	//	_shape2->transform.position.x -= speed * time.GetDeltaTime();
 	//}
 	//else if (input.GetKey(KeyCode::S)) {
 	//	_camera->transform.position.z += speed * time.GetDeltaTime();
@@ -248,6 +271,7 @@ void Game::UpdateGame() {
 	_model->Draw(basicShader);
 	//Directional light
 	_dirLight->DrawDirectionalLight();
+	_spotLight->DrawSpotLight();
 
 	//_point1->Draw();
 	//_point2->Draw();
@@ -294,6 +318,16 @@ void Game::UnloadGame() {
 	if (_dirLight != NULL) {
 		delete _dirLight;
 		_dirLight = NULL;
+	}
+
+	if (_spotLight != NULL) {
+		delete _spotLight;
+		_spotLight = NULL;
+	}
+
+	if (_model != NULL) {
+		delete _model;
+		_model = NULL;
 	}
 
 	//if (_point1 != NULL) {

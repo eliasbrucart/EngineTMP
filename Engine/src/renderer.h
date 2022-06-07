@@ -39,6 +39,7 @@ namespace Engine {
 		void DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao , unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount);
 		void DrawDirectionalLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 direction);
 		void DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic,int cantOfLights, int numberOfLight);
+		void DrawSpotLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightDir, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, float outerCutOff);
 		void DrawSprite(Shader &shader, unsigned int &vao, unsigned int &vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model, Material* material);
 		void DrawCamera(Shader& shader, glm::vec3 camPos, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 	};

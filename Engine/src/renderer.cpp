@@ -228,6 +228,30 @@ void Renderer::DrawSprite(Shader& shader, unsigned int& vao, unsigned int& vbo, 
 	UnbindBuffers();
 }
 
+void Renderer::DrawSpotLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightDir, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, float outerCutOff) {
+	shader.Use();
+	unsigned int lightPosLocation = glGetUniformLocation(shader.GetID(), "spotLight.position");
+	glUniform3fv(lightPosLocation, 1, glm::value_ptr(lightPos));
+	unsigned int lightDirLocation = glGetUniformLocation(shader.GetID(), "spotLight.direction");
+	glUniform3fv(lightDirLocation, 1, glm::value_ptr(lightDir));
+	unsigned int lightAmbientLocation = glGetUniformLocation(shader.GetID(), "spotLight.ambient");
+	glUniform3fv(lightAmbientLocation, 1, glm::value_ptr(ambient));
+	unsigned int lightDiffuseLocation = glGetUniformLocation(shader.GetID(), "spotLight.diffuse");
+	glUniform3fv(lightDiffuseLocation, 1, glm::value_ptr(diffuse));
+	unsigned int lightSpecularLocation = glGetUniformLocation(shader.GetID(), "spotLight.specular");
+	glUniform3fv(lightSpecularLocation, 1, glm::value_ptr(specular));
+	unsigned int lightConstantLocation = glGetUniformLocation(shader.GetID(), "spotLight.constant");
+	glUniform1f(lightConstantLocation, constant);
+	unsigned int lightLinearLocation = glGetUniformLocation(shader.GetID(), "spotLight.linear");
+	glUniform1f(lightLinearLocation, linear);
+	unsigned int lightQuadraticLocation = glGetUniformLocation(shader.GetID(), "spotLight.quadratic");
+	glUniform1f(lightQuadraticLocation, quadratic);
+	unsigned int lightCutOffLocation = glGetUniformLocation(shader.GetID(), "spotLight.cutOff");
+	glUniform1f(lightCutOffLocation, cutOff);
+	unsigned int lightOuterCutOff = glGetUniformLocation(shader.GetID(), "spotLight.outerCutOff");
+	glUniform1f(lightOuterCutOff, outerCutOff);
+}
+
 void Renderer::DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao, unsigned int& vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount) {
 	BindVAO(vao);
 	UpdateBuffers(vbo, vertices, verticesAmount);
