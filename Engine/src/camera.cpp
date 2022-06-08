@@ -17,8 +17,6 @@ Camera::Camera(Renderer* renderer, ProjectionType type, CamMode mode){
 	_type = type;
 	_yaw = -90.0f;
 	_pitch = 0.0f;
-	_lastX = 1280.0f / 2.0f;
-	_lastY = 720.0f / 2.0f;
 	_firstMouse = true;
 	_mode = mode;
 	_rotationAngle = 5.0f;
@@ -28,7 +26,7 @@ Camera::~Camera(){
 }
 
 void Camera::SetView(glm::vec3 direction, glm::vec3 up){
-	_view = glm::translate(_view, _cameraPos);
+	_view = glm::translate(_view, transform.position);
 }
 
 void Camera::SetProjection(ProjectionType type){
@@ -64,10 +62,6 @@ void Camera::SetCameraMode(CamMode mode) {
 	_mode = mode;
 }
 
-void Camera::SetCameraPos(glm::vec3 cameraPos) {
-	_cameraPos = cameraPos;
-}
-
 void Camera::SetCameraFront(glm::vec3 cameraFront) {
 	_cameraFront = cameraFront;
 }
@@ -84,32 +78,12 @@ void Camera::SetPitch(float pitch) {
 	_pitch = pitch;
 }
 
-void Camera::SetLastX(float lastX) {
-	_lastX = lastX;
-}
-
-void Camera::SetLastY(float lastY) {
-	_lastY = lastY;
-}
-
 float Camera::GetYaw() {
 	return _yaw;
 }
 
 float Camera::GetPitch() {
 	return _pitch;
-}
-
-float Camera::GetLastX() {
-	return _lastX;
-}
-
-float Camera::GetLastY() {
-	return _lastY;
-}
-
-glm::vec3 Camera::GetCameraPos() {
-	return _cameraPos;
 }
 
 glm::vec3 Camera::GetCameraFront() {

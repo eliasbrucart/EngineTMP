@@ -42,7 +42,17 @@ void Light::Init() {
 		_linear = 0.09f;
 		_quadratic = 0.032f;
 	}
-	//Inicializar la posicion de la light
+	if (_type == LightType::spot) {
+		_direction = glm::vec3(0.0, 0.0, -2.0f);
+		_ambient = glm::vec3(0.0f);
+		_diffuse = glm::vec3(1.0f);
+		_specular = glm::vec3(1.0f);
+		_constant = 1.0f;
+		_linear = 0.09f;
+		_quadratic = 0.032f;
+		_cutOff = glm::cos(glm::radians(12.5f));
+		_outerCutOff = glm::cos(glm::radians(15.0f));
+	}
 }
 
 void Light::SetPosition(glm::vec3 position) {

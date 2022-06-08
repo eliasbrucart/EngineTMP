@@ -31,14 +31,11 @@ namespace Engine {
 		Input inputCam;
 		Time time;
 		float _roll;
-		float _lastX;
-		float _lastY;
 		float _yaw;
 		float _pitch;
 		bool _firstMouse;
 		float _rotationAngle;
 	public:
-		glm::vec3 _cameraPos;
 		glm::vec3 _cameraFront;
 		glm::vec3 _cameraUp;
 		glm::vec3 _cameraRight;
@@ -50,20 +47,14 @@ namespace Engine {
 		void SetCameraMode(CamMode mode);
 		void SetLookAt(glm::vec3 forward);
 		void FollowTarget(glm::vec3 positionTarget);
-		void SetCameraPos(glm::vec3 cameraPos);
 		void SetCameraFront(glm::vec3 cameraFront);
 		void SetCameraUp(glm::vec3 cameraUp);
 		void SetYaw(float yaw);
 		void SetPitch(float pitch);
-		void SetLastX(float lastX); //sacar
-		void SetLastY(float lastY); //sacar
 		float GetYaw();
 		float GetPitch();
-		float GetLastX(); //sacar
-		float GetLastY(); //sacar
 		void RotateYaw(float yaw);
 		void RotatePitch(float pitch);
-		glm::vec3 GetCameraPos();
 		glm::vec3 GetCameraFront();
 		glm::vec3 GetCameraUp();
 		void UpdateRotation();

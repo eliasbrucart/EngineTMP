@@ -125,16 +125,17 @@ void Game::InitGame() {
 	//_light[3]->transform.position = glm::vec3(0.0f, 0.0f, 1.0f);
 	_dirLight->SetColor(1.0f, 1.0f, 0.0f);
 
+	_spotLight->Init();
 	_spotLight->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
-	_spotLight->SetDirection(_camera->GetCameraFront());
-	_spotLight->SetAmbient(glm::vec3(0.0f));
-	_spotLight->SetDiffuse(glm::vec3(1.0f));
-	_spotLight->SetSpecular(glm::vec3(1.0f));
-	_spotLight->SetConstant(1.0f);
-	_spotLight->SetLinear(0.09f);
-	_spotLight->SetQuadratic(0.032f);
-	_spotLight->SetCutOff(glm::cos(glm::radians(12.5f)));
-	_spotLight->SetOuterCutOff(glm::cos(glm::radians(15.0f)));
+	//_spotLight->SetDirection(_camera->GetCameraFront());
+	//_spotLight->SetAmbient(glm::vec3(0.0f));
+	//_spotLight->SetDiffuse(glm::vec3(1.0f));
+	//_spotLight->SetSpecular(glm::vec3(1.0f));
+	//_spotLight->SetConstant(1.0f);
+	//_spotLight->SetLinear(0.09f);
+	//_spotLight->SetQuadratic(0.032f);
+	//_spotLight->SetCutOff(glm::cos(glm::radians(12.5f)));
+	//_spotLight->SetOuterCutOff(glm::cos(glm::radians(15.0f)));
 
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
@@ -159,10 +160,13 @@ void Game::InitGame() {
 	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 }
 void Game::PlayerInputs() {
-	//if (input.GetKey(KeyCode::I)) {
-	//	//_camera->transform.position.z -= speed * time.GetDeltaTime();
-	//	_shape2->transform.position.x -= speed * time.GetDeltaTime();
-	//}
+	if (input.GetKey(KeyCode::I)) {
+		//_camera->transform.position.z -= speed * time.GetDeltaTime();
+		_spotLight->transform.position.x -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::O)) {
+		_spotLight->transform.position.x += speed * time.GetDeltaTime();
+	}
 	//else if (input.GetKey(KeyCode::S)) {
 	//	_camera->transform.position.z += speed * time.GetDeltaTime();
 	//	//_shape->transform.position.z += speed * time.GetDeltaTime();
