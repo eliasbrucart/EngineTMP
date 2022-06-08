@@ -25,6 +25,7 @@ namespace Engine {
 		float _outerCutOff;
 		glm::vec3 _color;
 		LightType _type;
+		bool _turnOn;
 	public:
 		Light();
 		Light(Renderer* renderer, Shader shader);
@@ -44,6 +45,8 @@ namespace Engine {
 		void SetQuadratic(float quadratic);
 		void SetCutOff(float cutOff);
 		void SetOuterCutOff(float outerCutOff);
+		void SetTurnOnState(bool state);
+		bool GetTurnState();
 		void DrawDirectionalLight();
 		void DrawPointLight(int numberOfLight);
 		void DrawSpotLight();

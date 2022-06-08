@@ -92,13 +92,14 @@ void Game::InitGame() {
 
 	for (int i = 0; i < 4; i++) {
 		_light[i] = new Light(GetRenderer(), basicShader, LightType::point);
+		_light[i]->Init();
 		_light[i]->SetPosition(pointLightPositions[i]);
-		_light[i]->SetAmbient(glm::vec3(0.2f));
-		_light[i]->SetDiffuse(glm::vec3(0.5f));
-		_light[i]->SetSpecular(glm::vec3(1.0f));
-		_light[i]->SetConstant(1.0f);
-		_light[i]->SetLinear(0.09f);
-		_light[i]->SetQuadratic(0.032f);
+		//_light[i]->SetAmbient(glm::vec3(0.2f));
+		//_light[i]->SetDiffuse(glm::vec3(0.5f));
+		//_light[i]->SetSpecular(glm::vec3(1.0f));
+		//_light[i]->SetConstant(1.0f);
+		//_light[i]->SetLinear(0.09f);
+		//_light[i]->SetQuadratic(0.032f);
 	}
 
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", "res/models/pandemic/textures/color_1.png", basicShader);
@@ -167,10 +168,14 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::O)) {
 		_spotLight->transform.position.x += speed * time.GetDeltaTime();
 	}
-	//else if (input.GetKey(KeyCode::S)) {
-	//	_camera->transform.position.z += speed * time.GetDeltaTime();
-	//	//_shape->transform.position.z += speed * time.GetDeltaTime();
-	//}
+	else if (input.GetKey(KeyCode::P)) {
+		_light[0]->SetTurnOnState(false);
+		_spotLight->SetTurnOnState(false);
+	}
+	else if (input.GetKey(KeyCode::L)) {
+		_light[0]->SetTurnOnState(true);
+		_spotLight->SetTurnOnState(true);
+	}
 	//else if (input.GetKey(KeyCode::D)) {
 	//	_camera->transform.position.x += speed * time.GetDeltaTime();
 	//	//_shape->transform.position.x += speed * time.GetDeltaTime();
