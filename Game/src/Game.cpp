@@ -13,6 +13,8 @@ glm::vec3 pointLightPositions[4] = {
 
 float rotationSpeed = 100.0f; //dejamos como esta
 
+glm::vec3 direction = glm::vec3(0.0f);
+
 Game::Game() {
 
 }
@@ -176,10 +178,11 @@ void Game::PlayerInputs() {
 		_light[0]->SetTurnOnState(true);
 		_spotLight->SetTurnOnState(true);
 	}
-	//else if (input.GetKey(KeyCode::D)) {
-	//	_camera->transform.position.x += speed * time.GetDeltaTime();
-	//	//_shape->transform.position.x += speed * time.GetDeltaTime();
-	//}
+	else if (input.GetKey(KeyCode::G)) {
+		direction.x += speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
 	//else if (input.GetKey(KeyCode::A)) {
 	//	_camera->transform.position.x -= speed * time.GetDeltaTime();
 	//	//_shape->transform.position.x -= speed * time.GetDeltaTime();

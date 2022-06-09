@@ -75,7 +75,7 @@ void Mesh::Draw(Shader& shader) {
 	glBindVertexArray(_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
-	shader.Use();
+	shader.Use(GetModel());
 
 	shader.SetTypeOfshape("type", 2);
 

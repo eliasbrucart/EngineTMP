@@ -10,6 +10,7 @@
 #include "shader.h"
 #include "mesh.h"
 #include "entity2D.h"
+#include "time_manager.h"
 
 #include <string>
 #include <fstream>
@@ -51,6 +52,7 @@ namespace Engine {
 		ModelImp(string path, const char* modelTexture, Shader shader);
 		ModelImp(string path);
 		~ModelImp();
+		void MoveModel(glm::vec3 direction);
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader);
