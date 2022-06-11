@@ -1,6 +1,6 @@
 #include "Game.h"
 
-float speed = 100.0f;
+float speed = 50.0f;
 
 using namespace Engine;
 
@@ -15,6 +15,8 @@ float rotationSpeed = 100.0f; //dejamos como esta
 
 glm::vec3 direction = glm::vec3(0.0f);
 glm::vec3 scale = glm::vec3(0.0f);
+
+glm::vec3 rot = glm::vec3(0.0f);
 
 Game::Game() {
 
@@ -189,6 +191,18 @@ void Game::PlayerInputs() {
 		scale.y += speed * time.GetDeltaTime();
 		scale.z += speed * time.GetDeltaTime();
 		_model->ScaleModel(scale.x, scale.y, scale.z);
+	}
+	else if (input.GetKey(KeyCode::X)) {
+		rot.x += speed * time.GetDeltaTime();
+		_model->RotateModelX(rot.x);
+	}
+	else if (input.GetKey(KeyCode::Y)) {
+		rot.y += speed * time.GetDeltaTime();
+		_model->RotateModelY(rot.y);
+	}
+	else if (input.GetKey(KeyCode::Z)) {
+		rot.z += speed * time.GetDeltaTime();
+		_model->RotateModelZ(rot.z);
 	}
 	//else if (input.GetKey(KeyCode::A)) {
 	//	_camera->transform.position.x -= speed * time.GetDeltaTime();

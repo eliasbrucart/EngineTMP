@@ -54,6 +54,9 @@ namespace Engine {
 		~ModelImp();
 		void MoveModel(glm::vec3 direction);
 		void ScaleModel(float x, float y, float z);
+		void RotateModelX(float x);
+		void RotateModelY(float y);
+		void RotateModelZ(float z);
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader);

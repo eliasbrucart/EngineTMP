@@ -41,6 +41,24 @@ void ModelImp::ScaleModel(float x, float y, float z) {
     }
 }
 
+void ModelImp::RotateModelX(float x) {
+    for (int i = 0; i < _meshes.size(); i++) {
+        _meshes[i].RotateX(x);
+    }
+}
+
+void ModelImp::RotateModelY(float y) {
+    for (int i = 0; i < _meshes.size(); i++) {
+        _meshes[i].RotateY(y);
+    }
+}
+
+void ModelImp::RotateModelZ(float z) {
+    for (int i = 0; i < _meshes.size(); i++) {
+        _meshes[i].RotateZ(z);
+    }
+}
+
 void ModelImp::LoadModel(string path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
