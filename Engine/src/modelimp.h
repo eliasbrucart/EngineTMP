@@ -53,6 +53,7 @@ namespace Engine {
 		ModelImp(string path);
 		~ModelImp();
 		void MoveModel(glm::vec3 direction);
+		void ScaleModel(float x, float y, float z);
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader);

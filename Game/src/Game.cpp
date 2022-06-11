@@ -14,6 +14,7 @@ glm::vec3 pointLightPositions[4] = {
 float rotationSpeed = 100.0f; //dejamos como esta
 
 glm::vec3 direction = glm::vec3(0.0f);
+glm::vec3 scale = glm::vec3(0.0f);
 
 Game::Game() {
 
@@ -105,7 +106,7 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", "res/models/pandemic/textures/color_1.png", basicShader);
-	_model = new ModelImp("res/models/slime/source/Astral_Slime.fbx");
+	_model = new ModelImp("res/models/cyborg/cyborg.obj");
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());
@@ -182,6 +183,12 @@ void Game::PlayerInputs() {
 		direction.x += speed * time.GetDeltaTime();
 		_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::H)) {
+		scale.x += speed * time.GetDeltaTime();
+		scale.y += speed * time.GetDeltaTime();
+		scale.z += speed * time.GetDeltaTime();
+		_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 	//else if (input.GetKey(KeyCode::A)) {
 	//	_camera->transform.position.x -= speed * time.GetDeltaTime();

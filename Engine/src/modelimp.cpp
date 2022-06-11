@@ -32,8 +32,12 @@ ModelImp::~ModelImp() {
 void ModelImp::MoveModel(glm::vec3 direction) {
     for (int i = 0; i < _meshes.size(); i++) {
         _meshes[i].Translate(direction.x, direction.y, direction.z);
-        //_meshes[i].transform.position = _meshes[i].transform.position + (direction * speed * timer.GetDeltaTime());
-        //_meshes[i].Translate(_meshes[i].transform.position.x, _meshes[i].transform.position.y, _meshes[i].transform.position.z);
+    }
+}
+
+void ModelImp::ScaleModel(float x, float y, float z) {
+    for (int i = 0; i < _meshes.size(); i++) {
+        _meshes[i].Scale(x, y, z);
     }
 }
 
