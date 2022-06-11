@@ -48,7 +48,8 @@ void ModelImp::LoadModel(string path) {
     }
     _directory = path.substr(0, path.find_last_of('/'));
 
-    ProcessNode(scene->mRootNode, scene);
+    if(scene)
+        ProcessNode(scene->mRootNode, scene);
 }
 
 void ModelImp::ProcessNode(aiNode* node, const aiScene* scene) {

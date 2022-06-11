@@ -105,7 +105,7 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", "res/models/pandemic/textures/color_1.png", basicShader);
-	_model = new ModelImp("res/models/cyborg/cyborg.obj");
+	_model = new ModelImp("res/models/slime/source/Astral_Slime.fbx");
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());
