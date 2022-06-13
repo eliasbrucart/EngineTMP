@@ -28,6 +28,8 @@ void Mesh::SetUpMesh() {
 
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
+	_shader.SetTypeOfshape("type", 2);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
@@ -57,18 +59,19 @@ void Mesh::Draw(Shader& shader) {
 		glActiveTexture(GL_TEXTURE0 + i);
 		string number;
 		string name = textures[i].type;
-		if (name == "texture_diffuse")
+		if (name == "diffuseM")
 			number = std::to_string(diffuseNr++);
-		else if (name == "texture_specular")
+		else if (name == "specularM")
 			number = std::to_string(specularNr++);
-		else if (name == "texture_normal")
-			number = std::to_string(normalNr++); // transfer unsigned int to string
-		else if (name == "texture_height")
-			number = std::to_string(heightNr++); // transfer unsigned int to string
+		//else if (name == "texture_normal")
+		//	number = std::to_string(normalNr++); // transfer unsigned int to string
+		//else if (name == "texture_height")
+		//	number = std::to_string(heightNr++); // transfer unsigned int to string
 
 		//setear el float de MaterialPro al shader
 		//Acordarse de agregar los nuevos samplers de textura para la mesh en el struct MaterialPro
-		glUniform1f(glGetUniformLocation(shader.GetID(), (name + number).c_str()), i);
+		glUniform1f(glGetUniformLocation(shader.GetID(), ("materialPro." + name).c_str()), i);
+		//glUniform1f(glGetUniformLocation(shader.GetID(), (name + number).c_str()), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 
@@ -91,11 +94,14 @@ void Mesh::Draw(Shader& shader) {
 	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 	glEnableVertexAttribArray(_textureAttrib);
 
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glBindVertexArray(_vao);
-	//dibujar la mesh
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+
+	//glBindVertexArray(_vao);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glActiveTexture(GL_TEXTURE0);
 }

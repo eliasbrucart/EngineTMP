@@ -107,14 +107,15 @@ void Game::InitGame() {
 		//_light[i]->SetQuadratic(0.032f);
 	}
 
-	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", "res/models/pandemic/textures/color_1.png", basicShader);
+	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
+	//_model = new ModelImp("res/models/slime/source/Astral_Slime.fbx");
 	_model = new ModelImp("res/models/cyborg/cyborg.obj");
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());
 
 	//_light[3]->transform.position = pointLightPositions[3];
-	//
+
 	//for (int i = 0; i < 3; i++) {
 	//	_light[i]->transform.position = pointLightPositions[i];
 	//}
@@ -177,6 +178,12 @@ void Game::PlayerInputs() {
 		_light[0]->SetTurnOnState(false);
 		_spotLight->SetTurnOnState(false);
 	}
+	else if (input.GetKey(KeyCode::F)) {
+		_spotLight->transform.position.z += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::V)) {
+		_spotLight->transform.position.z -= speed * time.GetDeltaTime();
+	}
 	else if (input.GetKey(KeyCode::L)) {
 		_light[0]->SetTurnOnState(true);
 		_spotLight->SetTurnOnState(true);
@@ -190,6 +197,12 @@ void Game::PlayerInputs() {
 		scale.x += speed * time.GetDeltaTime();
 		scale.y += speed * time.GetDeltaTime();
 		scale.z += speed * time.GetDeltaTime();
+		_model->ScaleModel(scale.x, scale.y, scale.z);
+	}
+	else if (input.GetKey(KeyCode::J)) {
+		scale.x -= speed * time.GetDeltaTime();
+		scale.y -= speed * time.GetDeltaTime();
+		scale.z -= speed * time.GetDeltaTime();
 		_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 	else if (input.GetKey(KeyCode::X)) {
