@@ -50,6 +50,8 @@ void Mesh::SetUpMesh() {
 }
 
 void Mesh::Draw(Shader& shader) {
+	UpdateMatrices();
+	UpdateModel();
 	//Pasar este codigo a renderer y que reciba como parametros todos los datos necesarios
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -94,14 +96,14 @@ void Mesh::Draw(Shader& shader) {
 	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 	glEnableVertexAttribArray(_textureAttrib);
 
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
-	//glBindVertexArray(_vao);
+	glBindVertexArray(_vao);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glActiveTexture(GL_TEXTURE0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glActiveTexture(GL_TEXTURE0);
 }

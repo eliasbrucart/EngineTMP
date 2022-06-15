@@ -18,8 +18,10 @@ ModelImp::ModelImp(string path, const char* modelTexture, Shader shader) : Entit
     //LoadTexture();
 }
 
-ModelImp::ModelImp(string path) {
+ModelImp::ModelImp(string path, Shader shader) {
     LoadModel(path);
+    _shader = shader;
+    _texImporter = new TextureImporter();
 }
 
 ModelImp::~ModelImp() {
@@ -61,7 +63,7 @@ void ModelImp::RotateModelZ(float z) {
 
 void ModelImp::LoadModel(string path) {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -179,8 +181,8 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
         }
         if (!skip) {
             Texture texture;
-            texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
-            //texture.id = TextureModel(_modelTexture);
+            //texture.id = TextureFromFile(str.C_Str(), this->_directory, false);
+            texture.id = _texImporter->TextureFromFile(str.C_Str(), this->_directory);
             texture.type = typeName;
             texture.path = str.C_Str();
             //texture.path = _modelTexture;

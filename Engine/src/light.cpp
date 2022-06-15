@@ -37,6 +37,9 @@ void Light::SetRenderer(Renderer* renderer) {
 void Light::Init() {
 	if (_type == LightType::directional) {
 		_direction = glm::vec3(-0.2f, -1.0f, -0.3f);
+		_ambient = glm::vec3(0.05f);
+		_diffuse = glm::vec3(0.04f);
+		_ambient = glm::vec3(0.4f);
 		_turnOn = true;
 	}
 	if (_type == LightType::point) {
@@ -118,7 +121,7 @@ void Light::SetColor(float r, float g, float b) {
 
 void Light::DrawDirectionalLight() {
 	if (_type == LightType::directional)
-		_renderer->DrawDirectionalLight(_shader, _position, _color, _direction);
+		_renderer->DrawDirectionalLight(_shader, _position, _color, _direction, _ambient, _diffuse, _specular);
 }
 
 void Light::DrawPointLight(int numberOfLight) {

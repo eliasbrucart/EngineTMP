@@ -1,6 +1,6 @@
 #include "Game.h"
 
-float speed = 50.0f;
+float speed = 10.0f;
 
 using namespace Engine;
 
@@ -108,8 +108,9 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
-	//_model = new ModelImp("res/models/slime/source/Astral_Slime.fbx");
-	_model = new ModelImp("res/models/cyborg/cyborg.obj");
+	_model = new ModelImp("res/models/cyborg/cyborg.obj", basicShader);
+	_model->Scale(2.0f, 2.0f, 2.0f);
+	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", basicShader);
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
 	//_model->SetShader(GetRenderer()->GetShader());

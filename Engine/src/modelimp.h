@@ -50,7 +50,7 @@ namespace Engine {
 	public:
 		ModelImp();
 		ModelImp(string path, const char* modelTexture, Shader shader);
-		ModelImp(string path);
+		ModelImp(string path, Shader shader);
 		~ModelImp();
 		void MoveModel(glm::vec3 direction);
 		void ScaleModel(float x, float y, float z);
