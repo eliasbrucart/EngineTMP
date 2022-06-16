@@ -39,6 +39,9 @@ void ModelImp::MoveModel(glm::vec3 direction) {
 
 void ModelImp::ScaleModel(float x, float y, float z) {
     for (int i = 0; i < _meshes.size(); i++) {
+        if (x < 0 || y < 0 || z < 0) {
+            x = 0;y = 0;z = 0;
+        }
         _meshes[i].Scale(x, y, z);
     }
 }

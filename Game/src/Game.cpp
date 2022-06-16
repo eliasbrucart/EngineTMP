@@ -109,6 +109,7 @@ void Game::InitGame() {
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
 	_model = new ModelImp("res/models/cyborg/cyborg.obj", basicShader);
+	_model->Translate(0.0f, 0.0f, 0.0f);
 	_model->Scale(2.0f, 2.0f, 2.0f);
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", basicShader);
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
@@ -178,8 +179,9 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::P)) {
 		_light[0]->SetTurnOnState(false);
 		_spotLight->SetTurnOnState(false);
+		_dirLight->SetTurnOnState(false);
 	}
-	else if (input.GetKey(KeyCode::F)) {
+	else if (input.GetKey(KeyCode::B)) {
 		_spotLight->transform.position.z += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::V)) {
@@ -188,9 +190,25 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::L)) {
 		_light[0]->SetTurnOnState(true);
 		_spotLight->SetTurnOnState(true);
+		_dirLight->SetTurnOnState(true);
 	}
 	else if (input.GetKey(KeyCode::G)) {
 		direction.x += speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::F)) {
+		direction.x -= speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::T)) {
+		direction.y += speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::C)) {
+		direction.y -= speed * time.GetDeltaTime();
 		_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
