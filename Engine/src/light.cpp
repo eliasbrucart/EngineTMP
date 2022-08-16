@@ -3,6 +3,8 @@
 
 using namespace Engine;
 
+//Esta clase deejarla como Base y crear derivadas para cada tipo de light
+
 Light::Light() : Entity2D(){
 	_renderer = NULL;
 }

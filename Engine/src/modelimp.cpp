@@ -3,24 +3,28 @@
 #include "GL/glew.h"
 using namespace Engine;
 
+//Pasar todo el codigo a una clase que se llame Model Loader y dejar esta para importar el modelo
+
 ModelImp::ModelImp() {
     _path = "";
     _directory = "";
 }
 
-ModelImp::ModelImp(string path, const char* modelTexture, Shader shader) : Entity2D(){
+ModelImp::ModelImp(string path, const char* modelTexture, Shader shader, Renderer* renderer) : Entity2D(){
     _modelTexture = modelTexture;
     LoadModel(path);
     //_directory = directory;
     //_shader.SetTypeOfshape("type", 2);
     _shader = shader;
+    _renderer = renderer;
     //_texImporter = new TextureImporter(modelTexture);
     //LoadTexture();
 }
 
-ModelImp::ModelImp(string path, Shader shader) {
+ModelImp::ModelImp(string path, Shader shader, Renderer* renderer) {
     LoadModel(path);
     _shader = shader;
+    _renderer = renderer;
     _texImporter = new TextureImporter();
 }
 
@@ -166,7 +170,7 @@ Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     std::cout << "Entro en ProcessMesh!!!" << std::endl;
 
-    return Mesh(vertices, indices, textures, _shader);
+    return Mesh(vertices, indices, textures, _shader, _renderer);
 }
 
 vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName) {

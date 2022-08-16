@@ -4,7 +4,7 @@
 
 using namespace Engine;
 
-Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader shader) : Entity2D() {
+Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader shader, Renderer* renderer) : Entity2D() {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
@@ -19,32 +19,49 @@ Mesh::~Mesh() {
 }
 
 void Mesh::SetUpMesh() {
-	glGenVertexArrays(1, &_vao);
-	glGenBuffers(1, &_vbo);
-	glGenBuffers(1, &_ebo);
+	//Pasar a renderer el setup del mesh ya que genera buffers y los bindea.
 
-	glBindVertexArray(_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	_renderer->GenerateVAO(_vao);
 
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	_renderer->BindVAO(_vao);
 
-	_shader.SetTypeOfshape("type", 2);
+	_renderer->GenerateVBO(_vbo);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	_renderer->UpdateMeshBuffers(_vbo, vertices.size() * sizeof(Vertex), &vertices[0]);
 
-	//Especificar al shader las posiciones, las normales y las uv del mesh
-	_positionAttrib = glGetAttribLocation(_shader.GetID(), "position");
-	glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	glEnableVertexAttribArray(_positionAttrib);
+	_renderer->BindMeshEBO(_ebo, indices.size() * sizeof(unsigned int), &indices[0]);
 
-	_normalAttrib = glGetAttribLocation(_shader.GetID(), "aNormal");
-	glVertexAttribPointer(_normalAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	glEnableVertexAttribArray(_normalAttrib);
+	_renderer->SetMeshAttribPointers(_shader, 3, sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords));
+	//_shader.SetMeshVertexAttributes("position", 3, sizeof(Vertex), 0);
+	//_shader.SetMeshVertexAttributes("aNormal", 3, sizeof(Vertex), offsetof(Vertex, Normal));
+	//_shader.SetMeshVertexAttributes("uv", 2, sizeof(Vertex), offsetof(Vertex, TexCoords));
 
-	_textureAttrib =  glGetAttribLocation(_shader.GetID(), "uv");
-	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-	glEnableVertexAttribArray(_textureAttrib);
+	//glGenVertexArrays(1, &_vao);
+	//glGenBuffers(1, &_vbo);
+	//glGenBuffers(1, &_ebo);
+	//
+	//glBindVertexArray(_vao);
+	//glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	//
+	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+	//
+	//_shader.SetTypeOfshape("type", 2);
+	//
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	//
+	////Especificar al shader las posiciones, las normales y las uv del mesh
+	//_positionAttrib = glGetAttribLocation(_shader.GetID(), "position");
+	//glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	//glEnableVertexAttribArray(_positionAttrib);
+	//
+	//_normalAttrib = glGetAttribLocation(_shader.GetID(), "aNormal");
+	//glVertexAttribPointer(_normalAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	//glEnableVertexAttribArray(_normalAttrib);
+	//
+	//_textureAttrib =  glGetAttribLocation(_shader.GetID(), "uv");
+	//glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	//glEnableVertexAttribArray(_textureAttrib);
 
 	glBindVertexArray(0);
 }
@@ -77,30 +94,36 @@ void Mesh::Draw(Shader& shader) {
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 
-	glBindVertexArray(_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	//Esto pasarlo a renderer
+	_renderer->BindVAO(_vao);
+	_renderer->UpdateMeshBuffers(_vbo, vertices.size() * sizeof(Vertex), &vertices[0]);
+	//_renderer->DrawMesh(_shader, _vao, _vbo, indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), GetModel());
 
+	//glBindVertexArray(_vao);
+	//glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	//
 	shader.Use(GetModel());
-
+	//
 	shader.SetTypeOfshape("type", 2);
-
-	_positionAttrib = glGetAttribLocation(shader.GetID(), "position");
-	glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	glEnableVertexAttribArray(_positionAttrib);
-
-	_normalAttrib = glGetAttribLocation(shader.GetID(), "aNormal");
-	glVertexAttribPointer(_normalAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	glEnableVertexAttribArray(_normalAttrib);
-
-	_textureAttrib = glGetAttribLocation(shader.GetID(), "uv");
-	glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
-	glEnableVertexAttribArray(_textureAttrib);
-
-	//glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-
-	glBindVertexArray(_vao);
+	_renderer->SetMeshAttribPointers(shader, 3, sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords));
+	//
+	//_positionAttrib = glGetAttribLocation(shader.GetID(), "position");
+	//glVertexAttribPointer(_positionAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	//glEnableVertexAttribArray(_positionAttrib);
+	//
+	//_normalAttrib = glGetAttribLocation(shader.GetID(), "aNormal");
+	//glVertexAttribPointer(_normalAttrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+	//glEnableVertexAttribArray(_normalAttrib);
+	//
+	//_textureAttrib = glGetAttribLocation(shader.GetID(), "uv");
+	//glVertexAttribPointer(_textureAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	//glEnableVertexAttribArray(_textureAttrib);
+	//
+	////glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	//
+	//
+	//glBindVertexArray(_vao);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);

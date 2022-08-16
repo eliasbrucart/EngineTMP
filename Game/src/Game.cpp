@@ -108,7 +108,7 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
-	_model = new ModelImp("res/models/cyborg/cyborg.obj", basicShader);
+	_model = new ModelImp("res/models/cyborg/cyborg.obj", basicShader, GetRenderer());
 	_model->Translate(0.0f, 0.0f, 0.0f);
 	_model->Scale(2.0f, 2.0f, 2.0f);
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", basicShader);

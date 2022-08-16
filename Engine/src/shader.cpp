@@ -119,6 +119,21 @@ void Shader::SetSamplerTexture(const char* name, int id) {
 	unsigned int attribute = glGetUniformLocation(_id, name);
 	glUniform1i(attribute, id);
 }
+void Shader::SetMeshAttribPointers(unsigned int dataAmount, unsigned int vertexSize, unsigned int posOffset, unsigned int normalOffset, unsigned int textureOffset) {
+	unsigned int posAttribute = glGetUniformLocation(_id, "position");
+	glVertexAttribPointer(posAttribute, dataAmount, GL_FLOAT, GL_FALSE, vertexSize, (void*)posOffset);
+	glEnableVertexAttribArray(posAttribute);
+
+	unsigned int normalAttribue = glGetUniformLocation(_id, "aNormal");
+	glVertexAttribPointer(normalAttribue, dataAmount, GL_FLOAT, GL_FALSE, vertexSize, (void*)normalOffset);
+	glEnableVertexAttribArray(normalAttribue);
+
+	unsigned int textureAttribute = glGetUniformLocation(_id, "uv");
+	glVertexAttribPointer(textureAttribute, 2, GL_FLOAT, GL_FALSE, vertexSize, (void*)textureOffset);
+	glEnableVertexAttribArray(textureAttribute);
+	//CreateAttribPointer(attribute, dataAmount, vertexSize, offsetOfVertex);
+}
+
 unsigned int Shader::GetMatrixAttributes(const char* name) {
 	unsigned int matrixLoc = glGetUniformLocation(_id, name);
 	return matrixLoc;

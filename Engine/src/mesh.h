@@ -35,9 +35,10 @@ namespace Engine {
 		unsigned int _normalAttrib;
 		unsigned int _textureAttrib;
 		Shader _shader;
+		Renderer* _renderer;
 		void SetUpMesh();
 	public:
-		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader shader);
+		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader shader, Renderer* renderer);
 		~Mesh();
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;

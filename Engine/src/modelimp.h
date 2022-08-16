@@ -43,14 +43,15 @@ namespace Engine {
 		TextureImporter* _texImporter = NULL;
 
 		Shader _shader;
+		Renderer* _renderer;
 
 		unsigned int TextureFromFile(const char* path, const string &directory,bool gamma);
 		void LoadTexture();
 		unsigned int TextureModel(const char* texture);
 	public:
 		ModelImp();
-		ModelImp(string path, const char* modelTexture, Shader shader);
-		ModelImp(string path, Shader shader);
+		ModelImp(string path, const char* modelTexture, Shader shader, Renderer* renderer);
+		ModelImp(string path, Shader shader, Renderer* renderer);
 		~ModelImp();
 		void MoveModel(glm::vec3 direction);
 		void ScaleModel(float x, float y, float z);
