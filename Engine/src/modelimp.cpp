@@ -10,7 +10,7 @@ ModelImp::ModelImp() {
     _directory = "";
 }
 
-ModelImp::ModelImp(string path, const char* modelTexture, Shader shader, Renderer* renderer) : Entity2D(){
+ModelImp::ModelImp(string path, const char* modelTexture, Shader& shader, Renderer* renderer) : Entity2D(){
     _modelTexture = modelTexture;
     LoadModel(path);
     //_directory = directory;
@@ -21,7 +21,7 @@ ModelImp::ModelImp(string path, const char* modelTexture, Shader shader, Rendere
     //LoadTexture();
 }
 
-ModelImp::ModelImp(string path, Shader shader, Renderer* renderer) {
+ModelImp::ModelImp(string path, Shader& shader, Renderer* renderer) {
     LoadModel(path);
     _shader = shader;
     _renderer = renderer;
@@ -170,6 +170,8 @@ Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     std::cout << "Entro en ProcessMesh!!!" << std::endl;
 
+    //Hacer new de mesh para pasarle los datos de shader correctamente.
+    //Averiguar por que el shader no se pasa bien al mesh para el dibujado.
     return Mesh(vertices, indices, textures, _shader, _renderer);
 }
 

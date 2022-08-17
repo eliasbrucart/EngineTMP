@@ -305,19 +305,16 @@ void Renderer::DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao,
 	UnbindBuffers();
 }
 
-void Renderer::DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, int indicesAmmount, unsigned int vertexSize, unsigned int offsetOfVertex, unsigned int offsetOfNormal, unsigned int offsetOfTexture, glm::mat4 model) {
-	//BindVAO(vao);
-	//glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	shader.Use(model);
-	//UpdateMeshBuffers(vbo);
-	shader.SetTypeOfshape("type", 2);
-	//shader.SetMeshVertexAttributes("position", 3, vertexSize, offsetOfVertex);
-	//shader.SetMeshVertexAttributes("aNormal", 3, vertexSize, offsetOfNormal);
-	//shader.SetMeshVertexAttributes("uv", 2, vertexSize, offsetOfTexture);
-	glBindTexture(GL_TEXTURE_2D, 0);
+void Renderer::DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, int verticesAmount, const void* dataVertices, int indicesAmmount, unsigned int vertexSize, unsigned int offsetOfVertex, unsigned int offsetOfNormal, unsigned int offsetOfTexture, glm::mat4 model) {
 	BindVAO(vao);
+	UpdateMeshBuffers(vbo, verticesAmount, dataVertices);
+	shader.Use(model);
+	shader.SetTypeOfshape("type", 2);
+	shader.SetMeshAttribPointers("position", 3, vertexSize, offsetOfVertex);
+	shader.SetMeshAttribPointers("aNormal", 3, vertexSize, offsetOfNormal);
+	shader.SetMeshAttribPointers("uv", 2, vertexSize, offsetOfTexture);
 	//attrib pointers si hace falta
-	//BindVAO();
+	//BindVAO(vao);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);
 	UnbindBuffers();
 }

@@ -27,7 +27,7 @@ namespace Engine {
 		void SetNormalAttributes(const char* name, int vertexSize);
 		void SetTypeOfshape(const char* name, int type);
 		void SetSamplerTexture(const char* name, int id);
-		void SetMeshAttribPointers(unsigned int dataAmount, unsigned int vertexSize, unsigned int posOffset, unsigned int normalOffset, unsigned int textureOffset);
+		void SetMeshAttribPointers(const char* name, unsigned int dataAmount, unsigned int vertexSize, unsigned int vertexOffset);
 		unsigned int GetMatrixAttributes(const char* name);
 		unsigned int GetID();
 	};
