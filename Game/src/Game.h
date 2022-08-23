@@ -20,6 +20,7 @@ private:
 	Light* _spotLight = NULL;
 	Sprite* _sprite = NULL;
 	ModelImp* _model = NULL;
+	ModelImp* _modelA = NULL;
 	//Animation* player = NULL;
 	//Tilemap* map = NULL;
 public:

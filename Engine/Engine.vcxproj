@@ -23,6 +23,7 @@
     <ClInclude Include="src\base.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\collision_manager.h" />
+    <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\entity2D.h" />
     <ClInclude Include="src\export.h" />
     <ClInclude Include="src\input.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="src\base.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\collision_manager.cpp" />
+    <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\entity2D.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\light.cpp" />

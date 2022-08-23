@@ -17,6 +17,7 @@
 #include "xml_lib/tinyxml2.h"
 #include "light.h"
 #include "modelimp.h"
+#include "entity.h"
 
 namespace Engine {
 	class ENGINE_API Base {

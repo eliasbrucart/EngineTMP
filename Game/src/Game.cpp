@@ -21,16 +21,12 @@ glm::vec3 rot = glm::vec3(0.0f);
 Game::Game() {
 
 }
+
 Game::~Game() {
 	if (_sprite != NULL) {
 		delete _sprite;
 		_sprite = NULL;
 	}
-	//
-	//if (player != NULL) {
-	//	delete player;
-	//	player = NULL;
-	//}
 
 	if (_shape != NULL) {
 		delete _shape;
@@ -54,15 +50,10 @@ Game::~Game() {
 		_model = NULL;
 	}
 
-	//if (_point1 != NULL) {
-	//	delete _point1;
-	//	_point1 = NULL;
-	//}
-	//
-	//if (_point2 != NULL) {
-	//	delete _point2;
-	//	_point2 = NULL;
-	//}
+	if (_modelA != NULL) {
+		delete _modelA;
+		_modelA = NULL;
+	}
 
 	if (_dirLight != NULL) {
 		delete _dirLight;
@@ -108,9 +99,20 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
-	_model = new ModelImp("res/models/cyborg/cyborg.obj", basicShader, GetRenderer());
-	_model->Translate(0.0f, 0.0f, 0.0f);
-	_model->Scale(2.0f, 2.0f, 2.0f);
+	string modelpath = "res/models/claire/claire.obj";
+	_model = new ModelImp(modelpath, basicShader, GetRenderer());
+	_model->transform.position = glm::vec3(0.0f);
+	_model->transform.scale = glm::vec3(1.0f);
+
+	_modelA = new Entity(modelpath, basicShader, GetRenderer());
+	_modelA->transform.position = glm::vec3(5.0f, 0.0f, 0.0f);
+	_modelA->transform.scale = glm::vec3(1.0f);
+	_modelA->RotateModelY(-120.0f);
+
+	//_modelA->AddChild(_model);
+
+	//_modelA->UpdateSelfAndChild();
+	
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", basicShader);
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
@@ -194,22 +196,25 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::G)) {
 		direction.x += speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_modelA->transform.position.x += speed * time.GetDeltaTime();
+		//_modelA->Translate(direction.x, direction.y, direction.z);
+		std::cout << "_modelA X " << _modelA->transform.position.x << std::endl;
+		std::cout << "_model X " << _model->transform.position.x << std::endl;
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::F)) {
 		direction.x -= speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_modelA->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::T)) {
 		direction.y += speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_modelA->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::C)) {
 		direction.y -= speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_modelA->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::H)) {
@@ -226,37 +231,40 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::X)) {
 		rot.x += speed * time.GetDeltaTime();
-		_model->RotateModelX(rot.x);
+		_modelA->RotateModelX(rot.x);
+		//_model->RotateModelX(rot.x);
 	}
 	else if (input.GetKey(KeyCode::Y)) {
 		rot.y += speed * time.GetDeltaTime();
-		_model->RotateModelY(rot.y);
+		_modelA->RotateModelY(rot.y);
+		//_model->RotateModelY(rot.y);
 	}
 	else if (input.GetKey(KeyCode::Z)) {
 		rot.z += speed * time.GetDeltaTime();
-		_model->RotateModelZ(rot.z);
+		_modelA->RotateModelZ(rot.z);
+		//_model->RotateModelZ(rot.z);
 	}
-	//else if (input.GetKey(KeyCode::A)) {
-	//	_camera->transform.position.x -= speed * time.GetDeltaTime();
-	//	//_shape->transform.position.x -= speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::LEFT)) {
-	//	_light->transform.position.x -= speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::RIGHT)) {
-	//	_light->transform.position.x += speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::UP)) {
-	//	_light->transform.position.z -= speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::DOWN)) {
-	//	_light->transform.position.z += speed * time.GetDeltaTime();
-	//}
-	//else if (input.GetKey(KeyCode::T)) {
-	//	float value = 10.0f;
-	//	value += 20.0f * time.GetDeltaTime();
-	//	_shape2->RotateZ(value);
-	//}
+	else if (input.GetKey(KeyCode::A)) {
+		_camera->transform.position.x -= speed * time.GetDeltaTime();
+		//_shape->transform.position.x -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::LEFT)) {
+		_light[0]->transform.position.x -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::RIGHT)) {
+		_light[0]->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::UP)) {
+		_light[0]->transform.position.z -= speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::DOWN)) {
+		_light[0]->transform.position.z += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::T)) {
+		float value = 10.0f;
+		value += 20.0f * time.GetDeltaTime();
+		_shape2->RotateZ(value);
+	}
 
 	if (input.GetKey(KeyCode::W)) {
 		_camera->transform.position += speed * time.GetDeltaTime() * _camera->GetCameraFront();
@@ -333,7 +341,11 @@ void Game::UpdateGame() {
 
 	_shape->Draw();
 	_shape2->Draw();
+	//_modelA->UpdateSelfAndChild();
 	_model->Draw(basicShader);
+	_modelA->Draw(basicShader);
+
+	//_modelA->Draw(basicShader);
 	//Directional light
 	_dirLight->DrawDirectionalLight();
 	_spotLight->DrawSpotLight();
@@ -394,24 +406,9 @@ void Game::UnloadGame() {
 		delete _model;
 		_model = NULL;
 	}
-
-	//if (_point1 != NULL) {
-	//	delete _point1;
-	//	_point1 = NULL;
-	//}
-	//
-	//if (_point2 != NULL) {
-	//	delete _point2;
-	//	_point2 = NULL;
-	//}
-
-	//if (player != NULL) {
-	//	delete player;
-	//	player = NULL;
-	//}
-
-	//if (map != NULL) {
-	//	delete map;
-	//	map = NULL;
-	//}
+	
+	if (_modelA != NULL) {
+		delete _modelA;
+		_modelA = NULL;
+	}
 }

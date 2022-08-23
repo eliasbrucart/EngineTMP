@@ -3,6 +3,9 @@
 #include "export.h"
 #include "mat4x4.hpp"
 #include "vec3.hpp"
+#include <vector>
+
+using namespace std;
 
 namespace Engine {
 
@@ -25,6 +28,9 @@ namespace Engine {
 		glm::mat4 trs;
 	};
 
+	//Agregar referencias a Model, agregar vector de entidades hijas y puntero al padre.
+	//Agregar metodo para agregar hijos al vector.
+
 	class ENGINE_API Entity2D {
 	private:
 	protected:
@@ -32,6 +38,21 @@ namespace Engine {
 		void UpdateMatrices();
 		void UpdateModel();
 	public:
+		//metodos y atributos para scene graph
+		std::vector<Entity2D*> children;
+		Entity2D* parent = nullptr;
+		void AddChild(Entity2D* entity);
+		glm::mat4 GetLocalModelMatrix();
+		void UpdateSelfAndChild();
+
+		bool m_isDirty;
+		void ComputeModelMatrix();
+		void ComputeModelMatrix(const glm::mat4& parentGlobalModelMatrix);
+		void SetLocalPosition(const glm::vec3& newPosition);
+		const glm::mat4& GetModelMatrix();
+		bool IsDirty();
+		void ForceUpdateSelfAndChild();
+
 		Transform transform;
 		Entity2D();
 		~Entity2D();

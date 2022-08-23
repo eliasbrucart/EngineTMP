@@ -21,7 +21,7 @@ ModelImp::ModelImp(string path, const char* modelTexture, Shader& shader, Render
     //LoadTexture();
 }
 
-ModelImp::ModelImp(string path, Shader& shader, Renderer* renderer) {
+ModelImp::ModelImp(string path, Shader& shader, Renderer* renderer) : Entity2D(){
     LoadModel(path);
     _shader = shader;
     _renderer = renderer;
@@ -33,11 +33,24 @@ ModelImp::~ModelImp() {
         delete _texImporter;
         _texImporter = NULL;
     }
+    if (_rootNode) {
+        delete _rootNode;
+        _rootNode = NULL;
+    }
+    if (!_meshes.empty()) {
+        for (auto* mesh : _meshes) {
+            if (mesh != NULL) {
+                delete mesh;
+                mesh = NULL;
+            }
+        }
+        _meshes.clear();
+    }
 }
 
 void ModelImp::MoveModel(glm::vec3 direction) {
     for (int i = 0; i < _meshes.size(); i++) {
-        _meshes[i].Translate(direction.x, direction.y, direction.z);
+        _meshes[i]->Translate(direction.x, direction.y, direction.z);
     }
 }
 
@@ -46,25 +59,25 @@ void ModelImp::ScaleModel(float x, float y, float z) {
         if (x < 0 || y < 0 || z < 0) {
             x = 0;y = 0;z = 0;
         }
-        _meshes[i].Scale(x, y, z);
+        _meshes[i]->Scale(x, y, z);
     }
 }
 
 void ModelImp::RotateModelX(float x) {
     for (int i = 0; i < _meshes.size(); i++) {
-        _meshes[i].RotateX(x);
+        _meshes[i]->RotateX(x);
     }
 }
 
 void ModelImp::RotateModelY(float y) {
     for (int i = 0; i < _meshes.size(); i++) {
-        _meshes[i].RotateY(y);
+        _meshes[i]->RotateY(y);
     }
 }
 
 void ModelImp::RotateModelZ(float z) {
     for (int i = 0; i < _meshes.size(); i++) {
-        _meshes[i].RotateZ(z);
+        _meshes[i]->RotateZ(z);
     }
 }
 
@@ -84,18 +97,46 @@ void ModelImp::LoadModel(string path) {
 }
 
 void ModelImp::ProcessNode(aiNode* node, const aiScene* scene) {
-    std::cout << "Entro en ProcessNode!!!" << std::endl;
-    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        _meshes.push_back(ProcessMesh(mesh, scene));
+
+    Entity2D* actualNode = nullptr;
+
+    if (parent == NULL) { //Si no hay padre procesamos el nodo actual y agregamos como child una entity normalizada
+        _rootNode = new Entity2D();
+        actualNode = _rootNode;
+        std::cout << "No hay padre, agregando hijo" << std::endl;
+        AddChild(_rootNode);
+    }
+    else { //Si hay padre hacemos el nodo actual hijo del padre.
+        actualNode = new Entity2D();
+        parent->AddChild(actualNode);
+        std::cout << "Hay padre, nodo actual hijo del padre" << std::endl;
+        //children.push_back(actualNode);
+    }
+    
+    if (node->mNumMeshes > 0) {
+        for (int i = 0; i < node->mNumMeshes; i++) {
+            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+            Mesh* nMesh = ProcessMesh(mesh, scene);
+            actualNode->AddChild(nMesh);
+            _meshes.push_back(nMesh);
+        }
     }
 
+
+    std::cout << "Entro en ProcessNode!!!" << std::endl;
+    //for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+    //    aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+    //    _meshes.push_back(ProcessMesh(mesh, scene)); //pusehar la ultima mesh encontrada
+    //}
+    //
+    ////procesar nodos para que se agrupen por jerarquia
+    //
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
         ProcessNode(node->mChildren[i], scene);
     }
 }
 
-Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
+Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     vector<Vertex> vertices;
     vector<unsigned int> indices;
     vector<Texture> textures;
@@ -172,7 +213,9 @@ Mesh ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     //Hacer new de mesh para pasarle los datos de shader correctamente.
     //Averiguar por que el shader no se pasa bien al mesh para el dibujado.
-    return Mesh(vertices, indices, textures, _shader, _renderer);
+    Mesh* newMesh = new Mesh(vertices, indices, textures, _shader, _renderer);
+    return newMesh;
+    delete newMesh;
 }
 
 vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName) {
@@ -214,8 +257,18 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
 //}
 
 void ModelImp::Draw(Shader& shader) {
-    for (unsigned int i = 0; i < _meshes.size(); i++)
-        _meshes[i].Draw(shader);
+    UpdateSelfAndChild();
+    UpdateModel();
+    //UpdateMatrices();
+    //for (unsigned int i = 0; i < _meshes.size(); i++)
+    //    _meshes[i]->Draw(shader);
+    std::cout << "_meshes size: " << _meshes.size() << std::endl;
+    if (!_meshes.empty()) {
+        for (auto* mesh : _meshes) {
+            if (mesh != NULL)
+                mesh->Draw(shader);
+        }
+    }
 }
 
 unsigned int ModelImp::TextureFromFile(const char* path, string const &directory,bool gamma) {

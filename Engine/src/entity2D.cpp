@@ -34,6 +34,73 @@ Entity2D::~Entity2D() {
 
 }
 
+void Entity2D::AddChild(Entity2D* entity) {
+	children.emplace_back(entity); //Agregamos una entidad nueva a nuestro vector de entidades hijas
+	children.back()->parent = this; //Agregamos la entidad actual como padre de la nueva entidad agregada
+}
+
+//Obtenemos la matriz modelo local de la entidad actual
+glm::mat4 Entity2D::GetLocalModelMatrix() {
+	const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	const glm::mat4 rotationMatrix = transformX * transformY * transformZ;
+
+	return glm::translate(glm::mat4(1.0f), transform.position) * rotationMatrix * glm::scale(glm::mat4(1.0f), transform.scale);
+}
+
+//Actualizamos la matriz modelo de esta entidad actual, si hay padre, multiplicamos la matriz modelo de la entidad con la del hijo
+//Si no hay hijo tambien actualizamos la matriz modelo
+void Entity2D::UpdateSelfAndChild() {
+	//if (!m_isDirty)
+	//	return;
+
+	ForceUpdateSelfAndChild();
+
+	//if (parent) {
+	//	model.trs = parent->model.trs * GetLocalModelMatrix();
+	//}
+	//else {
+	//	model.trs = GetLocalModelMatrix();
+	//}
+	//
+	//for (auto&& child : children)
+	//	child->UpdateSelfAndChild();
+}
+
+void Entity2D::ComputeModelMatrix() {
+	model.trs = GetLocalModelMatrix();
+}
+
+void Entity2D::ComputeModelMatrix(const glm::mat4& parentGlobalModelMatrix) {
+	model.trs = parentGlobalModelMatrix * GetLocalModelMatrix();
+}
+
+void Entity2D::SetLocalPosition(const glm::vec3& newPosition) {
+	transform.position = newPosition;
+}
+
+const glm::mat4& Entity2D::GetModelMatrix() {
+	return model.trs;
+}
+
+bool Entity2D::IsDirty() {
+	return m_isDirty;
+}
+
+void Entity2D::ForceUpdateSelfAndChild() {
+	if (parent) {
+		ComputeModelMatrix(parent->GetModelMatrix());
+	}
+	else {
+		ComputeModelMatrix();
+	}
+
+	for (auto&& child : children)
+		child->ForceUpdateSelfAndChild();
+}
+
 void Engine::Entity2D::RotateX(float angle) {
 	transform.rotation.x = angle;
 	glm::vec3 axis = glm::vec3(1.0);
