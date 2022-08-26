@@ -46,6 +46,15 @@ ModelImp::~ModelImp() {
         }
         _meshes.clear();
     }
+    if (!_rootNodeChildren.empty()) {
+        for (auto* nodeChilds : _rootNodeChildren) {
+            if (nodeChilds != NULL) {
+                delete nodeChilds;
+                nodeChilds = NULL;
+            }
+        }
+        _rootNodeChildren.clear();
+    }
 }
 
 void ModelImp::MoveModel(glm::vec3 direction) {
@@ -61,12 +70,24 @@ void ModelImp::ScaleModel(float x, float y, float z) {
         }
         _meshes[i]->Scale(x, y, z);
     }
+
+    //_meshes[5]->Scale(x, y, z);
+    //_rootNodeChildren[5]->Scale(x, y, z);
+
+    //for (int i = 0; i < _rootNodeChildren.size(); i++) {
+    //    _rootNodeChildren[7]->Scale(x, y, z);
+    //    //_rootNode->children[5]->Scale(x, y, z);
+    //}
 }
 
 void ModelImp::RotateModelX(float x) {
-    for (int i = 0; i < _meshes.size(); i++) {
+    for (int i = 0; i < 1; i++) {
         _meshes[i]->RotateX(x);
     }
+
+    //for (int i = 0; i < _rootNodeChildren.size(); i++) {
+    //    _rootNodeChildren[1]->RotateX(x);
+    //}
 }
 
 void ModelImp::RotateModelY(float y) {
@@ -93,24 +114,26 @@ void ModelImp::LoadModel(string path) {
     _directory = path.substr(0, path.find_last_of('/'));
 
     if(scene)
-        ProcessNode(scene->mRootNode, scene);
+        ProcessNode(scene->mRootNode, scene, nullptr);
+
+    std::cout << "rootNodeChildren: "<< _rootNodeChildren.size() << std::endl;
 }
 
-void ModelImp::ProcessNode(aiNode* node, const aiScene* scene) {
+void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent) {
 
     Entity2D* actualNode = nullptr;
-
-    if (parent == NULL) { //Si no hay padre procesamos el nodo actual y agregamos como child una entity normalizada
+    
+    if (parent == nullptr) { //Si no hay padre procesamos el nodo actual y agregamos como child una entity normalizada
         _rootNode = new Entity2D();
         actualNode = _rootNode;
         std::cout << "No hay padre, agregando hijo" << std::endl;
         AddChild(_rootNode);
     }
-    else { //Si hay padre hacemos el nodo actual hijo del padre.
+    if(parent) { //Si hay padre hacemos el nodo actual hijo del padre.
         actualNode = new Entity2D();
         parent->AddChild(actualNode);
         std::cout << "Hay padre, nodo actual hijo del padre" << std::endl;
-        //children.push_back(actualNode);
+        _rootNodeChildren.push_back(actualNode);
     }
     
     if (node->mNumMeshes > 0) {
@@ -132,7 +155,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene) {
     ////procesar nodos para que se agrupen por jerarquia
     //
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        ProcessNode(node->mChildren[i], scene);
+        ProcessNode(node->mChildren[i], scene, actualNode);
     }
 }
 
@@ -211,11 +234,13 @@ Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     std::cout << "Entro en ProcessMesh!!!" << std::endl;
 
+    //return Mesh(vertices, indices, textures, _shader, _renderer);
+
     //Hacer new de mesh para pasarle los datos de shader correctamente.
     //Averiguar por que el shader no se pasa bien al mesh para el dibujado.
     Mesh* newMesh = new Mesh(vertices, indices, textures, _shader, _renderer);
     return newMesh;
-    delete newMesh;
+    //delete newMesh;
 }
 
 vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName) {
@@ -258,11 +283,11 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
 
 void ModelImp::Draw(Shader& shader) {
     UpdateSelfAndChild();
-    UpdateModel();
-    //UpdateMatrices();
+    //UpdateModel();
+    UpdateVectors();
     //for (unsigned int i = 0; i < _meshes.size(); i++)
-    //    _meshes[i]->Draw(shader);
-    std::cout << "_meshes size: " << _meshes.size() << std::endl;
+    //    _meshes[i].Draw(shader);
+    //std::cout << "_meshes size: " << _meshes.size() << std::endl;
     if (!_meshes.empty()) {
         for (auto* mesh : _meshes) {
             if (mesh != NULL)

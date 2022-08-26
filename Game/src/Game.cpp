@@ -50,10 +50,10 @@ Game::~Game() {
 		_model = NULL;
 	}
 
-	if (_modelA != NULL) {
-		delete _modelA;
-		_modelA = NULL;
-	}
+	//if (_modelA != NULL) {
+	//	delete _modelA;
+	//	_modelA = NULL;
+	//}
 
 	if (_dirLight != NULL) {
 		delete _dirLight;
@@ -99,15 +99,14 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
-	string modelpath = "res/models/claire/claire.obj";
+	string modelpath = "res/models/cyborg/cyborg.obj";
 	_model = new ModelImp(modelpath, basicShader, GetRenderer());
-	_model->transform.position = glm::vec3(0.0f);
+	_model->transform.position = glm::vec3(0.0f, -0.5f, -1.0f);
 	_model->transform.scale = glm::vec3(1.0f);
 
-	_modelA = new Entity(modelpath, basicShader, GetRenderer());
-	_modelA->transform.position = glm::vec3(5.0f, 0.0f, 0.0f);
-	_modelA->transform.scale = glm::vec3(1.0f);
-	_modelA->RotateModelY(-120.0f);
+	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
+	//_modelA->transform.position = glm::vec3(-0.5f, -0.5f, -1.0f);
+	//_modelA->transform.scale = glm::vec3(1.0f);
 
 	//_modelA->AddChild(_model);
 
@@ -128,6 +127,9 @@ void Game::InitGame() {
 	_shape2->Init();
 
 	_sprite->Init();
+
+
+	_model->SetParent(_shape);
 
 	//Crear un array de posiciones para las luces y array de ambient, diffuse, specular, eviar hardcodeo.
 
@@ -196,53 +198,55 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::G)) {
 		direction.x += speed * time.GetDeltaTime();
-		_modelA->transform.position.x += speed * time.GetDeltaTime();
+		//_model->MoveModel(direction);
 		//_modelA->Translate(direction.x, direction.y, direction.z);
-		std::cout << "_modelA X " << _modelA->transform.position.x << std::endl;
+		//std::cout << "_modelA X " << _modelA->transform.position.x << std::endl;
 		std::cout << "_model X " << _model->transform.position.x << std::endl;
-		//_shape->transform.position.x += speed * time.GetDeltaTime();
+		_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::F)) {
 		direction.x -= speed * time.GetDeltaTime();
-		_modelA->MoveModel(direction);
-		//_shape->transform.position.x += speed * time.GetDeltaTime();
+		//_model->MoveModel(direction);
+		_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::T)) {
 		direction.y += speed * time.GetDeltaTime();
-		_modelA->MoveModel(direction);
+		_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::C)) {
 		direction.y -= speed * time.GetDeltaTime();
-		_modelA->MoveModel(direction);
+		_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::H)) {
 		scale.x += speed * time.GetDeltaTime();
 		scale.y += speed * time.GetDeltaTime();
 		scale.z += speed * time.GetDeltaTime();
-		_model->ScaleModel(scale.x, scale.y, scale.z);
+		_shape->Scale(scale.x, scale.y, scale.z);
+		//_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 	else if (input.GetKey(KeyCode::J)) {
 		scale.x -= speed * time.GetDeltaTime();
 		scale.y -= speed * time.GetDeltaTime();
 		scale.z -= speed * time.GetDeltaTime();
-		_model->ScaleModel(scale.x, scale.y, scale.z);
+		_shape->Scale(scale.x, scale.y, scale.z);
+		//_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 	else if (input.GetKey(KeyCode::X)) {
 		rot.x += speed * time.GetDeltaTime();
-		_modelA->RotateModelX(rot.x);
-		//_model->RotateModelX(rot.x);
+		//_modelA->RotateModelX(rot.x);
+		_model->RotateModelX(rot.x);
 	}
 	else if (input.GetKey(KeyCode::Y)) {
 		rot.y += speed * time.GetDeltaTime();
-		_modelA->RotateModelY(rot.y);
-		//_model->RotateModelY(rot.y);
+		//_modelA->RotateModelY(rot.y);
+		_model->RotateModelY(rot.y);
 	}
 	else if (input.GetKey(KeyCode::Z)) {
 		rot.z += speed * time.GetDeltaTime();
-		_modelA->RotateModelZ(rot.z);
-		//_model->RotateModelZ(rot.z);
+		//_modelA->RotateModelZ(rot.z);
+		_model->RotateModelZ(rot.z);
 	}
 	else if (input.GetKey(KeyCode::A)) {
 		_camera->transform.position.x -= speed * time.GetDeltaTime();
@@ -343,7 +347,7 @@ void Game::UpdateGame() {
 	_shape2->Draw();
 	//_modelA->UpdateSelfAndChild();
 	_model->Draw(basicShader);
-	_modelA->Draw(basicShader);
+	//_modelA->Draw(basicShader);
 
 	//_modelA->Draw(basicShader);
 	//Directional light
@@ -407,8 +411,8 @@ void Game::UnloadGame() {
 		_model = NULL;
 	}
 	
-	if (_modelA != NULL) {
-		delete _modelA;
-		_modelA = NULL;
-	}
+	//if (_modelA != NULL) {
+	//	delete _modelA;
+	//	_modelA = NULL;
+	//}
 }

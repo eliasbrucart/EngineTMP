@@ -36,7 +36,8 @@ void Mesh::SetUpMesh() {
 
 void Mesh::Draw(Shader& shader) {
 	//UpdateMatrices();
-	//UpdateSelfAndChild();
+	UpdateSelfAndChild();
+	UpdateVectors();
 	//UpdateModel();
 	//Pasar este codigo a renderer y que reciba como parametros todos los datos necesarios
 	unsigned int diffuseNr = 1;

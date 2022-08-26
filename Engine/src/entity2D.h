@@ -19,6 +19,9 @@ namespace Engine {
 		glm::vec3 position;
 		glm::vec3 rotation;
 		glm::vec3 scale;
+		glm::vec3 forward;
+		glm::vec3 up;
+		glm::vec3 right;
 	};
 
 	struct ENGINE_API Model {
@@ -33,14 +36,18 @@ namespace Engine {
 
 	class ENGINE_API Entity2D {
 	private:
+		bool _hasParent;
 	protected:
 		Model model;
 		void UpdateMatrices();
 		void UpdateModel();
+		void UpdateForward();
+		void UpdateUp();
+		void UpdateRight();
 	public:
 		//metodos y atributos para scene graph
 		std::vector<Entity2D*> children;
-		Entity2D* parent = nullptr;
+		Entity2D* _parent = nullptr;
 		void AddChild(Entity2D* entity);
 		glm::mat4 GetLocalModelMatrix();
 		void UpdateSelfAndChild();
@@ -52,7 +59,8 @@ namespace Engine {
 		const glm::mat4& GetModelMatrix();
 		bool IsDirty();
 		void ForceUpdateSelfAndChild();
-
+		inline void SetParent(Entity2D* parent);
+		inline bool GetHasParent();
 		Transform transform;
 		Entity2D();
 		~Entity2D();
@@ -62,6 +70,7 @@ namespace Engine {
 		void Translate(float x, float y, float z);
 		glm::vec2 Lerp(glm::vec2 a, glm::vec2 b, float t);
 		void Scale(float x, float y, float z);
+		void UpdateVectors();
 		glm::mat4 GetModel();
 	};
 

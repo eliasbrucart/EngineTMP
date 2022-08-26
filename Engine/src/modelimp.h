@@ -35,11 +35,12 @@ namespace Engine {
 		const char* _modelTexture;
 		string _directory;
 
+		std::vector<Entity2D*> _rootNodeChildren;
 		Entity2D* _rootNode; //Atributo para setear el nodo actual.
 
 		//const string* _modelTexture;
 		void LoadModel(string path);
-		void ProcessNode(aiNode* node, const aiScene* scene);
+		void ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent);
 		Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
 		vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 

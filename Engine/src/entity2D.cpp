@@ -34,9 +34,24 @@ Entity2D::~Entity2D() {
 
 }
 
+void Entity2D::UpdateForward() {
+	transform.forward.x = glm::cos(glm::radians(transform.rotation.y)) * glm::cos(glm::radians(transform.rotation.x));
+	transform.forward.y = glm::sin(glm::radians(transform.rotation.x));
+	transform.forward.z = glm::sin(glm::radians(transform.rotation.y)) * glm::cos(glm::radians(transform.rotation.x));
+	transform.forward = glm::normalize(transform.forward);
+}
+
+void Entity2D::UpdateUp() {
+	transform.up = glm::normalize(glm::cross(transform.right, transform.forward));
+}
+
+void Entity2D::UpdateRight() {
+	transform.right = glm::normalize(glm::cross(transform.forward, glm::vec3(0, 1, 0)));
+}
+
 void Entity2D::AddChild(Entity2D* entity) {
 	children.emplace_back(entity); //Agregamos una entidad nueva a nuestro vector de entidades hijas
-	children.back()->parent = this; //Agregamos la entidad actual como padre de la nueva entidad agregada
+	children.back()->_parent = this; //Agregamos la entidad actual como padre de la nueva entidad agregada
 }
 
 //Obtenemos la matriz modelo local de la entidad actual
@@ -90,8 +105,8 @@ bool Entity2D::IsDirty() {
 }
 
 void Entity2D::ForceUpdateSelfAndChild() {
-	if (parent) {
-		ComputeModelMatrix(parent->GetModelMatrix());
+	if (_parent) {
+		ComputeModelMatrix(_parent->GetModelMatrix());
 	}
 	else {
 		ComputeModelMatrix();
@@ -99,6 +114,15 @@ void Entity2D::ForceUpdateSelfAndChild() {
 
 	for (auto&& child : children)
 		child->ForceUpdateSelfAndChild();
+}
+
+inline void Entity2D::SetParent(Entity2D* parent) {
+	_parent = parent;
+	_hasParent = true;
+}
+
+inline bool Entity2D::GetHasParent() {
+	return _hasParent;
 }
 
 void Engine::Entity2D::RotateX(float angle) {
@@ -153,7 +177,6 @@ glm::vec2 Entity2D::Lerp(glm::vec2 a, glm::vec2 b, float t){
 
 }
 
-
 void Entity2D::Scale(float x, float y, float z) {
 	transform.scale.x = x;
 	transform.scale.y = y;
@@ -163,7 +186,15 @@ void Entity2D::Scale(float x, float y, float z) {
 	UpdateModel();
 }
 
+void Entity2D::UpdateVectors() {
+	UpdateForward();
+	UpdateUp();
+	UpdateRight();
+}
+
 glm::mat4 Entity2D::GetModel() {
+	if (_hasParent)
+		return _parent->model.trs * model.trs;
 	return model.trs;
 }
 
