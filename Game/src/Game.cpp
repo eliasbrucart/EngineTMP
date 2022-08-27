@@ -99,7 +99,7 @@ void Game::InitGame() {
 	}
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
-	string modelpath = "res/models/cyborg/cyborg.obj";
+	string modelpath = "res/models/Bob.fbx";
 	_model = new ModelImp(modelpath, basicShader, GetRenderer());
 	_model->transform.position = glm::vec3(0.0f, -0.5f, -1.0f);
 	_model->transform.scale = glm::vec3(1.0f);
@@ -201,7 +201,7 @@ void Game::PlayerInputs() {
 		//_model->MoveModel(direction);
 		//_modelA->Translate(direction.x, direction.y, direction.z);
 		//std::cout << "_modelA X " << _modelA->transform.position.x << std::endl;
-		std::cout << "_model X " << _model->transform.position.x << std::endl;
+		//std::cout << "_model X " << _model->transform.position.x << std::endl;
 		_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::F)) {
@@ -223,10 +223,25 @@ void Game::PlayerInputs() {
 		scale.x += speed * time.GetDeltaTime();
 		scale.y += speed * time.GetDeltaTime();
 		scale.z += speed * time.GetDeltaTime();
+		//_shape->Scale(scale.x, scale.y, scale.z);
+		_model->ScaleModel(scale.x, scale.y, scale.z);
+	}
+	else if (input.GetKey(KeyCode::J)) {
+		scale.x -= speed * time.GetDeltaTime();
+		scale.y -= speed * time.GetDeltaTime();
+		scale.z -= speed * time.GetDeltaTime();
+		//_shape->Scale(scale.x, scale.y, scale.z);
+		_model->ScaleModel(scale.x, scale.y, scale.z);
+	}
+
+	else if (input.GetKey(KeyCode::N)) {
+		scale.x += speed * time.GetDeltaTime();
+		scale.y += speed * time.GetDeltaTime();
+		scale.z += speed * time.GetDeltaTime();
 		_shape->Scale(scale.x, scale.y, scale.z);
 		//_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
-	else if (input.GetKey(KeyCode::J)) {
+	else if (input.GetKey(KeyCode::M)) {
 		scale.x -= speed * time.GetDeltaTime();
 		scale.y -= speed * time.GetDeltaTime();
 		scale.z -= speed * time.GetDeltaTime();

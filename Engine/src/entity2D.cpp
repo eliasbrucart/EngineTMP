@@ -52,6 +52,7 @@ void Entity2D::UpdateRight() {
 void Entity2D::AddChild(Entity2D* entity) {
 	children.emplace_back(entity); //Agregamos una entidad nueva a nuestro vector de entidades hijas
 	children.back()->_parent = this; //Agregamos la entidad actual como padre de la nueva entidad agregada
+	_hasParent = true;
 }
 
 //Obtenemos la matriz modelo local de la entidad actual

@@ -58,21 +58,22 @@ ModelImp::~ModelImp() {
 }
 
 void ModelImp::MoveModel(glm::vec3 direction) {
-    for (int i = 0; i < _meshes.size(); i++) {
-        _meshes[i]->Translate(direction.x, direction.y, direction.z);
-    }
+    //for (int i = 0; i < _meshes.size(); i++) {
+    //    _meshes[i]->Translate(direction.x, direction.y, direction.z);
+    //}
+    _rootNodeChildren[6]->_parent->Translate(direction.x, direction.y, direction.z);
 }
 
 void ModelImp::ScaleModel(float x, float y, float z) {
-    for (int i = 0; i < _meshes.size(); i++) {
-        if (x < 0 || y < 0 || z < 0) {
-            x = 0;y = 0;z = 0;
-        }
-        _meshes[i]->Scale(x, y, z);
-    }
+    //for (int i = 0; i < _meshes.size(); i++) {
+    //    if (x < 0 || y < 0 || z < 0) {
+    //        x = 0;y = 0;z = 0;
+    //    }
+    //    _meshes[i]->Scale(x, y, z);
+    //}
 
     //_meshes[5]->Scale(x, y, z);
-    //_rootNodeChildren[5]->Scale(x, y, z);
+    _rootNodeChildren[6]->_parent->Scale(x, y, z);
 
     //for (int i = 0; i < _rootNodeChildren.size(); i++) {
     //    _rootNodeChildren[7]->Scale(x, y, z);
@@ -127,6 +128,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent)
         _rootNode = new Entity2D();
         actualNode = _rootNode;
         std::cout << "No hay padre, agregando hijo" << std::endl;
+        //SetParent(_rootNode);
         AddChild(_rootNode);
     }
     if(parent) { //Si hay padre hacemos el nodo actual hijo del padre.
