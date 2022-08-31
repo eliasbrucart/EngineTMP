@@ -184,6 +184,22 @@ ProjectionType Camera::GetProjectionType(){
 	return _type;
 }
 
+Frustum Camera::CreateFrustumFromCamera(float aspect, float fovY, float zNear, float zFar) {
+	Frustum frustum;
+	const float halfVSide = zFar * tanf(fovY * 0.5f);
+	const float halfHSide = halfVSide * aspect;
+	const glm::vec3 frontMultFar = zFar * _cameraFront;
+
+	frustum.nearFace = {transform.position + zNear * _cameraFront, _cameraFront};
+	frustum.farFace = {transform.position + frontMultFar , -_cameraFront};
+	frustum.rightFace = {transform.position, glm::cross(_cameraUp, frontMultFar + _cameraRight * halfHSide)};
+	frustum.leftFace = {transform.position, glm::cross(frontMultFar - _cameraRight * halfHSide, _cameraUp)};
+	frustum.topFace = {transform.position, glm::cross(_cameraRight, frontMultFar - _cameraUp * halfVSide)};
+	frustum.bottomFace = { transform.position, glm::cross(frontMultFar + _cameraUp * halfVSide, _cameraRight) };
+
+	return frustum;
+}
+
 void Camera::Draw(Shader& shader){
 	_renderer->DrawCamera(shader, transform.position, GetModel(), GetView(), GetProjection());
 }

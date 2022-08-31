@@ -6,6 +6,7 @@
 #include "entity2D.h"
 #include "input.h"
 #include "time_manager.h"
+#include "plane.h"
 
 using namespace std;
 
@@ -19,6 +20,16 @@ namespace Engine {
 
 	enum class ENGINE_API CamMode {
 		firstPerson, thirdPerson
+	};
+
+	//frustum de la camara
+	struct Frustum {
+		Plane topFace;
+		Plane bottomFace;
+		Plane rightFace;
+		Plane leftFace;
+		Plane farFace;
+		Plane nearFace;
 	};
 
 	class ENGINE_API Camera : public Entity2D{
@@ -62,6 +73,7 @@ namespace Engine {
 		glm::mat4 GetProjection();
 		glm::mat4 GetMVP();
 		ProjectionType GetProjectionType();
+		Frustum CreateFrustumFromCamera(float aspect, float fovY, float zNear, float zFar); //Metodo para crear el frustum a partir de la camara
 		void Draw(Shader& shader);
 	};
 

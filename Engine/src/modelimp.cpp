@@ -61,7 +61,7 @@ void ModelImp::MoveModel(glm::vec3 direction) {
     //for (int i = 0; i < _meshes.size(); i++) {
     //    _meshes[i]->Translate(direction.x, direction.y, direction.z);
     //}
-    _rootNodeChildren[6]->_parent->Translate(direction.x, direction.y, direction.z);
+    _rootNodeChildren[9]->_parent->Translate(direction.x, direction.y, direction.z);
 }
 
 void ModelImp::ScaleModel(float x, float y, float z) {
@@ -127,7 +127,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent)
     if (parent == nullptr) { //Si no hay padre procesamos el nodo actual y agregamos como child una entity normalizada
         _rootNode = new Entity2D();
         actualNode = _rootNode;
-        std::cout << "No hay padre, agregando hijo" << std::endl;
+        std::cout << "No hay padre, agregando nodo raiz" << std::endl;
         //SetParent(_rootNode);
         AddChild(_rootNode);
     }

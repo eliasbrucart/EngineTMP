@@ -74,6 +74,7 @@ void Base::Update(){
 		_renderer->BeginFrame(1.0f,1.0f,1.0f);
 		//_camera->transform.position.x += speed;
 		//std::cout << _camera->transform.position.x << std::endl;
+		
 		UpdateGame();
 		time.CalculateFPS();
 		time.Tick();
