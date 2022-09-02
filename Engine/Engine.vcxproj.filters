@@ -64,6 +64,9 @@
     <Filter Include="Plane">
       <UniqueIdentifier>{5b41a73e-f1ed-4c17-b531-12fad3af344a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BoundingVolume">
+      <UniqueIdentifier>{c16f78bd-00ca-4309-9549-d81afdc156c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity2D.h">
@@ -141,6 +144,12 @@
     <ClInclude Include="src\plane.h">
       <Filter>Plane</Filter>
     </ClInclude>
+    <ClInclude Include="src\bounding_volume.h">
+      <Filter>BoundingVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AABB.h">
+      <Filter>BoundingVolume</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base.cpp">
@@ -214,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="src\plane.cpp">
       <Filter>Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bounding_volume.cpp">
+      <Filter>BoundingVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AABB.cpp">
+      <Filter>BoundingVolume</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

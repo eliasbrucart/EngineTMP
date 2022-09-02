@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "texture_importer.h"
+#include "camera.h"
 
 using namespace std;
 
@@ -49,6 +50,10 @@ namespace Engine {
 		Shader _shader;
 		Renderer* _renderer;
 
+		AABB* _boundingVolume;
+
+		AABB* GenerateGlobalAABB();
+
 		unsigned int TextureFromFile(const char* path, const string &directory,bool gamma);
 		void LoadTexture();
 		unsigned int TextureModel(const char* texture);
@@ -64,7 +69,7 @@ namespace Engine {
 		void RotateModelZ(float z);
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
-		void Draw(Shader& shader);
+		void Draw(Shader& shader, Frustum frustum);
 	};
 }
 

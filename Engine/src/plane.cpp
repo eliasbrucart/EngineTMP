@@ -36,3 +36,7 @@ glm::vec3 Plane::GetNormal() {
 float Plane::GetDistance() {
 	return _distance;
 }
+
+float Plane::GetSignedDistanceToPlane(const glm::vec3& point) {
+	return glm::dot(_normal, point) - _distance;
+}

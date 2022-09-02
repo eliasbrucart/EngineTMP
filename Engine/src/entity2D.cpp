@@ -85,6 +85,23 @@ void Entity2D::UpdateSelfAndChild() {
 	//	child->UpdateSelfAndChild();
 }
 
+//AABB Entity2D::GenerateAABB(std::vector<Mesh*> meshes, std::vector<Vertex> vertices) {
+//	glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
+//	glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
+//	for (auto&& mesh : meshes) {
+//		for (auto&& vertex : vertices) {
+//			minAABB.x = std::min(minAABB.x, vertex.Position.x);
+//			minAABB.y = std::min(minAABB.y, vertex.Position.y);
+//			minAABB.z = std::min(minAABB.z, vertex.Position.z);
+//
+//			maxAABB.x = std::max(maxAABB.x, vertex.Position.x);
+//			maxAABB.y = std::max(maxAABB.y, vertex.Position.y);
+//			maxAABB.z = std::max(maxAABB.z, vertex.Position.z);
+//		}
+//	}
+//	return AABB(minAABB, maxAABB);
+//}
+
 void Entity2D::ComputeModelMatrix() {
 	model.trs = GetLocalModelMatrix();
 }

@@ -55,6 +55,10 @@ ModelImp::~ModelImp() {
         }
         _rootNodeChildren.clear();
     }
+    if (_boundingVolume != NULL) {
+        delete _boundingVolume;
+        _boundingVolume = NULL;
+    }
 }
 
 void ModelImp::MoveModel(glm::vec3 direction) {
@@ -117,7 +121,34 @@ void ModelImp::LoadModel(string path) {
     if(scene)
         ProcessNode(scene->mRootNode, scene, nullptr);
 
+    //_boundingVolume = GenerateGlobalAABB();
+
     std::cout << "rootNodeChildren: "<< _rootNodeChildren.size() << std::endl;
+}
+
+AABB* ModelImp::GenerateGlobalAABB() {
+    //Get global scale thanks to our transform
+    glm::vec3 globalCenter{ GetModel() * glm::vec4(_boundingVolume->GetCenter(), 1.0f) };
+
+    // Scaled orientation
+    glm::vec3 right = transform.right * _boundingVolume->GetExtents().x;
+    glm::vec3 up = transform.up * _boundingVolume->GetExtents().y;
+    glm::vec3 forward = transform.forward * _boundingVolume->GetExtents().z;
+
+    float newIi = std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, right)) +
+        std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, up)) +
+        std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, forward));
+
+    float newIj = std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, right)) +
+        std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, up)) +
+        std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, forward));
+
+    float newIk = std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, right)) +
+        std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, up)) +
+        std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, forward));
+
+    AABB* newAABB = new AABB(globalCenter, newIi, newIj, newIk);
+    return newAABB;
 }
 
 void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent) {
@@ -221,6 +252,7 @@ Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     //    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     //}
 
+    //_boundingVolume = GenerateAABB(_meshes, vertices);
 
     vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuseM");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
@@ -240,7 +272,7 @@ Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     //Hacer new de mesh para pasarle los datos de shader correctamente.
     //Averiguar por que el shader no se pasa bien al mesh para el dibujado.
-    Mesh* newMesh = new Mesh(vertices, indices, textures, _shader, _renderer);
+    Mesh* newMesh = new Mesh(vertices, indices, textures, _meshes, _shader, _renderer);
     return newMesh;
     //delete newMesh;
 }
@@ -283,7 +315,7 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
 //    _directory = texturePath;
 //}
 
-void ModelImp::Draw(Shader& shader) {
+void ModelImp::Draw(Shader& shader, Frustum frustum) {
     UpdateSelfAndChild();
     //UpdateModel();
     UpdateVectors();
@@ -293,7 +325,10 @@ void ModelImp::Draw(Shader& shader) {
     if (!_meshes.empty()) {
         for (auto* mesh : _meshes) {
             if (mesh != NULL)
-                mesh->Draw(shader);
+            {
+                //if(_boundingVolume->IsOnFrustum(frustum, mesh))
+                    mesh->Draw(shader, frustum);
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Engine {
 		void SetDistance(float distance);
 		glm::vec3 GetNormal();
 		float GetDistance();
+		float GetSignedDistanceToPlane(const glm::vec3& point);
 	};
 }
 

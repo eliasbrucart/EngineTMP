@@ -33,6 +33,7 @@ namespace Engine {
 		Renderer* GetRenderer();
 		Window* GetWindow();
 		CollisionManager* collisionmanager;
+		Frustum camFrustum;
 
 		Time time;
 		Input input;

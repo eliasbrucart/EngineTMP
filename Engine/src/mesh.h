@@ -11,6 +11,7 @@
 #include <string>
 
 #include "export.h"
+#include "AABB.h"
 using namespace std;
 
 namespace Engine {
@@ -37,13 +38,16 @@ namespace Engine {
 		Shader _shader;
 		Renderer* _renderer;
 		void SetUpMesh();
+		AABB _boundingVolume;
+		AABB GenerateAABB();
 	public:
-		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader& shader, Renderer* renderer);
+		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer);
 		~Mesh();
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
 		vector<Texture> textures;
-		void Draw(Shader& shader);
+		vector<Mesh*> _meshes;
+		void Draw(Shader& shader, Frustum frustum);
 	};
 }
 

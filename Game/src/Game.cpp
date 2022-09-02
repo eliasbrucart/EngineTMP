@@ -361,7 +361,7 @@ void Game::UpdateGame() {
 	_shape->Draw();
 	_shape2->Draw();
 	//_modelA->UpdateSelfAndChild();
-	_model->Draw(basicShader);
+	_model->Draw(basicShader, camFrustum);
 	//_modelA->Draw(basicShader);
 
 	//_modelA->Draw(basicShader);

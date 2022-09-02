@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\base.h" />
+    <ClInclude Include="src\bounding_volume.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\collision_manager.h" />
     <ClInclude Include="src\entity.h" />
@@ -46,8 +48,10 @@
     <ClInclude Include="src\xml_lib\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\base.cpp" />
+    <ClCompile Include="src\bounding_volume.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\collision_manager.cpp" />
     <ClCompile Include="src\entity.cpp" />

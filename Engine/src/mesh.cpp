@@ -4,11 +4,11 @@
 
 using namespace Engine;
 
-Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader& shader, Renderer* renderer) : Entity2D() {
+Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer) : Entity2D() {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
-
+	_meshes = meshes;
 	_shader = shader;
 
 	SetUpMesh();
@@ -32,9 +32,29 @@ void Mesh::SetUpMesh() {
 	_renderer->SetMeshAttribPointers(_shader, 3, sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords));
 
 	glBindVertexArray(0);
+
+	_boundingVolume = GenerateAABB();
 }
 
-void Mesh::Draw(Shader& shader) {
+AABB Mesh::GenerateAABB() {
+	glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
+	glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
+
+	for (auto&& mesh : _meshes) {
+		for (auto&& vertex : vertices) {
+			minAABB.x = std::min(minAABB.x, vertex.Position.x);
+			minAABB.y = std::min(minAABB.y, vertex.Position.y);
+			minAABB.z = std::min(minAABB.z, vertex.Position.z);
+
+			maxAABB.x = std::max(maxAABB.x, vertex.Position.x);
+			maxAABB.y = std::max(maxAABB.y, vertex.Position.y);
+			maxAABB.z = std::max(maxAABB.z, vertex.Position.z);
+		}
+	}
+	return AABB(minAABB, maxAABB);
+}
+
+void Mesh::Draw(Shader& shader, Frustum frustum) {
 	//UpdateMatrices();
 	UpdateSelfAndChild();
 	UpdateVectors();
@@ -63,6 +83,6 @@ void Mesh::Draw(Shader& shader) {
 		//glUniform1f(glGetUniformLocation(shader.GetID(), (name + number).c_str()), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
-
-	_renderer->DrawMesh(shader, _vao, _vbo, vertices.size() * sizeof(Vertex), &vertices[0], indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), GetModel());
+	if(_boundingVolume.IsOnFrustum(frustum, this))
+		_renderer->DrawMesh(shader, _vao, _vbo, vertices.size() * sizeof(Vertex), &vertices[0], indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), GetModel());
 }

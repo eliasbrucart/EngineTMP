@@ -46,6 +46,7 @@ namespace Engine {
 		float _pitch;
 		bool _firstMouse;
 		float _rotationAngle;
+		glm::vec3 _worldUp;
 	public:
 		glm::vec3 _cameraFront;
 		glm::vec3 _cameraUp;
