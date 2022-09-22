@@ -23,6 +23,7 @@
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\base.h" />
     <ClInclude Include="src\bounding_volume.h" />
+    <ClInclude Include="src\bsp_algorithm.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\collision_manager.h" />
     <ClInclude Include="src\entity.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\base.cpp" />
     <ClCompile Include="src\bounding_volume.cpp" />
+    <ClCompile Include="src\bsp_algorithm.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\collision_manager.cpp" />
     <ClCompile Include="src\entity.cpp" />

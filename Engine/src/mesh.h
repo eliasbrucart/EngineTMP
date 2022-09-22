@@ -38,15 +38,23 @@ namespace Engine {
 		Shader _shader;
 		Renderer* _renderer;
 		void SetUpMesh();
-		AABB _boundingVolume;
-		AABB GenerateAABB();
+		AABB* _boundingVolume;
+		Entity2D* _parentNodePtr;
+		Entity2D* _childrenNodePtr;
+		bool _canDraw;
 	public:
-		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer);
+		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer, Entity2D* parentNodePtr, Entity2D* childrenNodePtr);
 		~Mesh();
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
 		vector<Texture> textures;
 		vector<Mesh*> _meshes;
+		AABB* GenerateAABB();
+		Entity2D* GetParentNodePtr();
+		Entity2D* GetChildrenNodePtr();
+		AABB* GetMeshAABB();
+		void SetCanDraw(bool value);
+		bool GetCanDraw();
 		void Draw(Shader& shader, Frustum frustum);
 	};
 }

@@ -62,10 +62,10 @@ ModelImp::~ModelImp() {
 }
 
 void ModelImp::MoveModel(glm::vec3 direction) {
-    //for (int i = 0; i < _meshes.size(); i++) {
-    //    _meshes[i]->Translate(direction.x, direction.y, direction.z);
-    //}
-    _rootNodeChildren[9]->_parent->Translate(direction.x, direction.y, direction.z);
+    for (int i = 0; i < _meshes.size(); i++) {
+        _meshes[i]->Translate(direction.x, direction.y, direction.z);
+    }
+    //_rootNodeChildren[9]->_parent->Translate(direction.x, direction.y, direction.z);
 }
 
 void ModelImp::ScaleModel(float x, float y, float z) {
@@ -77,7 +77,7 @@ void ModelImp::ScaleModel(float x, float y, float z) {
     //}
 
     //_meshes[5]->Scale(x, y, z);
-    _rootNodeChildren[6]->_parent->Scale(x, y, z);
+    _rootNodeChildren[6]->children[1]->Scale(x, y, z);
 
     //for (int i = 0; i < _rootNodeChildren.size(); i++) {
     //    _rootNodeChildren[7]->Scale(x, y, z);
@@ -105,6 +105,10 @@ void ModelImp::RotateModelZ(float z) {
     for (int i = 0; i < _meshes.size(); i++) {
         _meshes[i]->RotateZ(z);
     }
+}
+
+vector<Mesh*> ModelImp::GetMeshes() {
+    return _meshes;
 }
 
 void ModelImp::LoadModel(string path) {
@@ -154,6 +158,7 @@ AABB* ModelImp::GenerateGlobalAABB() {
 void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent) {
 
     Entity2D* actualNode = nullptr;
+    Mesh* actualMesh = nullptr;
     
     if (parent == nullptr) { //Si no hay padre procesamos el nodo actual y agregamos como child una entity normalizada
         _rootNode = new Entity2D();
@@ -172,9 +177,18 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent)
     if (node->mNumMeshes > 0) {
         for (int i = 0; i < node->mNumMeshes; i++) {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            Mesh* nMesh = ProcessMesh(mesh, scene);
-            actualNode->AddChild(nMesh);
-            _meshes.push_back(nMesh);
+            if (parent = nullptr) {
+                Mesh* nMesh = ProcessMesh(mesh, scene, _rootNode, actualNode);
+                actualNode->AddChild(nMesh);
+                _rootNodeChildrenMesh.push_back(nMesh);
+                _meshes.push_back(nMesh);
+            }
+            else {
+                Mesh* nMesh = ProcessMesh(mesh, scene, parent, actualNode);
+                actualNode->AddChild(nMesh);
+                _rootNodeChildrenMesh.push_back(nMesh);
+                _meshes.push_back(nMesh);
+            }
         }
     }
 
@@ -192,7 +206,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent)
     }
 }
 
-Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
+Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene, Entity2D* parentNodeMesh, Entity2D* childrenNodeMesh) {
     vector<Vertex> vertices;
     vector<unsigned int> indices;
     vector<Texture> textures;
@@ -272,7 +286,7 @@ Mesh* ModelImp::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 
     //Hacer new de mesh para pasarle los datos de shader correctamente.
     //Averiguar por que el shader no se pasa bien al mesh para el dibujado.
-    Mesh* newMesh = new Mesh(vertices, indices, textures, _meshes, _shader, _renderer);
+    Mesh* newMesh = new Mesh(vertices, indices, textures, _meshes, _shader, _renderer, parentNodeMesh, childrenNodeMesh);
     return newMesh;
     //delete newMesh;
 }

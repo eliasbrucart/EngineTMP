@@ -188,23 +188,39 @@ ProjectionType Camera::GetProjectionType(){
 }
 
 Frustum Camera::CreateFrustumFromCamera(float aspect, float fovY, float zNear, float zFar) {
-	Frustum frustum;
+	//Frustum frustum;
 	const float halfVSide = zFar * tanf(fovY * 0.5f);
 	const float halfHSide = halfVSide * aspect;
 	const glm::vec3 frontMultFar = zFar * _cameraFront;
 
-	frustum.nearFace = {transform.position + zNear * _cameraFront, _cameraFront};
-	frustum.farFace = {transform.position + frontMultFar , -_cameraFront};
-	frustum.rightFace = {transform.position, glm::cross(_cameraUp, frontMultFar + _cameraRight * halfHSide)};
-	frustum.leftFace = {transform.position, glm::cross(frontMultFar - _cameraRight * halfHSide, _cameraUp)};
-	frustum.topFace = {transform.position, glm::cross(_cameraRight, frontMultFar - _cameraUp * halfVSide)};
-	frustum.bottomFace = { transform.position, glm::cross(frontMultFar + _cameraUp * halfVSide, _cameraRight) };
+	_frustum.nearFace = {transform.position + zNear * _cameraFront, _cameraFront};
+	_frustum.farFace = {transform.position + frontMultFar , -_cameraFront};
+	_frustum.rightFace = {transform.position, glm::cross(_cameraUp, frontMultFar + _cameraRight * halfHSide)};
+	_frustum.leftFace = {transform.position, glm::cross(frontMultFar - _cameraRight * halfHSide, _cameraUp)};
+	_frustum.topFace = {transform.position, glm::cross(_cameraRight, frontMultFar - _cameraUp * halfVSide)};
+	_frustum.bottomFace = { transform.position, glm::cross(frontMultFar + _cameraUp * halfVSide, _cameraRight) };
 
 	std::cout << "_camera right x: " << _cameraRight.x << std::endl;
 	std::cout << "_camera right y: " << _cameraRight.y << std::endl;
 	std::cout << "_camera right z: " << _cameraRight.z << std::endl;
 
-	return frustum;
+	return _frustum;
+}
+
+Plane Camera::GetNear() {
+	return _frustum.nearFace;
+}
+
+Plane Camera::GetLeft() {
+	return _frustum.leftFace;
+}
+
+Plane Camera::GetRight() {
+	return _frustum.rightFace;
+}
+
+Plane Camera::GetFar() {
+	return _frustum.farFace;
 }
 
 void Camera::Draw(Shader& shader){

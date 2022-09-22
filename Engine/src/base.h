@@ -18,6 +18,8 @@
 #include "light.h"
 #include "modelimp.h"
 #include "entity.h"
+#include "plane.h"
+#include "bsp_algorithm.h"
 
 namespace Engine {
 	class ENGINE_API Base {

@@ -4,18 +4,34 @@
 
 using namespace Engine;
 
-Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer) : Entity2D() {
+Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer, Entity2D* parentNodePtr, Entity2D* childrenNodePtr) : Entity2D() {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
 	_meshes = meshes;
 	_shader = shader;
 
+	_parentNodePtr = parentNodePtr;
+	_childrenNodePtr = childrenNodePtr;
+
 	SetUpMesh();
 }
 
 Mesh::~Mesh() {
+	if (_parentNodePtr != NULL) {
+		delete _parentNodePtr;
+		_parentNodePtr = NULL;
+	}
 
+	if (_childrenNodePtr != NULL) {
+		delete _childrenNodePtr;
+		_childrenNodePtr = NULL;
+	}
+
+	if (_boundingVolume != NULL) {
+		delete _boundingVolume;
+		_boundingVolume = NULL;
+	}
 }
 
 void Mesh::SetUpMesh() {
@@ -34,9 +50,11 @@ void Mesh::SetUpMesh() {
 	glBindVertexArray(0);
 
 	_boundingVolume = GenerateAABB();
+	//_boundingVolume->GenerateGlobalAABB(_parent);
+	//_boundingVolume.GetGlobalAABB();
 }
 
-AABB Mesh::GenerateAABB() {
+AABB* Mesh::GenerateAABB() {
 	glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
 	glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
 
@@ -51,7 +69,27 @@ AABB Mesh::GenerateAABB() {
 			maxAABB.z = std::max(maxAABB.z, vertex.Position.z);
 		}
 	}
-	return AABB(minAABB, maxAABB);
+	return new AABB(minAABB, maxAABB);
+}
+
+Entity2D* Mesh::GetParentNodePtr() {
+	return _parentNodePtr;
+}
+
+Entity2D* Mesh::GetChildrenNodePtr() {
+	return _childrenNodePtr;
+}
+
+AABB* Mesh::GetMeshAABB() {
+	return _boundingVolume;
+}
+
+void Mesh::SetCanDraw(bool value) {
+	_canDraw = value;
+}
+
+bool Mesh::GetCanDraw() {
+	return _canDraw;
 }
 
 void Mesh::Draw(Shader& shader, Frustum frustum) {
@@ -83,6 +121,7 @@ void Mesh::Draw(Shader& shader, Frustum frustum) {
 		//glUniform1f(glGetUniformLocation(shader.GetID(), (name + number).c_str()), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
-	if(_boundingVolume.IsOnFrustum(frustum, this))
+	if (_boundingVolume->IsOnFrustum(frustum, _parent) || _canDraw) //Para hacer el chequeo con el frsutum y que funcione por jerarquia, chequear por parent y no por this (malla actual)
 		_renderer->DrawMesh(shader, _vao, _vbo, vertices.size() * sizeof(Vertex), &vertices[0], indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), GetModel());
+	//if(_canDraw)
 }

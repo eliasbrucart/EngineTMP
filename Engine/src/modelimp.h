@@ -38,11 +38,13 @@ namespace Engine {
 
 		std::vector<Entity2D*> _rootNodeChildren;
 		Entity2D* _rootNode; //Atributo para setear el nodo actual.
+		std::vector<Mesh*> _rootNodeChildrenMesh;
+		Mesh* _rootNodeMesh;
 
 		//const string* _modelTexture;
 		void LoadModel(string path);
 		void ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent);
-		Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+		Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, Entity2D* parentNodeMesh, Entity2D* childrenNodeMesh);
 		vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
 		TextureImporter* _texImporter = NULL;
@@ -67,6 +69,7 @@ namespace Engine {
 		void RotateModelX(float x);
 		void RotateModelY(float y);
 		void RotateModelZ(float z);
+		vector<Mesh*> GetMeshes();
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader, Frustum frustum);

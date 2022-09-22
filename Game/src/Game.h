@@ -20,6 +20,8 @@ private:
 	Light* _spotLight = NULL;
 	Sprite* _sprite = NULL;
 	ModelImp* _model = NULL;
+	BSPAlgorithm* _bsp = NULL;
+	Plane _planes[3];
 	//ModelImp* _modelA = NULL;
 	//Animation* player = NULL;
 	//Tilemap* map = NULL;

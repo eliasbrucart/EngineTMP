@@ -47,6 +47,7 @@ namespace Engine {
 		bool _firstMouse;
 		float _rotationAngle;
 		glm::vec3 _worldUp;
+		Frustum _frustum;
 	public:
 		glm::vec3 _cameraFront;
 		glm::vec3 _cameraUp;
@@ -75,6 +76,10 @@ namespace Engine {
 		glm::mat4 GetMVP();
 		ProjectionType GetProjectionType();
 		Frustum CreateFrustumFromCamera(float aspect, float fovY, float zNear, float zFar); //Metodo para crear el frustum a partir de la camara
+		Plane GetNear();
+		Plane GetLeft();
+		Plane GetRight();
+		Plane GetFar();
 		void Draw(Shader& shader);
 	};
 

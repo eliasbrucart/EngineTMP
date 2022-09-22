@@ -50,10 +50,10 @@ Game::~Game() {
 		_model = NULL;
 	}
 
-	//if (_modelA != NULL) {
-	//	delete _modelA;
-	//	_modelA = NULL;
-	//}
+	if (_bsp != NULL) {
+		delete _bsp;
+		_bsp = NULL;
+	}
 
 	if (_dirLight != NULL) {
 		delete _dirLight;
@@ -65,11 +65,18 @@ Game::~Game() {
 		_spotLight = NULL;
 	}
 
-	//if (map != NULL) {
-	//	delete map;
-	//	map = NULL;
+	//for (int i = 0; i < 3; i++) {
+	//	if (_planes[i] != NULL) {
+	//		delete _planes[i];
+	//		_planes[i] = NULL;
+	//	}
 	//}
 }
+
+//if (map != NULL) {
+//	delete map;
+//	map = NULL;
+//}
 void Game::InitGame() {
 	//_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
 	//player = new Animation();
@@ -98,11 +105,43 @@ void Game::InitGame() {
 		//_light[i]->SetQuadratic(0.032f);
 	}
 
+	glm::vec3 farMultiplyCamFront = 100.0f * _camera->GetCameraFront();
+	float halfVSide = 100.0f * tanf(glm::radians(45.0f) * 0.5f);
+	float halfHSide = (halfVSide * (1280.0f / 720.0f));
+
+	//_planes[0] = _camera->GetFar();
+	//_planes[0] = { glm::vec3(0.57f, 0.0f, 0.81f), 1.0f };
+	_planes[0] = { glm::vec3(0.0f, 0.0f, 1.0f), 1.0f};
+	//std::cout << "camera front en ese momento en z: " << _camera->GetCameraFront().z << std::endl;
+	//std::cout << "Normal del plano 0 en z: " << _planes[0].GetNormal().z << std::endl;
+	//_planes[0]->SetAngleA(glm::vec3(0.0f, -90.0f, 0.0f));
+	//_planes[0]->SetAngleB(glm::vec3(0.0f, 90.0f, 0.0f));
+	//_planes[0]->RotateY(-90.0f);
+
+	//_planes[1] = {_camera->transform.position, glm::cross(farMultiplyCamFront - _camera->_cameraRight * halfVSide, _camera->_cameraUp)};
+	//_planes[1] = {_camera->transform.position, glm::vec3(0.0f, 0.0f, 1.0f)};
+	_planes[1] = {glm::vec3(1.0f, 0.0f, 0.0f), 1.0f};
+	//_planes[1]->transform.position = glm::vec3(-5.0f, 0.0f, 0.0f);
+	//_planes[1]->SetNormal(glm::vec3(0.0f, 0.0f, 1.0f));
+	//_planes[1]->SetAngleA(glm::vec3(0.0f, 90.0f, 0.0f));
+	//_planes[1]->SetAngleB(glm::vec3(0.0f, -90.0f, 0.0f));
+	//_planes[1]->RotateY(90.0f);
+
+	//_planes[2] = {_camera->transform.position, glm::cross(_camera->_cameraUp, farMultiplyCamFront + _camera->_cameraRight * halfHSide)};
+	//_planes[2] = { _camera->transform.position, glm::vec3(0.0f, 0.0f, -1.0f) };
+	_planes[2] = {glm::vec3(-1.0f, 0.0f, 0.0f), 1.0f};
+	//_planes[2]->SetAngleA(glm::vec3(0.0f, 0.0f, 0.0f));
+	//_planes[2]->SetAngleB(glm::vec3(0.0f, 0.0f, -1.0f));
+
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
 	string modelpath = "res/models/Bob.fbx";
 	_model = new ModelImp(modelpath, basicShader, GetRenderer());
-	_model->transform.position = glm::vec3(0.0f, -0.5f, -1.0f);
+	//_model->transform.position = glm::vec3(0.0f, 0.0f, 2.0f);
+	_model->Translate(0.0f, 0.0f, 0.0f);
 	_model->transform.scale = glm::vec3(1.0f);
+
+	std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
+
 
 	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
 	//_modelA->transform.position = glm::vec3(-0.5f, -0.5f, -1.0f);
@@ -111,7 +150,7 @@ void Game::InitGame() {
 	//_modelA->AddChild(_model);
 
 	//_modelA->UpdateSelfAndChild();
-	
+
 	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", basicShader);
 	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
 	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
@@ -129,7 +168,7 @@ void Game::InitGame() {
 	_sprite->Init();
 
 
-	_model->SetParent(_shape);
+	//_model->SetParent(_shape);
 
 	//Crear un array de posiciones para las luces y array de ambient, diffuse, specular, eviar hardcodeo.
 
@@ -171,6 +210,15 @@ void Game::InitGame() {
 	//_sprite->Color(1.0f, 1.0f, 1.0f);
 	_sprite->transform.position = glm::vec3(15.0f, 0.0f, -10.0f);
 	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
+
+	//BSP
+	_bsp = new BSPAlgorithm();
+	_bsp->AddModel(_model);
+
+	//Agregar planos
+	_bsp->AddPlane(&_planes[0]);
+	_bsp->AddPlane(&_planes[1]);
+	_bsp->AddPlane(&_planes[2]);
 }
 void Game::PlayerInputs() {
 	if (input.GetKey(KeyCode::I)) {
@@ -198,16 +246,16 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::G)) {
 		direction.x += speed * time.GetDeltaTime();
-		//_model->MoveModel(direction);
+		_model->MoveModel(direction);
 		//_modelA->Translate(direction.x, direction.y, direction.z);
 		//std::cout << "_modelA X " << _modelA->transform.position.x << std::endl;
 		//std::cout << "_model X " << _model->transform.position.x << std::endl;
-		_shape->transform.position.x += speed * time.GetDeltaTime();
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::F)) {
 		direction.x -= speed * time.GetDeltaTime();
-		//_model->MoveModel(direction);
-		_shape->transform.position.x -= speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::T)) {
 		direction.y += speed * time.GetDeltaTime();
@@ -216,6 +264,16 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::C)) {
 		direction.y -= speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::K)) {
+		direction.z -= speed * time.GetDeltaTime();
+		_model->MoveModel(direction);
+		//_shape->transform.position.x += speed * time.GetDeltaTime();
+	}
+	else if (input.GetKey(KeyCode::R)) {
+		direction.z += speed * time.GetDeltaTime();
 		_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
@@ -249,9 +307,11 @@ void Game::PlayerInputs() {
 		//_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 	else if (input.GetKey(KeyCode::X)) {
-		rot.x += speed * time.GetDeltaTime();
+		//_planes[0].SetNormal(glm::vec3(-0.100f, 0.23f, 0.96f));
+		_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, -1.0f));
+		//rot.x += speed * time.GetDeltaTime();
 		//_modelA->RotateModelX(rot.x);
-		_model->RotateModelX(rot.x);
+		//_model->RotateModelX(rot.x);
 	}
 	else if (input.GetKey(KeyCode::Y)) {
 		rot.y += speed * time.GetDeltaTime();
@@ -259,9 +319,11 @@ void Game::PlayerInputs() {
 		_model->RotateModelY(rot.y);
 	}
 	else if (input.GetKey(KeyCode::Z)) {
-		rot.z += speed * time.GetDeltaTime();
+		//_planes[0].SetNormal(glm::vec3(0.57f, 0.0f, 0.81f));
+		_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, 1.0f));
+		//rot.z += speed * time.GetDeltaTime();
 		//_modelA->RotateModelZ(rot.z);
-		_model->RotateModelZ(rot.z);
+		//_model->RotateModelZ(rot.z);
 	}
 	else if (input.GetKey(KeyCode::A)) {
 		_camera->transform.position.x -= speed * time.GetDeltaTime();
@@ -320,7 +382,7 @@ void Game::PlayerInputs() {
 		//_camera->_rotationSpeed = rotationSpeed * time.GetDeltaTime();
 		_camera->RotateYaw(rotationSpeed * time.GetDeltaTime());
 	}
-	
+
 	//
 	//if (input.GetMouseButton(MouseButtons::LEFT_MOUSE_BUTTON)) {
 	//	player->SetAnimation(0);
@@ -369,6 +431,20 @@ void Game::UpdateGame() {
 	_dirLight->DrawDirectionalLight();
 	_spotLight->DrawSpotLight();
 
+	//_planes[0] = _camera->GetFar();
+	//_planes[1] = _camera->GetRight();
+	//_planes[2] = _camera->GetLeft();
+
+	std::cout << "Normal del plano 0 en x: " << _planes[0].GetNormal().x << std::endl;
+	std::cout << "Normal del plano 0 en y: " << _planes[0].GetNormal().y << std::endl;
+	std::cout << "Normal del plano 0 en z: " << _planes[0].GetNormal().z << std::endl;
+
+	std::cout << "Distance del plano 0: " << _planes[0].GetDistance() << std::endl;
+
+	std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
+
+
+
 	//_point1->Draw();
 	//_point2->Draw();
 
@@ -378,8 +454,11 @@ void Game::UpdateGame() {
 
 	_sprite->DrawSprite();
 
+	//_bsp->CheckPlaneWithCamera(_camera);
+	_bsp->BSP(_camera);
+
 	//map->Draw();
-	
+
 	//map->CheckCollisionWithTileMap(_sprite, _sprite->transform.position, speed * time.GetDeltaTime());
 
 	//player->UpdateIndex(time);
@@ -405,7 +484,7 @@ void Game::UnloadGame() {
 			_light[i] = NULL;
 		}
 	}
-	
+
 	if (_sprite != NULL) {
 		delete _sprite;
 		_sprite = NULL;
@@ -425,9 +504,9 @@ void Game::UnloadGame() {
 		delete _model;
 		_model = NULL;
 	}
-	
-	//if (_modelA != NULL) {
-	//	delete _modelA;
-	//	_modelA = NULL;
-	//}
+
+	if (_bsp != NULL) {
+		delete _bsp;
+		_bsp = NULL;
+	}
 }
