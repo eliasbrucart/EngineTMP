@@ -23,7 +23,8 @@ namespace Engine {
 		~BSPAlgorithm();
 		void BSP(Camera* camera);
 		void CheckBSP(Camera* camera, Mesh* mesh);
-		void CheckPlaneWithCamera(Camera* camera);
+		void CheckBSP(Camera* camera, AABB* aabb, Entity2D* parent, Mesh* mesh);
+		//void CheckPlaneWithCamera(Camera* camera);
 		void AddPlane(Plane* plane);
 		void AddModel(ModelImp* model);
 		void SetPosPlane(int planeIndex, glm::vec3 position);
