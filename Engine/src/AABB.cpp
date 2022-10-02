@@ -52,6 +52,32 @@ bool AABB::IsOnFrustum(Frustum& camFrustum, Entity2D* mesh) {
 		globalAABB.IsOnOrForwardPlan(&camFrustum.farFace));
 }
 
+bool AABB::IsOnBSP(std::vector<Plane*> planes, Entity2D* mesh) {
+	glm::vec3 globalCenter{ mesh->model.trs * glm::vec4(_center, 1.0f) };
+
+	glm::vec3 right = mesh->transform.right * _extents.x;
+	glm::vec3 up = mesh->transform.up * _extents.y;
+	glm::vec3 forward = mesh->transform.forward * _extents.z;
+
+	float newIi = std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, forward));
+
+	float newIj = std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, forward));
+
+	float newIk = std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, forward));
+
+	AABB globalAABB(globalCenter, newIi, newIj, newIk);
+
+	return (globalAABB.IsOnOrForwardPlan(planes[0]) /* &&
+		globalAABB.IsOnOrForwardPlan(planes[1]) &&
+		globalAABB.IsOnOrForwardPlan(planes[2])*/);
+}
+
 void AABB::GenerateGlobalAABB(Entity2D* mesh) {
 	glm::vec3 globalCenter{ mesh->model.trs * glm::vec4(_center, 1.0f) };
 
@@ -96,6 +122,12 @@ bool AABB::IsOnOrForwardPlan(Plane plane) {
 	float r = _extents.x * std::abs(plane.GetNormal().x) + _extents.y * std::abs(plane.GetNormal().y) + _extents.z * std::abs(plane.GetNormal().z);
 
 	return -r <= plane.GetSignedDistanceToPlane(_center);
+}
+
+bool AABB::IsOnOrBackwardPlan(Plane* plane) {
+	float r = _extents.x * std::abs(plane->GetNormal().x) + _extents.y * std::abs(plane->GetNormal().y) + _extents.z * std::abs(plane->GetNormal().z);
+
+	return -r >= plane->GetSignedDistanceToPlane(_center);
 }
 
 glm::vec3 AABB::GetCenter() {
