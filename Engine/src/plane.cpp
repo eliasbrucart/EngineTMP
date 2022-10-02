@@ -14,7 +14,17 @@ Plane::Plane(glm::vec3 normal, float distance) : Entity2D() {
 
 Plane::Plane(const glm::vec3& p1, const glm::vec3& normal) : Entity2D() {
 	_normal = glm::normalize(normal);
-	_distance = glm::dot(_normal, p1);
+	_distance = -glm::dot(_normal, p1);
+}
+
+//Plane::Plane(glm::vec3 normal, glm::vec3 point) : Entity2D() {
+//	_normal = glm::normalize(normal);
+//	_distance = -glm::dot(normal, point);
+//}
+//
+Plane::Plane(glm::vec3 a, glm::vec3 b, glm::vec3 c) : Entity2D() {
+	_normal = glm::normalize(glm::cross(b - a, c - a));
+	_distance = -glm::dot(_normal, a);
 }
 
 Plane::~Plane() {
@@ -27,14 +37,6 @@ void Plane::SetNormal(glm::vec3 normal) {
 
 void Plane::SetDistance(float distance) {
 	_distance = distance;
-}
-
-void Plane::SetAngleA(glm::vec3 angle) {
-	_angleA = angle;
-}
-
-void Plane::SetAngleB(glm::vec3 angle) {
-	_angleB = angle;
 }
 
 glm::vec3 Plane::GetNormal() {
@@ -55,10 +57,26 @@ bool Plane::SameSide(glm::vec3 a, glm::vec3 b) {
 	return positiveSide || negativeSide;
 }
 
-glm::vec3 Plane::GetAngleA() {
-	return _angleA;
+void Plane::Set3Points(glm::vec3 a, glm::vec3 b, glm::vec3 c) {
+	_normal = glm::normalize(glm::cross(b - a, c - a));
+	_distance = -glm::dot(_normal, a);
 }
 
-glm::vec3 Plane::GetAngleB() {
-	return _angleB;
+void Plane::Flip() {
+	_normal = -_normal;
+	_distance = _distance;
+}
+
+float Plane::GetDistanceToPoint(glm::vec3 point) {
+	return glm::dot(_normal, point) + _distance;
+}
+
+bool Plane::GetSide(glm::vec3 point) {
+	return glm::dot(_normal, point) + _distance > 0.0f;
+}
+
+bool Plane::SameSideA(glm::vec3 pointA, glm::vec3 pointB) {
+	float dist0 = GetDistanceToPoint(pointA);
+	float dist1 = GetDistanceToPoint(pointB);
+	return (dist0 > 0.0f && dist1 > 0.0f || dist0 <= 0.0f && dist1 <= 0.0f);
 }
