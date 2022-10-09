@@ -3,6 +3,9 @@
 #include "export.h"
 #include "mat4x4.hpp"
 #include "vec3.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 #include <vector>
 
 using namespace std;
@@ -52,6 +55,8 @@ namespace Engine {
 		void UpdateSelfAndChild();
 		//AABB _boundingVolume;
 		Model model;
+		Model parentModel;
+		Model worldModel;
 		//AABB GenerateAABB(std::vector<Mesh*> meshes, std::vector<Vertex> vertices);
 		//Crear un metodo que devuelva un AABB global
 		bool m_isDirty;
@@ -62,6 +67,7 @@ namespace Engine {
 		bool IsDirty();
 		void ForceUpdateSelfAndChild();
 		inline void SetParent(Entity2D* parent);
+		void setHasParent(bool value);
 		inline bool GetHasParent();
 		Transform transform;
 		Entity2D();
@@ -74,6 +80,27 @@ namespace Engine {
 		void Scale(float x, float y, float z);
 		void UpdateVectors();
 		glm::mat4 GetModel();
+		void SetWorldModel(glm::mat4 matrix);
+		void SetMatrix(glm::mat4 matrix);
+		void SetPos(glm::vec3 position);
+		glm::vec3 GetPos(glm::mat4 matrix);
+		glm::vec3 GetPos();
+		void SetRotationRadians(glm::vec3 rotation);
+		glm::vec3 GetRotation(glm::mat4 matrix);
+		glm::vec3 GetRotation();
+		void SetScale(glm::vec3 localScale);
+		glm::vec3 GetScale(glm::mat4 matrix);
+		glm::vec3 GetScale();
+		glm::vec3 ToEulerRad(glm::quat rotation);
+		glm::quat GetRotationInMatrix(glm::mat4 matrix);
+		glm::vec3 NormalizeAngles(glm::vec3 angles);
+		float NormalizeAngle(float angle);
+
+		//Crear metodo ToEulerRad
+
+		glm::vec3 vlocalPosition;
+		glm::vec3 vlocalRotation;
+		glm::vec3 vlocalScale;
 	};
 
 }

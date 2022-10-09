@@ -1,7 +1,11 @@
 #include "entity2D.h"
+#include "glm.hpp"
+#include "vec3.hpp"
+#include "mat4x4.hpp"
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 #include "ext/scalar_constants.hpp"
+#include "gtc/type_ptr.hpp"
 
 using namespace Engine;
 
@@ -13,7 +17,14 @@ void Engine::Entity2D::UpdateMatrices() {
 }
 
 void Entity2D::UpdateModel() {
-	model.trs = model.translate * model.rotation.x * model.rotation.y * model.rotation.z * model.scale;
+	if (_hasParent) {
+		model.trs = model.translate * model.rotation.x * model.rotation.y * model.rotation.z * model.scale;
+		worldModel.trs = parentModel.trs * model.trs;
+	}
+	else{
+		model.trs = model.translate * model.rotation.x * model.rotation.y * model.rotation.z * model.scale;
+	}
+
 }
 
 Entity2D::Entity2D() {
@@ -28,6 +39,10 @@ Entity2D::Entity2D() {
 	RotateY(0.0f);
 	RotateZ(0.0f);
 	Scale(1.0f, 1.0f, 1.0f);
+
+	//Matrices necesarias para la jerarquia
+	parentModel.trs = glm::mat4(1.0f);
+	worldModel.trs = glm::mat4(1.0f);
 }
 
 Entity2D::~Entity2D() {
@@ -139,6 +154,10 @@ inline void Entity2D::SetParent(Entity2D* parent) {
 	_hasParent = true;
 }
 
+void Entity2D::setHasParent(bool value) {
+	_hasParent = true;
+}
+
 inline bool Entity2D::GetHasParent() {
 	return _hasParent;
 }
@@ -211,9 +230,157 @@ void Entity2D::UpdateVectors() {
 }
 
 glm::mat4 Entity2D::GetModel() {
+	//return model.trs;
 	if (_hasParent)
-		return _parent->model.trs * model.trs;
-	return model.trs;
+		return worldModel.trs;
+	else {
+		return model.trs;
+	}
 }
 
+void Entity2D::SetWorldModel(glm::mat4 matrix) {
+	parentModel.trs = matrix;
 
+	UpdateModel();
+}
+
+void Entity2D::SetMatrix(glm::mat4 matrix) {
+	SetPos(GetPos(matrix));
+	SetRotationRadians(GetRotation(matrix));
+	SetScale(GetScale(matrix));
+}
+
+void Entity2D::SetPos(glm::vec3 position) {
+	vlocalPosition = position;
+	worldModel.translate = glm::translate(glm::mat4(1.0), vlocalPosition);
+
+	UpdateModel();
+}
+
+glm::vec3 Entity2D::GetPos(glm::mat4 matrix) {
+	return glm::vec3(matrix[3][0], matrix[3][1], matrix[3][2]);
+}
+
+glm::vec3 Entity2D::GetPos() {
+	return vlocalPosition;
+}
+
+void Entity2D::SetRotationRadians(glm::vec3 rotation) {
+	RotateX(glm::radians(rotation.x));
+	RotateY(glm::radians(rotation.y));
+	RotateZ(glm::radians(rotation.z));
+
+	UpdateModel();
+}
+
+glm::vec3 Entity2D::GetRotation(glm::mat4 matrix) {
+	return ToEulerRad(GetRotationInMatrix(matrix));
+}
+
+glm::vec3 Entity2D::GetRotation() {
+	return vlocalRotation;
+}
+
+void Entity2D::SetScale(glm::vec3 localScale) {
+	vlocalScale = localScale;
+	model.scale = glm::scale(glm::mat4(1.0f), vlocalScale);
+
+	UpdateModel();
+}
+
+glm::vec3 Entity2D::GetScale(glm::mat4 matrix) {
+	glm::vec4 m0 = glm::vec4(matrix[0].x, matrix[0].y, matrix[0].z, matrix[0].w);
+	glm::vec4 m1 = glm::vec4(matrix[1].x, matrix[1].y, matrix[1].z, matrix[1].w);
+	glm::vec4 m2 = glm::vec4(matrix[2].x, matrix[2].y, matrix[2].z, matrix[2].w);
+
+	return glm::vec3(glm::length(m0), glm::length(m1), glm::length(m2));
+}
+
+glm::vec3 Entity2D::GetScale() {
+	return vlocalScale;
+}
+
+glm::vec3 Entity2D::ToEulerRad(glm::quat rotation) {
+	float sqw = rotation.w * rotation.w;
+	float sqx = rotation.x * rotation.x;
+	float sqy = rotation.y * rotation.y;
+	float sqz = rotation.z * rotation.z;
+	float unit = sqx + sqy + sqz + sqw;
+	float test = rotation.x * rotation.w - rotation.y * rotation.z;
+
+	glm::vec3 vec = glm::vec3();
+
+	if (test > 0.4995f * unit)
+	{
+		vec.y = 2.f * atan2(rotation.y, rotation.x);
+		vec.x = glm::pi<float>() / 2.f;
+		vec.z = 0.f;
+
+		return NormalizeAngles(vec * 57.29578f);
+	}
+	if (test < -0.4995f * unit)
+	{
+		vec.y = -2.f * atan2(rotation.y, rotation.x);
+		vec.x = -glm::pi<float>() / 2.f;
+		vec.z = 0.f;
+
+		return NormalizeAngles(vec * 57.29578f);
+	}
+
+	glm::vec4 quaternion = glm::vec4(rotation.w, rotation.z, rotation.x, rotation.y);
+	vec.y = atan2(2.f * quaternion.x * quaternion.w + 2.f * quaternion.y * quaternion.z, 1.f - 2.f * (quaternion.z * quaternion.z + quaternion.w * quaternion.w));
+	vec.x = asin(2.f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y));
+	vec.z = atan2(2.f * quaternion.x * quaternion.y + 2.f * quaternion.z * quaternion.w, 1.f - 2.f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z));
+
+	return NormalizeAngles(vec * 57.29578f);
+}
+
+glm::quat Entity2D::GetRotationInMatrix(glm::mat4 matrix) {
+	glm::vec3 scale = GetScale(matrix);
+
+	float m00 = matrix[0].x / scale.x;
+	float m01 = matrix[0].y / scale.y;
+	float m02 = matrix[0].z / scale.z;
+	float m10 = matrix[1].x / scale.x;
+	float m11 = matrix[1].y / scale.y;
+	float m12 = matrix[1].z / scale.z;
+	float m20 = matrix[2].x / scale.x;
+	float m21 = matrix[2].y / scale.y;
+	float m22 = matrix[2].z / scale.z;
+
+	glm::quat quat = glm::quat();
+	quat.w = glm::sqrt(glm::max(0.f, 1.f + m00 + m11 + m22)) / 2.f;
+	quat.x = glm::sqrt(glm::max(0.f, 1.f + m00 - m11 - m22)) / 2.f;
+	quat.y = glm::sqrt(glm::max(0.f, 1.f - m00 + m11 - m22)) / 2.f;
+	quat.z = glm::sqrt(glm::max(0.f, 1.f - m00 - m11 + m22)) / 2.f;
+	quat.x *= glm::sign(quat.x * (m21 - m12));
+	quat.y *= glm::sign(quat.y * (m02 - m20));
+	quat.z *= glm::sign(quat.z * (m10 - m01));
+
+	float qMagnitude = glm::sqrt(quat.w * quat.w + quat.x * quat.x + quat.y * quat.y + quat.z * quat.z);
+	quat.w /= qMagnitude;
+	quat.x /= qMagnitude;
+	quat.y /= qMagnitude;
+	quat.z /= qMagnitude;
+
+	return quat;
+}
+
+glm::vec3 Entity2D::NormalizeAngles(glm::vec3 angles) {
+	angles.x = NormalizeAngle(angles.x);
+	angles.y = NormalizeAngle(angles.y);
+	angles.z = NormalizeAngle(angles.z);
+
+	return angles;
+}
+
+float Entity2D::NormalizeAngle(float angle) {
+	while (angle > 360.f)
+		angle -= 360.f;
+	while (angle < 0.f)
+		angle += 360.f;
+
+	return angle;
+}
+
+//En Game ordenar la posicion, rotacion y escala de cada objeto que venga en la escena para que queden bien posicionados
