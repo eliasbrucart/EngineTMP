@@ -48,10 +48,12 @@ void Node::SetName(string name) {
 
 void Node::SetTransformMatrix() {
 	if (_meshes.size() > 0) {
-		_localBoundingVolume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
+		//std::cout << "Entro en meshes mayor a 0 en transform Matrix" << std::endl;
+		//_volume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
+		_children[i]->setWorldModelWithParentModel(worldModel);
 		_children[i]->SetTransformMatrix();
 
 		UpdateAABBchildren(_children[i]);
@@ -80,7 +82,7 @@ AABB* Node::GetVolume() {
 
 void Node::SetRenderer(Renderer* renderer) {
 	_renderer = renderer;
-
+	UseLocalMatrix();
 	for (int i = 0; i < _children.size(); i++) {
 		_children[i]->SetRenderer(renderer);
 	}
@@ -114,6 +116,8 @@ Node* Node::GetChildrenWithName(string name) {
 void Node::GenerateAABB() {
 	if (_meshes.size() > 0) {
 
+		std::cout << "Entro en Generate AABB en Node" << std::endl;
+
 		glm::vec3 minAABB = glm::vec3(std::numeric_limits<float>::max());
 		glm::vec3 maxAABB = glm::vec3(std::numeric_limits<float>::min());
 
@@ -121,6 +125,8 @@ void Node::GenerateAABB() {
 			Mesh mesh = _meshes[i];
 
 			for (int j = 0; j < mesh.vertices.size(); j++) {
+
+				std::cout << "llego a entrar en el sgundo for! mesh vertrices: " << mesh.vertices.size() << std::endl;
 
 				Vertex vertex = mesh.vertices[j];
 
@@ -166,14 +172,15 @@ void Node::UpdateAABBchildren(Node* child) {
 
 void Node::Draw(Shader& shader, Frustum& frustum) {
 	if (_meshes.size() > 0 || !_meshes.empty()) {
-		shader.Use(this->GetModel());
+		shader.Use(worldModel);
 		for (int i = 0; i < _meshes.size(); i++){
-			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), GetModel());
+			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
 			//_meshes[i].Draw(shader, frustum);
 		}
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
+		_children[i]->setWorldModelWithParentModel(worldModel);
 		_children[i]->Draw(shader, frustum);
 	}
 }

@@ -1,7 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 #include "export.h"
-#include "entity2D.h"
+#include "entity.h"
 #include "mesh.h"
 #include "AABB.h"
 #include "glm.hpp"
@@ -15,7 +15,7 @@
 using namespace std;
 
 namespace Engine {
-	class ENGINE_API Node : public Entity2D {
+	class ENGINE_API Node : public Entity {
 	private:
 		std::vector<Node*> _children;
 		Node* _parent;
