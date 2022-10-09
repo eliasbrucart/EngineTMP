@@ -1,7 +1,6 @@
 #ifndef MODELIMP_H
 #define MODELIMP_H
 
-#include <glm.hpp>
 #include "stb_image.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -10,41 +9,36 @@
 #include "shader.h"
 #include "mesh.h"
 #include "entity2D.h"
-#include "time_manager.h"
 
 #include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
-#include <map>
 #include <vector>
+#include "mat4x4.hpp"
 
 #include "texture_importer.h"
-#include "camera.h"
+#include "node.h"
 
 using namespace std;
 
 namespace Engine {
-	class ENGINE_API ModelImp : public Entity2D{
+	class ENGINE_API ModelImp{
 	private:
 		int _width = 0;
 		int _height = 0;
 		bool _transparency;
 		vector<Texture> _textures_loaded;
-		vector<Mesh*> _meshes;
+		//vector<Mesh*> _meshes;
 		string _path;
 		const char* _modelTexture;
 		string _directory;
 
-		std::vector<Entity2D*> _rootNodeChildren;
-		Entity2D* _rootNode; //Atributo para setear el nodo actual.
-		std::vector<Mesh*> _rootNodeChildrenMesh;
-		Mesh* _rootNodeMesh;
+		//std::vector<Entity2D*> _rootNodeChildren;
+		//Entity2D* _rootNode; //Atributo para setear el nodo actual.
 
 		//const string* _modelTexture;
 		void LoadModel(string path);
-		void ProcessNode(aiNode* node, const aiScene* scene, Entity2D* parent);
-		Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, Entity2D* parentNodeMesh, Entity2D* childrenNodeMesh);
+		void ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm::mat4 identMatrix);
+		Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 		vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
 		TextureImporter* _texImporter = NULL;
@@ -52,13 +46,13 @@ namespace Engine {
 		Shader _shader;
 		Renderer* _renderer;
 
-		AABB* _boundingVolume;
-
-		AABB* GenerateGlobalAABB();
-
 		unsigned int TextureFromFile(const char* path, const string &directory,bool gamma);
 		void LoadTexture();
 		unsigned int TextureModel(const char* texture);
+
+		std::vector<Mesh> _meshes;
+
+		Node* sceneNode;
 	public:
 		ModelImp();
 		ModelImp(string path, const char* modelTexture, Shader& shader, Renderer* renderer);
@@ -69,7 +63,8 @@ namespace Engine {
 		void RotateModelX(float x);
 		void RotateModelY(float y);
 		void RotateModelZ(float z);
-		vector<Mesh*> GetMeshes();
+		Mesh* _rootNodeMesh;
+		Node* GetSceneNode();
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader, Frustum frustum);
