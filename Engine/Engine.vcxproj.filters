@@ -70,6 +70,9 @@
     <Filter Include="Visibility">
       <UniqueIdentifier>{b74bbe92-a0b5-4976-aef9-67abdcc526ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Node">
+      <UniqueIdentifier>{99c0002f-2984-4bd8-b106-03622297d9ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity2D.h">
@@ -156,6 +159,9 @@
     <ClInclude Include="src\bsp_algorithm.h">
       <Filter>Visibility</Filter>
     </ClInclude>
+    <ClInclude Include="src\node.h">
+      <Filter>Node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base.cpp">
@@ -238,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="src\bsp_algorithm.cpp">
       <Filter>Visibility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\node.cpp">
+      <Filter>Node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

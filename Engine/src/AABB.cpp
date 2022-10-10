@@ -7,8 +7,11 @@ AABB::AABB() : BoundingVolume() {
 }
 
 AABB::AABB(glm::vec3& min, glm::vec3& max) : BoundingVolume() {
-	_center = (max + min) * 0.5f;
-	_extents = glm::vec3(max.x - _center.x, max.y - _center.y, max.z - _center.z);
+	UpdateAABB(min, max);
+	//this->min = min;
+	//this->max = max;
+	//_center = (max + min) * 0.5f;
+	//_extents = glm::vec3(max.x - _center.x, max.y - _center.y, max.z - _center.z);
 }
 
 AABB::AABB(glm::vec3& inCenter, float iI, float iJ, float iK) : BoundingVolume() {
@@ -136,4 +139,11 @@ glm::vec3 AABB::GetCenter() {
 
 glm::vec3 AABB::GetExtents() {
 	return _extents;
+}
+
+void AABB::UpdateAABB(glm::vec3 min, glm::vec3 max) {
+	this->min = min;
+	this->max = max;
+	_center = glm::vec3((max + min) * .5f);
+	_extents = glm::vec3(max.x - _center.x, max.y - _center.y, max.z - _center.z);
 }

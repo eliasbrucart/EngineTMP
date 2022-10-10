@@ -27,6 +27,9 @@ namespace Engine {
 		bool IsOnOrBackwardPlan(Plane* plane);
 		glm::vec3 GetCenter();
 		glm::vec3 GetExtents();
+		glm::vec3 min;
+		glm::vec3 max;
+		void UpdateAABB(glm::vec3 min, glm::vec3 max);
 	};
 }
 

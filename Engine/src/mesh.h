@@ -29,30 +29,31 @@ namespace Engine {
 
 	class ENGINE_API Mesh : public Entity2D {
 	private:
-		unsigned int _vao;
-		unsigned int _vbo;
-		unsigned int _ebo;
+
 		unsigned int _positionAttrib;
 		unsigned int _normalAttrib;
 		unsigned int _textureAttrib;
 		Shader _shader;
 		Renderer* _renderer;
 		void SetUpMesh();
-		AABB* _boundingVolume;
-		Entity2D* _parentNodePtr;
-		Entity2D* _childrenNodePtr;
+		//AABB* _boundingVolume;
 		bool _canDraw;
 	public:
-		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, vector<Mesh*> meshes, Shader& shader, Renderer* renderer, Entity2D* parentNodePtr, Entity2D* childrenNodePtr);
+		Mesh();
+		Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader& shader, Renderer* renderer);
 		~Mesh();
 		vector<Vertex> vertices;
 		vector<unsigned int> indices;
 		vector<Texture> textures;
 		vector<Mesh*> _meshes;
-		AABB* GenerateAABB();
-		Entity2D* GetParentNodePtr();
-		Entity2D* GetChildrenNodePtr();
-		AABB* GetMeshAABB();
+		unsigned int _vao;
+		unsigned int _vbo;
+		unsigned int _ebo;
+		//AABB* GenerateAABB();
+		//AABB* GetMeshAABB();
+		Mesh* _parentMesh;
+		std::vector<Mesh*> _meshesChildren;
+		void AddChildMesh(Mesh* children);
 		void SetCanDraw(bool value);
 		bool GetCanDraw();
 		void Draw(Shader& shader, Frustum frustum);

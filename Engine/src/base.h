@@ -19,6 +19,7 @@
 #include "modelimp.h"
 #include "entity.h"
 #include "plane.h"
+#include "node.h"
 #include "bsp_algorithm.h"
 
 namespace Engine {
@@ -26,7 +27,6 @@ namespace Engine {
 	private:
 		Renderer* _renderer;
 		Window* _window;
-		ModelImp* _model;
 	protected:
 		//void mouse_callback(GLFWwindow* window, double posX, double posY);
 		Camera* _camera;

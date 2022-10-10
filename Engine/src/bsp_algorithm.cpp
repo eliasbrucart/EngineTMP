@@ -36,13 +36,13 @@ BSPAlgorithm::~BSPAlgorithm() {
 void BSPAlgorithm::BSP(Camera* camera) {
 	for (int i = 0; i < _models.size(); i++) {
 		//_aabb = _models[i]->GetMeshes()[i]->GetMeshAABB();
-		CheckBSP(camera, _models[i]->GetMeshes()[0]);
+		//CheckBSP(camera, _models[i]->GetMeshes()[0]);
 		//std::cout << "vector models get meshes: " << _models[i]->GetMeshes().size() << std::endl;
 	}
 }
 
 void BSPAlgorithm::CheckBSP(Camera* camera, Mesh* mesh) {
-	_aabb = mesh->GetMeshAABB(); //Aca un getter del aabb de nuestra malla.
+	//_aabb = mesh->GetMeshAABB(); //Aca un getter del aabb de nuestra malla.
 
 
 	//if (_aabb->IsOnBSP(_planes, mesh)) {

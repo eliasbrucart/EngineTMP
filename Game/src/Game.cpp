@@ -2,6 +2,7 @@
 
 float speed = 10.0f;
 
+using namespace std;
 using namespace Engine;
 
 glm::vec3 pointLightPositions[4] = {
@@ -50,10 +51,10 @@ Game::~Game() {
 		_model = NULL;
 	}
 
-	if (_bsp != NULL) {
-		delete _bsp;
-		_bsp = NULL;
-	}
+	//if (_bsp != NULL) {
+	//	delete _bsp;
+	//	_bsp = NULL;
+	//}
 
 	if (_dirLight != NULL) {
 		delete _dirLight;
@@ -65,18 +66,34 @@ Game::~Game() {
 		_spotLight = NULL;
 	}
 
-	//for (int i = 0; i < 3; i++) {
-	//	if (_planes[i] != NULL) {
-	//		delete _planes[i];
-	//		_planes[i] = NULL;
-	//	}
-	//}
+	if (_modelLeft != NULL) {
+		delete _modelLeft;
+		_modelLeft = NULL;
+	}
+
+	if (_modelRight != NULL) {
+		delete _modelRight;
+		_modelRight = NULL;
+	}
+
+	if (_modelForward != NULL) {
+		delete _modelForward;
+		_modelForward = NULL;
+	}
+
+	if (_modelMobile != NULL) {
+		delete _modelMobile;
+		_modelMobile = NULL;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		if (_bspPlanes[i] != NULL) {
+			delete _bspPlanes[i];
+			_bspPlanes[i] = NULL;
+		}
+	}
 }
 
-//if (map != NULL) {
-//	delete map;
-//	map = NULL;
-//}
 void Game::InitGame() {
 	//_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
 	//player = new Animation();
@@ -111,7 +128,9 @@ void Game::InitGame() {
 
 	//_planes[0] = _camera->GetFar();
 	//_planes[0] = { glm::vec3(0.57f, 0.0f, 0.81f), 1.0f };
-	_planes[0] = { glm::vec3(0.0f, 0.0f, 1.0f), 1.0f};
+	//_planes[0] = { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)};
+	//std::cout << "plane 0 distance: " << _planes[0].GetDistance() << std::endl;
+	//_planes[0].transform.position = glm::vec3(0.0f, 0.0f, 0.0f);
 	//std::cout << "camera front en ese momento en z: " << _camera->GetCameraFront().z << std::endl;
 	//std::cout << "Normal del plano 0 en z: " << _planes[0].GetNormal().z << std::endl;
 	//_planes[0]->SetAngleA(glm::vec3(0.0f, -90.0f, 0.0f));
@@ -120,7 +139,7 @@ void Game::InitGame() {
 
 	//_planes[1] = {_camera->transform.position, glm::cross(farMultiplyCamFront - _camera->_cameraRight * halfVSide, _camera->_cameraUp)};
 	//_planes[1] = {_camera->transform.position, glm::vec3(0.0f, 0.0f, 1.0f)};
-	_planes[1] = {glm::vec3(1.0f, 0.0f, 0.0f), 1.0f};
+	//_planes[1] = { glm::vec3(-3.0f, 0.0f, 3.0f), glm::vec3(1.0f, 0.0f, 0.0f) };
 	//_planes[1]->transform.position = glm::vec3(-5.0f, 0.0f, 0.0f);
 	//_planes[1]->SetNormal(glm::vec3(0.0f, 0.0f, 1.0f));
 	//_planes[1]->SetAngleA(glm::vec3(0.0f, 90.0f, 0.0f));
@@ -129,19 +148,35 @@ void Game::InitGame() {
 
 	//_planes[2] = {_camera->transform.position, glm::cross(_camera->_cameraUp, farMultiplyCamFront + _camera->_cameraRight * halfHSide)};
 	//_planes[2] = { _camera->transform.position, glm::vec3(0.0f, 0.0f, -1.0f) };
-	_planes[2] = {glm::vec3(-1.0f, 0.0f, 0.0f), 1.0f};
+	//_planes[2] = { glm::vec3(3.0f, 0.0f, 3.0f), glm::vec3(-1.0f, 0.0f, 0.0f) };
 	//_planes[2]->SetAngleA(glm::vec3(0.0f, 0.0f, 0.0f));
 	//_planes[2]->SetAngleB(glm::vec3(0.0f, 0.0f, -1.0f));
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
-	string modelpath = "res/models/Bob.fbx";
+	//string modelpath = "res/models/scene/scenefachera.fbx";
+	string modelpath = "res/models/scene/scenefachera.fbx";
 	_model = new ModelImp(modelpath, basicShader, GetRenderer());
 	//_model->transform.position = glm::vec3(0.0f, 0.0f, 2.0f);
-	_model->Translate(0.0f, 0.0f, 0.0f);
-	_model->transform.scale = glm::vec3(1.0f);
+	//_model->Translate(0.0f, 0.0f, 0.0f);
+	//_model->transform.scale = glm::vec3(1.0f);
 
-	std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
+	//std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
 
+	_modelLeft = _model->GetSceneNode()->GetChildrenWithName("left");
+	_modelLeft->SetRenderer(GetRenderer());
+	_modelRight = _model->GetSceneNode()->GetChildrenWithName("right");
+	_modelRight->SetRenderer(GetRenderer());
+	_modelForward = _model->GetSceneNode()->GetChildrenWithName("foward");
+	_modelForward->SetRenderer(GetRenderer());
+	_modelMobile = _model->GetSceneNode()->GetChildrenWithName("mobile");
+	_modelMobile->SetRenderer(GetRenderer());
+
+	_bspPlanes[0] = _model->GetSceneNode()->GetChildrenWithName("bspPlane");
+	_bspPlanes[0]->SetRenderer(GetRenderer());
+	_bspPlanes[1] = _model->GetSceneNode()->GetChildrenWithName("bspPlane4");
+	_bspPlanes[1]->SetRenderer(GetRenderer());
+	_bspPlanes[2] = _model->GetSceneNode()->GetChildrenWithName("bspPlane5");
+	_bspPlanes[2]->SetRenderer(GetRenderer());
 
 	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
 	//_modelA->transform.position = glm::vec3(-0.5f, -0.5f, -1.0f);
@@ -212,13 +247,13 @@ void Game::InitGame() {
 	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
 	//BSP
-	_bsp = new BSPAlgorithm();
-	_bsp->AddModel(_model);
+	//_bsp = new BSPAlgorithm();
+	//_bsp->AddModel(_model);
 
 	//Agregar planos
-	_bsp->AddPlane(&_planes[0]);
-	_bsp->AddPlane(&_planes[1]);
-	_bsp->AddPlane(&_planes[2]);
+	//_bsp->AddPlane(&_planes[0]);
+	//_bsp->AddPlane(&_planes[1]);
+	//_bsp->AddPlane(&_planes[2]);
 }
 void Game::PlayerInputs() {
 	if (input.GetKey(KeyCode::I)) {
@@ -246,35 +281,45 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::G)) {
 		direction.x += speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_camera->transform.position = _bspPlanes[2]->getPos();
+		//_bspPlanes[0]->setPos(_bspPlanes[0]->getPos(_bspPlanes[0]->getModel() + direction.x));
+		//_model->MoveModel(direction);
 		//_modelA->Translate(direction.x, direction.y, direction.z);
 		//std::cout << "_modelA X " << _modelA->transform.position.x << std::endl;
-		//std::cout << "_model X " << _model->transform.position.x << std::endl;
+		//std::cout << "_bspPlanes 0 X " << _bspPlanes[0]->transform.position.x << std::endl;
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::F)) {
 		direction.x -= speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_camera->transform.position = _bspPlanes[1]->getPos();
+		//_modelLeft->setPos(direction);
+		//_bspPlanes[1]->setPos(_bspPlanes[1]->getPos(_bspPlanes[1]->getModel() + direction.x));
+		//_model->MoveModel(direction);
 		//_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::T)) {
 		direction.y += speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_camera->transform.position = _modelRight->getPos();
+		//_bspPlanes[2]->Translate(direction.x, direction.y, direction.z);
+		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::C)) {
 		direction.y -= speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_camera->transform.position = _bspPlanes[2]->getPos();
+		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::K)) {
 		direction.z -= speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_camera->transform.position = _bspPlanes[0]->getPos();
+		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::R)) {
 		direction.z += speed * time.GetDeltaTime();
-		_model->MoveModel(direction);
+		_camera->transform.position = _bspPlanes[1]->getPos();
+		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::H)) {
@@ -308,7 +353,7 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::X)) {
 		//_planes[0].SetNormal(glm::vec3(-0.100f, 0.23f, 0.96f));
-		_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, -1.0f));
+		//_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, -1.0f));
 		//rot.x += speed * time.GetDeltaTime();
 		//_modelA->RotateModelX(rot.x);
 		//_model->RotateModelX(rot.x);
@@ -320,7 +365,7 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::Z)) {
 		//_planes[0].SetNormal(glm::vec3(0.57f, 0.0f, 0.81f));
-		_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, 1.0f));
+		//_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, 1.0f));
 		//rot.z += speed * time.GetDeltaTime();
 		//_modelA->RotateModelZ(rot.z);
 		//_model->RotateModelZ(rot.z);
@@ -416,6 +461,23 @@ void Game::UpdateGame() {
 
 	//_camera->UpdateRotation(_shape->transform.position);
 
+	Node* child = _modelMobile->GetChildrenWithName("RootNode");
+	
+	if (child != NULL) {
+		child->setScale(child->getScale());
+		child->setRotRadians(child->getRot());
+	}
+
+
+	_modelLeft->SetTransformMatrix();
+	_modelRight->SetTransformMatrix();
+	_modelForward->SetTransformMatrix();
+	_modelMobile->SetTransformMatrix();
+	
+	for (int i = 0; i < 3; i++) {
+		_bspPlanes[i]->SetTransformMatrix();
+	}
+
 	_camera->UpdateRotation();
 	_camera->SetLookAt(_camera->GetCameraFront());
 	_camera->Draw(basicShader);
@@ -423,7 +485,7 @@ void Game::UpdateGame() {
 	_shape->Draw();
 	_shape2->Draw();
 	//_modelA->UpdateSelfAndChild();
-	_model->Draw(basicShader, camFrustum);
+	//_model->Draw(basicShader, camFrustum);
 	//_modelA->Draw(basicShader);
 
 	//_modelA->Draw(basicShader);
@@ -435,13 +497,13 @@ void Game::UpdateGame() {
 	//_planes[1] = _camera->GetRight();
 	//_planes[2] = _camera->GetLeft();
 
-	std::cout << "Normal del plano 0 en x: " << _planes[0].GetNormal().x << std::endl;
-	std::cout << "Normal del plano 0 en y: " << _planes[0].GetNormal().y << std::endl;
-	std::cout << "Normal del plano 0 en z: " << _planes[0].GetNormal().z << std::endl;
+	//std::cout << "Normal del plano 0 en x: " << _planes[0].GetNormal().x << std::endl;
+	//std::cout << "Normal del plano 0 en y: " << _planes[0].GetNormal().y << std::endl;
+	//std::cout << "Normal del plano 0 en z: " << _planes[0].GetNormal().z << std::endl;
+	//
+	//std::cout << "Distance del plano 0: " << _planes[0].GetDistance() << std::endl;
 
-	std::cout << "Distance del plano 0: " << _planes[0].GetDistance() << std::endl;
-
-	std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
+	//std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
 
 
 
@@ -454,8 +516,17 @@ void Game::UpdateGame() {
 
 	_sprite->DrawSprite();
 
+	_modelLeft->Draw(basicShader, camFrustum);
+	_modelRight->Draw(basicShader, camFrustum);
+	_modelForward->Draw(basicShader, camFrustum);
+	_modelMobile->Draw(basicShader, camFrustum);
+	
+	for (int i = 0; i < 3; i++) {
+		_bspPlanes[i]->Draw(basicShader, camFrustum);
+	}
+
 	//_bsp->CheckPlaneWithCamera(_camera);
-	_bsp->BSP(_camera);
+	//_bsp->BSP(_camera);
 
 	//map->Draw();
 
@@ -505,8 +576,8 @@ void Game::UnloadGame() {
 		_model = NULL;
 	}
 
-	if (_bsp != NULL) {
-		delete _bsp;
-		_bsp = NULL;
-	}
+	//if (_bsp != NULL) {
+	//	delete _bsp;
+	//	_bsp = NULL;
+	//}
 }

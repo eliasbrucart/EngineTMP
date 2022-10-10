@@ -180,7 +180,7 @@ void Node::Draw(Shader& shader, Frustum& frustum) {
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
-		_children[i]->setWorldModelWithParentModel(worldModel);
+		//_children[i]->setWorldModelWithParentModel(worldModel);
 		_children[i]->Draw(shader, frustum);
 	}
 }

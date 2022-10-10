@@ -1,7 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include"base.h" 
+#include"base.h"
+#include <string>
 #include <vector>
 
 using namespace Engine;
@@ -20,8 +21,13 @@ private:
 	Light* _spotLight = NULL;
 	Sprite* _sprite = NULL;
 	ModelImp* _model = NULL;
-	BSPAlgorithm* _bsp = NULL;
-	Plane _planes[3];
+	Node* _modelLeft = NULL;
+	Node* _modelRight = NULL;
+	Node* _modelForward = NULL;
+	Node* _modelMobile = NULL;
+	Node* _bspPlanes[3] = {NULL, NULL, NULL};
+	//BSPAlgorithm* _bsp = NULL;
+	//Plane _planes[3];
 	//ModelImp* _modelA = NULL;
 	//Animation* player = NULL;
 	//Tilemap* map = NULL;
