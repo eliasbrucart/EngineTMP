@@ -49,7 +49,7 @@ void Node::SetName(string name) {
 void Node::SetTransformMatrix() {
 	if (_meshes.size() > 0) {
 		//std::cout << "Entro en meshes mayor a 0 en transform Matrix" << std::endl;
-		//_volume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
+		_volume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
 	}
 
 	for (int i = 0; i < _children.size(); i++) {

@@ -154,7 +154,7 @@ void Game::InitGame() {
 
 	//_model = new ModelImp("res/models/bar/source/Bar_stool.fbx");
 	//string modelpath = "res/models/scene/scenefachera.fbx";
-	string modelpath = "res/models/scene/scenefachera.fbx";
+	string modelpath = "res/models/scene2/scene-planes.fbx";
 	_model = new ModelImp(modelpath, basicShader, GetRenderer());
 	//_model->transform.position = glm::vec3(0.0f, 0.0f, 2.0f);
 	//_model->Translate(0.0f, 0.0f, 0.0f);
@@ -162,20 +162,20 @@ void Game::InitGame() {
 
 	//std::cout << "Posicion en z del modelo: " << _model->transform.position.z << std::endl;
 
-	_modelLeft = _model->GetSceneNode()->GetChildrenWithName("left");
+	_modelLeft = _model->GetSceneNode()->GetChildrenWithName("Left");
 	_modelLeft->SetRenderer(GetRenderer());
-	_modelRight = _model->GetSceneNode()->GetChildrenWithName("right");
+	_modelRight = _model->GetSceneNode()->GetChildrenWithName("Right");
 	_modelRight->SetRenderer(GetRenderer());
-	_modelForward = _model->GetSceneNode()->GetChildrenWithName("foward");
+	_modelForward = _model->GetSceneNode()->GetChildrenWithName("Forward");
 	_modelForward->SetRenderer(GetRenderer());
-	_modelMobile = _model->GetSceneNode()->GetChildrenWithName("mobile");
+	_modelMobile = _model->GetSceneNode()->GetChildrenWithName("Mobile");
 	_modelMobile->SetRenderer(GetRenderer());
 
-	_bspPlanes[0] = _model->GetSceneNode()->GetChildrenWithName("bspPlane");
+	_bspPlanes[0] = _model->GetSceneNode()->GetChildrenWithName("bspPlane1");
 	_bspPlanes[0]->SetRenderer(GetRenderer());
-	_bspPlanes[1] = _model->GetSceneNode()->GetChildrenWithName("bspPlane4");
+	_bspPlanes[1] = _model->GetSceneNode()->GetChildrenWithName("bspPlane2");
 	_bspPlanes[1]->SetRenderer(GetRenderer());
-	_bspPlanes[2] = _model->GetSceneNode()->GetChildrenWithName("bspPlane5");
+	_bspPlanes[2] = _model->GetSceneNode()->GetChildrenWithName("bspPlane3");
 	_bspPlanes[2]->SetRenderer(GetRenderer());
 
 	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
@@ -291,7 +291,8 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::F)) {
 		direction.x -= speed * time.GetDeltaTime();
-		_camera->transform.position = _bspPlanes[1]->getPos();
+		//_bspPlanes[1]->setPos(direction.x, direction.y, direction.z);
+		_modelMobile->setPos(direction.x, direction.y, direction.z);
 		//_modelLeft->setPos(direction);
 		//_bspPlanes[1]->setPos(_bspPlanes[1]->getPos(_bspPlanes[1]->getModel() + direction.x));
 		//_model->MoveModel(direction);
@@ -299,14 +300,14 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::T)) {
 		direction.y += speed * time.GetDeltaTime();
-		_camera->transform.position = _modelRight->getPos();
+		_camera->transform.position = _bspPlanes[2]->getPos();
 		//_bspPlanes[2]->Translate(direction.x, direction.y, direction.z);
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::C)) {
 		direction.y -= speed * time.GetDeltaTime();
-		_camera->transform.position = _bspPlanes[2]->getPos();
+		_camera->transform.position = _bspPlanes[0]->getPos();
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
@@ -461,12 +462,12 @@ void Game::UpdateGame() {
 
 	//_camera->UpdateRotation(_shape->transform.position);
 
-	Node* child = _modelMobile->GetChildrenWithName("RootNode");
-	
-	if (child != NULL) {
-		child->setScale(child->getScale());
-		child->setRotRadians(child->getRot());
-	}
+	//Node* child = _modelMobile->GetChildrenWithName("RootNode");
+	//
+	//if (child != NULL) {
+	//	child->setScale(child->getScale());
+	//	child->setRotRadians(child->getRot());
+	//}
 
 
 	_modelLeft->SetTransformMatrix();

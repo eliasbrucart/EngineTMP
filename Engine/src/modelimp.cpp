@@ -108,10 +108,11 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 	Node* actualNode = new Node();
 	string nameNode = node->mName.C_Str();
 
+	//Importador que tiene en cuenta el pivote de rotacion de cada objeto en la escena
 	if (nameNode.find("$AssimpFbx$") == -1 && node->mNumMeshes == 0 && identMatrix == glm::mat4(1.f)) {
 		if (nameNode.find("RotationPivot") != -1 && nameNode.find("Inverse") == -1) {
 			aiMatrix4x4 newMatrix = node->mTransformation;
-
+	
 			identMatrix[0][0] = (float)newMatrix.a1;
 			identMatrix[0][1] = (float)newMatrix.b1;
 			identMatrix[0][2] = (float)newMatrix.c1;
@@ -128,12 +129,12 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 			identMatrix[3][1] = (float)newMatrix.b4;
 			identMatrix[3][2] = (float)newMatrix.c4;
 			identMatrix[3][3] = (float)newMatrix.d4;
-
+	
 		}
-		if (nameNode.find("Pivot") == -1) {
+		if (nameNode.find("Pivot") == std::string::npos) {
 			glm::mat4 m;
 			aiMatrix4x4 newMatrix = node->mTransformation;
-
+	
 			m[0][0] = (float)newMatrix.a1;
 			m[0][1] = (float)newMatrix.b1;
 			m[0][2] = (float)newMatrix.c1;
@@ -150,22 +151,22 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 			m[3][1] = (float)newMatrix.b4;
 			m[3][2] = (float)newMatrix.c4;
 			m[3][3] = (float)newMatrix.d4;
-
+	
 			identMatrix *= m;
 		}
-
+	
 		actualNode->setMatrix(identMatrix); //modificar esto para hacer el correcto seteo de la matriz
 	}
 	else {
-
+	
 		//if (node->mNumMeshes > 0) {
 		//	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		//		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		//		_meshes.push_back(ProcessMesh(mesh, scene)); //pusehar la ultima mesh encontrada
 		//	}
 		//}
-
-
+	
+	
 		if (node->mNumMeshes > 0) {
 		    std::vector<Mesh> nodeMeshes;
 		
