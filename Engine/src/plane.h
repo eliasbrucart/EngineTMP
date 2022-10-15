@@ -4,11 +4,12 @@
 #include "glm.hpp"
 #include "vec3.hpp"
 #include "entity2D.h"
+#include "entity.h"
 #include <iostream>
 using namespace std;
 
 namespace Engine {
-	class ENGINE_API Plane : public Entity2D {
+	class ENGINE_API Plane : public Entity {
 	private:
 		glm::vec3 _normal;
 		float _distance;

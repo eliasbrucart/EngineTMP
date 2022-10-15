@@ -7,12 +7,12 @@ Plane::Plane() {
 	_distance = 0.0f;
 }
 
-Plane::Plane(glm::vec3 normal, float distance) : Entity2D() {
+Plane::Plane(glm::vec3 normal, float distance) : Entity() {
 	_normal = normal;
 	_distance = distance;
 }
 
-Plane::Plane(const glm::vec3& p1, const glm::vec3& normal) : Entity2D() {
+Plane::Plane(const glm::vec3& p1, const glm::vec3& normal) : Entity() {
 	_normal = glm::normalize(normal);
 	_distance = -glm::dot(_normal, p1);
 }
@@ -22,7 +22,7 @@ Plane::Plane(const glm::vec3& p1, const glm::vec3& normal) : Entity2D() {
 //	_distance = -glm::dot(normal, point);
 //}
 //
-Plane::Plane(glm::vec3 a, glm::vec3 b, glm::vec3 c) : Entity2D() {
+Plane::Plane(glm::vec3 a, glm::vec3 b, glm::vec3 c) : Entity() {
 	_normal = glm::normalize(glm::cross(b - a, c - a));
 	_distance = -glm::dot(_normal, a);
 }
