@@ -109,22 +109,46 @@ AABB* AABB::GetGlobalAABB() {
 	return _globalAABB;
 }
 
+AABB* AABB::GetGlobalAABBWithMatrix(glm::mat4 matrix) {
+	glm::vec3 globalCenter{ matrix * glm::vec4(_center, 1.f) };
+
+	glm::vec3 right = matrix[0] * _extents.x;
+	glm::vec3 up = matrix[1] * _extents.y;
+	glm::vec3 forward = matrix[2] * _extents.z;
+
+	float newIi = std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 1.f, 0.f, 0.f }, forward));
+
+	float newIj = std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 1.f, 0.f }, forward));
+
+	float newIk = std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, right)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, up)) +
+		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, forward));
+
+	_globalAABB = new AABB(globalCenter, newIi, newIj, newIk);
+
+	return _globalAABB;
+}
+
 bool AABB::IsOnOrForwardPlan(Plane& plane) {
 	float r = _extents.x * std::abs(plane.GetNormal().x) + _extents.y * std::abs(plane.GetNormal().y) + _extents.z * std::abs(plane.GetNormal().z);
 
-	return -r <= plane.GetSignedDistanceToPlane(_center);
+	return -r <= plane.GetDistanceToPoint(_center);
 }
 
 bool AABB::IsOnOrForwardPlan(Plane* plane) {
 	float r = _extents.x * std::abs(plane->GetNormal().x) + _extents.y * std::abs(plane->GetNormal().y) + _extents.z * std::abs(plane->GetNormal().z);
 
-	return -r <= plane->GetSignedDistanceToPlane(_center);
+	return -r <= plane->GetDistanceToPoint(_center);
 }
 
 bool AABB::IsOnOrForwardPlan(Plane plane) {
 	float r = _extents.x * std::abs(plane.GetNormal().x) + _extents.y * std::abs(plane.GetNormal().y) + _extents.z * std::abs(plane.GetNormal().z);
 
-	return -r <= plane.GetSignedDistanceToPlane(_center);
+	return -r <= plane.GetDistanceToPoint(_center);
 }
 
 bool AABB::IsOnOrBackwardPlan(Plane* plane) {

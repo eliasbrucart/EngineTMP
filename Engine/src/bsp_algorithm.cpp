@@ -27,24 +27,30 @@ BSPAlgorithm::~BSPAlgorithm() {
 		_nodes.clear();
 	}
 
+	if (!_planeModel.empty()) {
+		for (auto* planeM : _planeModel) {
+			if (planeM != NULL) {
+				delete planeM;
+				planeM = NULL;
+			}
+		}
+		_planeModel.clear();
+	}
+
 	if (_aabb != NULL) {
 		delete _aabb;
 		_aabb = NULL;
 	}
 }
 
-void BSPAlgorithm::BSP(Camera* camera) {
+void BSPAlgorithm::BSP() {
 	for (int i = 0; i < _nodes.size(); i++) {
-		//_aabb = _models[i]->GetMeshes()[i]->GetMeshAABB();
-		//CheckBSP(camera, _models[i]->GetMeshes()[0]);
+		CheckBSP(_nodes[i]);
 		//std::cout << "vector models get meshes: " << _models[i]->GetMeshes().size() << std::endl;
 	}
 }
 
-void BSPAlgorithm::CheckBSP(Camera* camera, Mesh* mesh) {
-	//_aabb = mesh->GetMeshAABB(); //Aca un getter del aabb de nuestra malla.
-
-
+void BSPAlgorithm::CheckBSP(Node* node) {
 	//if (_aabb->IsOnBSP(_planes, mesh)) {
 	//	std::cout << "La malla esta del mismo lado del los tres planos del BSP!" << std::endl;
 	//	mesh->SetCanDraw(true);
@@ -53,6 +59,7 @@ void BSPAlgorithm::CheckBSP(Camera* camera, Mesh* mesh) {
 	//	std::cout << "La malla NO esta del mismo lado del BSP" << std::endl;
 	//	mesh->SetCanDraw(false);
 	//}
+	node->SetCanDraw(true);
 
 	for (int i = 0; i < _planes.size(); i++) {
 		//if (mesh->GetMeshAABB().IsOnOrForwardPlan(camera->GetNear())) {
@@ -65,17 +72,23 @@ void BSPAlgorithm::CheckBSP(Camera* camera, Mesh* mesh) {
 		//else {
 		//	mesh->SetCanDraw(false);
 		//}
-	
-		if(_planes[0]->SameSideA(_aabb->GetCenter(), camera->transform.position)/* &&
-			_planes[1]->SameSide(_aabb->GetCenter(), camera->transform.position) &&
-			_planes[2]->SameSide(_aabb->GetCenter(), camera->transform.position)*/){
-			std::cout << "La malla esta del mismo lado del plano!" << std::endl;
-			mesh->SetCanDraw(true);
-		}
-		else {
-			mesh->SetCanDraw(false);
+
+		//if (node->GetVolume() == NULL) {
+		//	node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel())->UpdateAABB(node->GetVolume()->min, node->GetVolume()->max);
+		//}
+		if (node->GetVolume() != NULL) {
+			if (node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel())->IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
+				//std::cout << "Esta del mismo lado del plano y de la camara!" << std::endl;
+				node->SetCanDraw(false);
+			}
 		}
 	}
+
+	for (int j = 0; j < node->GetChildrens().size(); j++) {
+		CheckBSP(node->GetChildrens()[j]);
+	}
+
+	//Agregar chequeo de nodos hijos al BSP, llamar recursivamente a la funcion
 
 	//for (int i = 0; i < _planes.size(); i++) {
 	//	glm::vec3 directionA = glm::normalize(_aabb.GetCenter() - _planes[i]->transform.position);
@@ -102,16 +115,41 @@ void BSPAlgorithm::CheckBSP(Camera* camera, Mesh* mesh) {
 	//}
 }
 
-void BSPAlgorithm::AddPlane(Plane* plane) {
-	glm::vec3 planeNormal = glm::normalize(plane->getForwardConst());
-	Plane* bspPlane = new Plane(planeNormal, plane->getPos());
-	_planes.push_back(bspPlane);
+void BSPAlgorithm::CheckCameraWithPlanes() {
+	for (int i = 0; i < _planes.size(); i++) {
+		if (!_planes[i]->GetSide(_camera->transform.position)) //Esto tiene que ir separado del calculo del algoritmo
+			_planes[i]->Flip();
+	}
 }
 
-void SetUpPlane(Plane* plane) {
-	glm::vec3 planeNormal = glm::normalize(plane->getForwardConst());
+void BSPAlgorithm::AddPlane(Node* plane) {
+	_planeModel.push_back(plane);
+	for (int i = 0; i < _planeModel.size(); i++) {
+		glm::vec3 planeNormal = glm::normalize(_planeModel[i]->getForwardConst());
+		Plane* bspPlane = new Plane(_planeModel[i]->getPos(), planeNormal);
+		_planes.push_back(bspPlane);
+	}
+}
+
+void BSPAlgorithm::SetUpPlaneRenderer(Renderer* renderer) {
+	for (int i = 0; i < _planeModel.size(); i++) {
+		_planeModel[i]->SetRenderer(renderer);
+	}
 }
 
 void BSPAlgorithm::AddNode(Node* node) {
 	_nodes.push_back(node);
+	if (node->GetParent() != NULL) {
+		_nodes.push_back(node->GetParent());
+		//std::vector<Node*> childrens;
+	}
+	for (int i = 0; i < node->GetChildrens().size(); i++) {
+		_nodes.push_back(node->GetChildrens()[i]);
+	}
+	//_nodes.push_back(node);
+	//Desde el game llamar a AddNode y que el nodo padre se agregue a la lista junto con sus hijos para hacer el chequeo del BSP.
+}
+
+void BSPAlgorithm::AddCamera(Camera* camera) {
+	_camera = camera;
 }

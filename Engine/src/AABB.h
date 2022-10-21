@@ -21,6 +21,7 @@ namespace Engine {
 		bool IsOnBSP(std::vector<Plane*> planes, Entity2D* mesh);
 		void GenerateGlobalAABB(Entity2D* mesh);
 		AABB* GetGlobalAABB();
+		AABB* GetGlobalAABBWithMatrix(glm::mat4 matrix);
 		bool IsOnOrForwardPlan(Plane& plane);
 		bool IsOnOrForwardPlan(Plane* plane);
 		bool IsOnOrForwardPlan(Plane plane);

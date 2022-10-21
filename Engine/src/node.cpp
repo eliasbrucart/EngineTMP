@@ -3,7 +3,7 @@
 using namespace Engine;
 
 Node::Node() {
-
+	_canDraw = true;
 }
 
 Node::~Node() {
@@ -171,9 +171,26 @@ void Node::UpdateAABBchildren(Node* child) {
 }
 
 void Node::Draw(Shader& shader, Frustum& frustum) {
+	if (_canDraw) {
+		if (_meshes.size() > 0 || !_meshes.empty()) {
+			shader.Use(worldModel);
+			for (int i = 0; i < _meshes.size(); i++) {
+				_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
+				//_meshes[i].Draw(shader, frustum);
+			}
+		}
+
+		for (int i = 0; i < _children.size(); i++) {
+			//_children[i]->setWorldModelWithParentModel(worldModel);
+			_children[i]->Draw(shader, frustum);
+		}
+	}
+}
+
+void Node::DrawPlane(Shader& shader) {
 	if (_meshes.size() > 0 || !_meshes.empty()) {
 		shader.Use(worldModel);
-		for (int i = 0; i < _meshes.size(); i++){
+		for (int i = 0; i < _meshes.size(); i++) {
 			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
 			//_meshes[i].Draw(shader, frustum);
 		}
@@ -181,6 +198,14 @@ void Node::Draw(Shader& shader, Frustum& frustum) {
 
 	for (int i = 0; i < _children.size(); i++) {
 		//_children[i]->setWorldModelWithParentModel(worldModel);
-		_children[i]->Draw(shader, frustum);
+		_children[i]->DrawPlane(shader);
 	}
+}
+
+void Node::SetCanDraw(bool value) {
+	_canDraw = value;
+}
+
+bool Node::GetCanDraw() {
+	return _canDraw;
 }

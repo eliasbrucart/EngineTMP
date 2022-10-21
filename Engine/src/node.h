@@ -33,6 +33,8 @@ namespace Engine {
 
 		Renderer* _renderer;
 
+		bool _canDraw;
+
 	public:
 		Node();
 		~Node();
@@ -54,6 +56,9 @@ namespace Engine {
 		void GenerateAABB();
 		void UpdateAABBchildren(Node* child);
 		void Draw(Shader& shader, Frustum& frustum);
+		void DrawPlane(Shader& shader);
+		void SetCanDraw(bool value);
+		bool GetCanDraw();
 	};
 }
 
