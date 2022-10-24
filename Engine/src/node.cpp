@@ -209,3 +209,12 @@ void Node::SetCanDraw(bool value) {
 bool Node::GetCanDraw() {
 	return _canDraw;
 }
+
+void Node::StopDrawNodeAndChildrens(Node* node) {
+	node->SetCanDraw(false);
+	if (!node->GetChildrens().empty()) {
+		for (int i = 0; i < node->GetChildrens().size(); i++) {
+			StopDrawNodeAndChildrens(node->GetChildrens()[i]);
+		}
+	}
+}

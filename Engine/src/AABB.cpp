@@ -109,7 +109,7 @@ AABB* AABB::GetGlobalAABB() {
 	return _globalAABB;
 }
 
-AABB* AABB::GetGlobalAABBWithMatrix(glm::mat4 matrix) {
+AABB AABB::GetGlobalAABBWithMatrix(glm::mat4 matrix) {
 	glm::vec3 globalCenter{ matrix * glm::vec4(_center, 1.f) };
 
 	glm::vec3 right = matrix[0] * _extents.x;
@@ -128,9 +128,9 @@ AABB* AABB::GetGlobalAABBWithMatrix(glm::mat4 matrix) {
 		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, up)) +
 		std::abs(glm::dot(glm::vec3{ 0.f, 0.f, 1.f }, forward));
 
-	_globalAABB = new AABB(globalCenter, newIi, newIj, newIk);
+	AABB globalAABB(globalCenter, newIi, newIj, newIk);
 
-	return _globalAABB;
+	return globalAABB;
 }
 
 bool AABB::IsOnOrForwardPlan(Plane& plane) {

@@ -51,6 +51,7 @@ void BSPAlgorithm::BSP() {
 }
 
 void BSPAlgorithm::CheckBSP(Node* node) {
+	bool checkPassed = true;
 	//if (_aabb->IsOnBSP(_planes, mesh)) {
 	//	std::cout << "La malla esta del mismo lado del los tres planos del BSP!" << std::endl;
 	//	mesh->SetCanDraw(true);
@@ -59,31 +60,57 @@ void BSPAlgorithm::CheckBSP(Node* node) {
 	//	std::cout << "La malla NO esta del mismo lado del BSP" << std::endl;
 	//	mesh->SetCanDraw(false);
 	//}
-	node->SetCanDraw(true);
+	//node->SetCanDraw(true);
+
+	if (!node->GetChildrens().empty()) {
+
+		for (int i = 0; i < _planes.size(); i++) {
+
+			//if (node->GetVolume() != NULL) {
+			//	if (node->GetVolume()->IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
+			//		//std::cout << "Esta del mismo lado del plano y de la camara!" << std::endl;
+			//		//node->SetCanDraw(false);
+			//		checkPassed = false;
+			//		break;
+			//	}
+			//}
+
+			if (node->GetVolume() != NULL) {
+				if (node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel()).IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
+					//std::cout << "Esta del mismo lado del plano y de la camara!" << std::endl;
+					//node->SetCanDraw(false);
+					checkPassed = false;
+					break;
+				}
+			}
+		}
+
+		if (!checkPassed) {
+			node->SetCanDraw(false);
+			node->StopDrawNodeAndChildrens(node);
+			//llamar al chequeo que si tiene hijos, tambien pare el dibujado de los mismos
+			return;
+		}
+	}
 
 	for (int i = 0; i < _planes.size(); i++) {
-		//if (mesh->GetMeshAABB().IsOnOrForwardPlan(camera->GetNear())) {
-		//	std::cout << "La malla esta del mismo lado del plano near de la camara!" << std::endl;
-		//}
-		//if (_aabb->IsOnOrForwardPlan(_planes[i])) {
-		//	std::cout << "La malla esta del mismo lado del los tres planos del BSP!" << std::endl;
-		//	mesh->SetCanDraw(true);
-		//}
-		//else {
-		//	mesh->SetCanDraw(false);
-		//}
-
-		//if (node->GetVolume() == NULL) {
-		//	node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel())->UpdateAABB(node->GetVolume()->min, node->GetVolume()->max);
-		//}
 		if (node->GetVolume() != NULL) {
-			if (node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel())->IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
+			if (node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel()).IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
 				//std::cout << "Esta del mismo lado del plano y de la camara!" << std::endl;
-				node->SetCanDraw(false);
+				//node->SetCanDraw(false);
+				checkPassed = false;
+				break;
 			}
 		}
 	}
 
+	if (!checkPassed) {
+		node->SetCanDraw(false);
+	}
+	else {
+		node->SetCanDraw(true);
+	}
+	
 	for (int j = 0; j < node->GetChildrens().size(); j++) {
 		CheckBSP(node->GetChildrens()[j]);
 	}

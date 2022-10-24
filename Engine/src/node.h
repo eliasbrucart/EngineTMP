@@ -59,6 +59,7 @@ namespace Engine {
 		void DrawPlane(Shader& shader);
 		void SetCanDraw(bool value);
 		bool GetCanDraw();
+		void StopDrawNodeAndChildrens(Node* node);
 	};
 }
 

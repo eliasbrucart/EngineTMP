@@ -188,7 +188,7 @@ void Game::InitGame() {
 
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
-	_shape->transform.position = glm::vec3(0.0f, 0.0f, -5.0f);
+	_shape->transform.position = glm::vec3(0.0f, 0.0f, -10.0f);
 	_shape->transform.scale = glm::vec3(3.0f, 3.0f, 3.0f);
 
 	_shape2->Color(0.0f, 0.0f, 1.0f);
