@@ -60,6 +60,7 @@ namespace Engine {
 		void SetCanDraw(bool value);
 		bool GetCanDraw();
 		void StopDrawNodeAndChildrens(Node* node);
+		void BSP(vector<Plane*> planes, Camera* camera);
 	};
 }
 

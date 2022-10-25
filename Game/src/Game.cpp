@@ -449,6 +449,10 @@ void Game::UpdateGame() {
 
 	_camera->UpdateRotation();
 	_camera->SetLookAt(_camera->GetCameraFront());
+
+	_bsp->CheckCameraWithPlanes();
+	_bsp->BSP();
+
 	_camera->Draw(basicShader);
 
 	_shape->Draw();
@@ -485,17 +489,14 @@ void Game::UpdateGame() {
 
 	_sprite->DrawSprite();
 
-	_modelLeft->Draw(basicShader, camFrustum);
-	_modelRight->Draw(basicShader, camFrustum);
-	_modelForward->Draw(basicShader, camFrustum);
-	_modelMobile->Draw(basicShader, camFrustum);
-	
 	for (int i = 0; i < 3; i++) {
 		_bspPlanes[i]->DrawPlane(basicShader);
 	}
 
-	_bsp->CheckCameraWithPlanes();
-	_bsp->BSP();
+	_modelLeft->Draw(basicShader, camFrustum);
+	_modelRight->Draw(basicShader, camFrustum);
+	_modelForward->Draw(basicShader, camFrustum);
+	_modelMobile->Draw(basicShader, camFrustum);
 
 	//map->Draw();
 

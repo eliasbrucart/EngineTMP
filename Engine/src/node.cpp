@@ -26,7 +26,7 @@ void Node::SetChildren(std::vector<Node*> children) {
 	_children = children;
 }
 
-void Node::SetParent(Node* parent){
+void Node::SetParent(Node* parent) {
 	_parent = parent;
 }
 
@@ -97,7 +97,7 @@ Node* Node::GetChildrenWithName(string name) {
 
 	for (int i = 0; i < _children.size(); i++) {
 		if (_children[i]->GetName() == name) {
-			if(_children[i] != NULL)
+			if (_children[i] != NULL)
 				return _children[i];
 		}
 	}
@@ -171,19 +171,17 @@ void Node::UpdateAABBchildren(Node* child) {
 }
 
 void Node::Draw(Shader& shader, Frustum& frustum) {
-	if (_canDraw) {
-		if (_meshes.size() > 0 || !_meshes.empty()) {
-			shader.Use(worldModel);
-			for (int i = 0; i < _meshes.size(); i++) {
-				_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
-				//_meshes[i].Draw(shader, frustum);
-			}
+	if (_meshes.size() > 0 && _canDraw) {
+		//shader.Use(worldModel);
+		for (int i = 0; i < _meshes.size(); i++) {
+			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
+			//_meshes[i].Draw(shader, frustum);
 		}
+	}
 
-		for (int i = 0; i < _children.size(); i++) {
-			//_children[i]->setWorldModelWithParentModel(worldModel);
-			_children[i]->Draw(shader, frustum);
-		}
+	for (int i = 0; i < _children.size(); i++) {
+		//_children[i]->setWorldModelWithParentModel(worldModel);
+		_children[i]->Draw(shader, frustum);
 	}
 }
 
@@ -216,5 +214,26 @@ void Node::StopDrawNodeAndChildrens(Node* node) {
 		for (int i = 0; i < node->GetChildrens().size(); i++) {
 			StopDrawNodeAndChildrens(node->GetChildrens()[i]);
 		}
+	}
+}
+
+void Node::BSP(vector<Plane*> planes, Camera* camera) {
+	_canDraw = true;
+
+	if (_volume == NULL) {
+		for (int i = 0; i < _children.size(); i++) {
+			UpdateAABBchildren(_children[i]);
+		}
+	}
+
+	for (int i = 0; i < planes.size(); i++) {
+		if (_volume->GetGlobalAABBWithMatrix(worldModel).IsOnOrForwardPlan(planes[i]) != planes[i]->GetSide(camera->transform.position)) {
+			_canDraw = false;
+			break;
+		}
+	}
+
+	for (int j = 0; j < _children.size(); j++) {
+		_children[j]->BSP(planes, camera);
 	}
 }

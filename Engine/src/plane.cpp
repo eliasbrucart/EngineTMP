@@ -64,7 +64,7 @@ void Plane::Set3Points(glm::vec3 a, glm::vec3 b, glm::vec3 c) {
 
 void Plane::Flip() {
 	_normal = -_normal;
-	_distance = _distance;
+	_distance = -_distance;
 }
 
 float Plane::GetDistanceToPoint(glm::vec3 point) {
