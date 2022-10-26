@@ -111,6 +111,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 	//Importador que tiene en cuenta el pivote de rotacion de cada objeto en la escena
 	if (nameNode.find("$AssimpFbx$") == -1 && node->mNumMeshes == 0 && identMatrix == glm::mat4(1.f)) {
 		if (nameNode.find("RotationPivot") != -1 && nameNode.find("Inverse") == -1) {
+			//Obtenemos la matriz del nodo raiz de la escena y la colocamos en nuestra matriz para luego setearla
 			aiMatrix4x4 newMatrix = node->mTransformation;
 	
 			identMatrix[0][0] = (float)newMatrix.a1;
@@ -134,6 +135,9 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 		if (nameNode.find("Pivot") == std::string::npos) {
 			glm::mat4 m;
 			aiMatrix4x4 newMatrix = node->mTransformation;
+
+			//Si encontramos un nodo con el nombre Pivot, obtenemos su matriz y la multiplicamos por la matriz identidad que viene por defecto
+			//Esto es para freezar las posiciones ya que es una escena y tenemos mas de un objeto
 	
 			m[0][0] = (float)newMatrix.a1;
 			m[0][1] = (float)newMatrix.b1;
@@ -166,7 +170,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 		//	}
 		//}
 	
-	
+		//Si ya se proceso el nodo y tiene mallas para procesar, las procesamos.
 		if (node->mNumMeshes > 0) {
 		    std::vector<Mesh> nodeMeshes;
 		
@@ -174,7 +178,7 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 		        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		        nodeMeshes.push_back(ProcessMesh(mesh, scene));
 		    }
-		
+			//Agregamos la malla al vector de mallas para ese nodo.
 		    actualNode->SetMeshes(nodeMeshes);
 		
 		}
@@ -184,12 +188,14 @@ void ModelImp::ProcessNode(aiNode* node, const aiScene* scene, Node* parent, glm
 	//    //Crear un vector de node* para setear los planos;
 	//}
 
-	std::vector<Node*> childrens;
+	//std::vector<Node*> childrens;
 
+	//Recorremos los hijos del nodo que estamos procesando
 	for (int i = 0; i < node->mNumChildren; i++) {
 		ProcessNode(node->mChildren[i], scene, actualNode, identMatrix);
 	}
 
+	//Creamos la jerarquia por nodos para cada uno de ellos.
 	parent->SetChildren(actualNode);
 	actualNode->SetName(nameNode);
 	actualNode->SetParent(parent);

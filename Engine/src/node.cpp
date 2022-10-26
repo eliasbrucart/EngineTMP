@@ -46,15 +46,14 @@ void Node::SetName(string name) {
 	this->_nameNode = name;
 }
 
-void Node::SetTransformMatrix() {
+void Node::UpdateNode() {
 	if (_meshes.size() > 0) {
-		//std::cout << "Entro en meshes mayor a 0 en transform Matrix" << std::endl;
 		_volume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
 		_children[i]->setWorldModelWithParentModel(worldModel);
-		_children[i]->SetTransformMatrix();
+		_children[i]->UpdateNode();
 
 		UpdateAABBchildren(_children[i]);
 	}

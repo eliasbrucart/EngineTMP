@@ -66,11 +66,6 @@ void BSPAlgorithm::CheckBSP(Node* node) {
 			node->SetCanDraw(false);
 			break;
 		}
-
-		//if (node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel()).IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
-		//	node->SetCanDraw(false);
-		//	break;
-		//}
 	}
 	//bool checkPassed = true;
 	//

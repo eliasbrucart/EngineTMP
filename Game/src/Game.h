@@ -20,7 +20,7 @@ private:
 	Light* _dirLight = NULL;
 	Light* _spotLight = NULL;
 	Sprite* _sprite = NULL;
-	ModelImp* _model = NULL;
+	ModelInstance* _model = NULL;
 	Node* _modelLeft = NULL;
 	Node* _modelRight = NULL;
 	Node* _modelForward = NULL;

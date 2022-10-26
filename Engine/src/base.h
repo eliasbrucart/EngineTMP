@@ -17,6 +17,7 @@
 #include "xml_lib/tinyxml2.h"
 #include "light.h"
 #include "modelimp.h"
+#include "modelinstance.h"
 #include "entity.h"
 #include "plane.h"
 #include "node.h"

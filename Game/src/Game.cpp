@@ -122,22 +122,22 @@ void Game::InitGame() {
 		//_light[i]->SetQuadratic(0.032f);
 	}
 	string modelpath = "res/models/scene2/scene-planes.fbx";
-	_model = new ModelImp(modelpath, basicShader, GetRenderer());
+	_model = new ModelInstance(modelpath, basicShader, GetRenderer());
 
-	_modelLeft = _model->GetSceneNode()->GetChildrenWithName("Left");
+	_modelLeft = _model->GetRootNode()->GetChildrenWithName("Left");
 	_modelLeft->SetRenderer(GetRenderer());
-	_modelRight = _model->GetSceneNode()->GetChildrenWithName("Right");
+	_modelRight = _model->GetRootNode()->GetChildrenWithName("Right");
 	_modelRight->SetRenderer(GetRenderer());
-	_modelForward = _model->GetSceneNode()->GetChildrenWithName("Forward");
+	_modelForward = _model->GetRootNode()->GetChildrenWithName("Forward");
 	_modelForward->SetRenderer(GetRenderer());
-	_modelMobile = _model->GetSceneNode()->GetChildrenWithName("Mobile");
+	_modelMobile = _model->GetRootNode()->GetChildrenWithName("Mobile");
 	_modelMobile->SetRenderer(GetRenderer());
 
-	_bspPlanes[0] = _model->GetSceneNode()->GetChildrenWithName("bspPlane1");
+	_bspPlanes[0] = _model->GetRootNode()->GetChildrenWithName("bspPlane1");
 	_bspPlanes[0]->SetRenderer(GetRenderer());
-	_bspPlanes[1] = _model->GetSceneNode()->GetChildrenWithName("bspPlane2");
+	_bspPlanes[1] = _model->GetRootNode()->GetChildrenWithName("bspPlane2");
 	_bspPlanes[1]->SetRenderer(GetRenderer());
-	_bspPlanes[2] = _model->GetSceneNode()->GetChildrenWithName("bspPlane3");
+	_bspPlanes[2] = _model->GetRootNode()->GetChildrenWithName("bspPlane3");
 	_bspPlanes[2]->SetRenderer(GetRenderer());
 
 	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
@@ -296,14 +296,14 @@ void Game::PlayerInputs() {
 		scale.y += speed * time.GetDeltaTime();
 		scale.z += speed * time.GetDeltaTime();
 		//_shape->Scale(scale.x, scale.y, scale.z);
-		_model->ScaleModel(scale.x, scale.y, scale.z);
+		//_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 	else if (input.GetKey(KeyCode::J)) {
 		scale.x -= speed * time.GetDeltaTime();
 		scale.y -= speed * time.GetDeltaTime();
 		scale.z -= speed * time.GetDeltaTime();
 		//_shape->Scale(scale.x, scale.y, scale.z);
-		_model->ScaleModel(scale.x, scale.y, scale.z);
+		//_model->ScaleModel(scale.x, scale.y, scale.z);
 	}
 
 	else if (input.GetKey(KeyCode::N)) {
@@ -330,7 +330,7 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::Y)) {
 		rot.y += speed * time.GetDeltaTime();
 		//_modelA->RotateModelY(rot.y);
-		_model->RotateModelY(rot.y);
+		//_model->RotateModelY(rot.y);
 	}
 	else if (input.GetKey(KeyCode::Z)) {
 		//_planes[0].SetNormal(glm::vec3(0.57f, 0.0f, 0.81f));
@@ -438,13 +438,13 @@ void Game::UpdateGame() {
 	//}
 
 
-	_modelLeft->SetTransformMatrix();
-	_modelRight->SetTransformMatrix();
-	_modelForward->SetTransformMatrix();
-	_modelMobile->SetTransformMatrix();
+	_modelLeft->UpdateNode();
+	_modelRight->UpdateNode();
+	_modelForward->UpdateNode();
+	_modelMobile->UpdateNode();
 	
 	for (int i = 0; i < 3; i++) {
-		_bspPlanes[i]->SetTransformMatrix();
+		_bspPlanes[i]->UpdateNode();
 	}
 
 	_camera->UpdateRotation();

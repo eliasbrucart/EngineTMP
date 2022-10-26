@@ -45,7 +45,7 @@ namespace Engine {
 		void SetLocalBoundingVolume(AABB* localBoundingVolume);
 		void SetVolume(AABB* volume);
 		void SetName(string name);
-		void SetTransformMatrix();
+		void UpdateNode();
 		std::vector<Node*> GetChildrens();
 		Node* GetParent();
 		string GetName();

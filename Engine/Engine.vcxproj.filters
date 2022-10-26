@@ -162,6 +162,9 @@
     <ClInclude Include="src\node.h">
       <Filter>Node</Filter>
     </ClInclude>
+    <ClInclude Include="src\modelinstance.h">
+      <Filter>Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base.cpp">
@@ -247,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="src\node.cpp">
       <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modelinstance.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
