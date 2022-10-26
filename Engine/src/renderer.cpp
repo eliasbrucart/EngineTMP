@@ -305,7 +305,7 @@ void Renderer::DrawLightCube(Shader& shader, glm::mat4 model, unsigned int& vao,
 	UnbindBuffers();
 }
 
-void Renderer::DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, int verticesAmount, const void* dataVertices, int indicesAmmount, unsigned int vertexSize, unsigned int offsetOfVertex, unsigned int offsetOfNormal, unsigned int offsetOfTexture, glm::mat4 model) {
+void Renderer::DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, int verticesAmount, const void* dataVertices, int indicesAmmount, unsigned int vertexSize, unsigned int offsetOfVertex, unsigned int offsetOfNormal, unsigned int offsetOfTexture, glm::vec3 color, Material* material, glm::mat4 model) {
 	BindVAO(vao);
 	UpdateMeshBuffers(vbo, verticesAmount, dataVertices);
 	shader.Use(model);
@@ -313,6 +313,8 @@ void Renderer::DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, in
 	shader.SetMeshAttribPointers("position", 3, vertexSize, offsetOfVertex);
 	shader.SetMeshAttribPointers("aNormal", 3, vertexSize, offsetOfNormal);
 	shader.SetMeshAttribPointers("uv", 2, vertexSize, offsetOfTexture);
+	shader.SetUniformModelColor("objectColor", color);
+	material->ApplyMaterial(shader);
 	//attrib pointers si hace falta
 	//BindVAO(vao);
 	glDrawElements(GL_TRIANGLES, indicesAmmount, GL_UNSIGNED_INT, 0);

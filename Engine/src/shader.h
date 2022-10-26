@@ -28,6 +28,7 @@ namespace Engine {
 		void SetTypeOfshape(const char* name, int type);
 		void SetSamplerTexture(const char* name, int id);
 		void SetMeshAttribPointers(const char* name, unsigned int dataAmount, unsigned int vertexSize, unsigned int vertexOffset);
+		void SetUniformModelColor(const char* name, glm::vec3 color);
 		unsigned int GetMatrixAttributes(const char* name);
 		unsigned int GetID();
 	};

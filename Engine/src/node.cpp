@@ -4,6 +4,7 @@ using namespace Engine;
 
 Node::Node() {
 	_canDraw = true;
+	_material = new Material(MaterialType::lambert);
 }
 
 Node::~Node() {
@@ -16,6 +17,12 @@ Node::~Node() {
 		delete _volume;
 		_volume = NULL;
 	}
+
+	if (_material != NULL) {
+		delete _material;
+		_material = NULL;
+	}
+
 }
 
 void Node::SetChildren(Node* children) {
@@ -87,6 +94,10 @@ void Node::SetRenderer(Renderer* renderer) {
 	}
 
 	GenerateAABB();
+}
+
+void Node::SetMaterial() {
+	_material->SetMaterialType(MaterialType::gold);
 }
 
 Node* Node::GetChildrenWithName(string name) {
@@ -169,18 +180,18 @@ void Node::UpdateAABBchildren(Node* child) {
 	}
 }
 
-void Node::Draw(Shader& shader, Frustum& frustum) {
+void Node::Draw(Shader& shader) {
 	if (_meshes.size() > 0 && _canDraw) {
-		//shader.Use(worldModel);
+		shader.Use(worldModel);
 		for (int i = 0; i < _meshes.size(); i++) {
-			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
+			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), color, _material, worldModel);
 			//_meshes[i].Draw(shader, frustum);
 		}
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
 		//_children[i]->setWorldModelWithParentModel(worldModel);
-		_children[i]->Draw(shader, frustum);
+		_children[i]->Draw(shader);
 	}
 }
 
@@ -188,7 +199,7 @@ void Node::DrawPlane(Shader& shader) {
 	if (_meshes.size() > 0 || !_meshes.empty()) {
 		shader.Use(worldModel);
 		for (int i = 0; i < _meshes.size(); i++) {
-			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), worldModel);
+			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), color, _material, worldModel);
 			//_meshes[i].Draw(shader, frustum);
 		}
 	}

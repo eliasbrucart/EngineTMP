@@ -98,7 +98,7 @@ void Game::InitGame() {
 	//_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
 	//player = new Animation();
 
-	_sprite = new Sprite(true, "res/textures/container2.png", "res/textures/container2_specular.png", GetRenderer(), basicShader, MaterialType::lambertPro);
+	//_sprite = new Sprite(true, "res/textures/container2.png", "res/textures/container2_specular.png", GetRenderer(), basicShader, MaterialType::lambertPro);
 
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");
@@ -126,19 +126,26 @@ void Game::InitGame() {
 
 	_modelLeft = _model->GetRootNode()->GetChildrenWithName("Left");
 	_modelLeft->SetRenderer(GetRenderer());
+	//_modelLeft->SetMaterial();
 	_modelRight = _model->GetRootNode()->GetChildrenWithName("Right");
 	_modelRight->SetRenderer(GetRenderer());
+	//_modelRight->SetMaterial();
 	_modelForward = _model->GetRootNode()->GetChildrenWithName("Forward");
 	_modelForward->SetRenderer(GetRenderer());
+	//_modelForward->SetMaterial();
 	_modelMobile = _model->GetRootNode()->GetChildrenWithName("Mobile");
 	_modelMobile->SetRenderer(GetRenderer());
+	//_modelMobile->SetMaterial();
 
 	_bspPlanes[0] = _model->GetRootNode()->GetChildrenWithName("bspPlane1");
 	_bspPlanes[0]->SetRenderer(GetRenderer());
+	//_bspPlanes[0]->SetMaterial();
 	_bspPlanes[1] = _model->GetRootNode()->GetChildrenWithName("bspPlane2");
 	_bspPlanes[1]->SetRenderer(GetRenderer());
+	//_bspPlanes[1]->SetMaterial();
 	_bspPlanes[2] = _model->GetRootNode()->GetChildrenWithName("bspPlane3");
 	_bspPlanes[2]->SetRenderer(GetRenderer());
+	//_bspPlanes[2]->SetMaterial();
 
 	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
 	//_modelA->transform.position = glm::vec3(-0.5f, -0.5f, -1.0f);
@@ -162,7 +169,7 @@ void Game::InitGame() {
 	_shape->Init();
 	_shape2->Init();
 
-	_sprite->Init();
+	//_sprite->Init();
 
 
 	//_model->SetParent(_shape);
@@ -205,8 +212,8 @@ void Game::InitGame() {
 
 	//ahora se pueden mover las cosas estilo unity
 	//_sprite->Color(1.0f, 1.0f, 1.0f);
-	_sprite->transform.position = glm::vec3(15.0f, 0.0f, -10.0f);
-	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
+	//_sprite->transform.position = glm::vec3(15.0f, 0.0f, -10.0f);
+	//_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
 	//BSP
 	_bsp = new BSPAlgorithm();
@@ -487,16 +494,16 @@ void Game::UpdateGame() {
 	for (int i = 0; i < 4; i++)
 		_light[i]->DrawPointLight(i);
 
-	_sprite->DrawSprite();
+	//_sprite->DrawSprite();
 
 	for (int i = 0; i < 3; i++) {
 		_bspPlanes[i]->DrawPlane(basicShader);
 	}
 
-	_modelLeft->Draw(basicShader, camFrustum);
-	_modelRight->Draw(basicShader, camFrustum);
-	_modelForward->Draw(basicShader, camFrustum);
-	_modelMobile->Draw(basicShader, camFrustum);
+	_modelLeft->Draw(basicShader);
+	_modelRight->Draw(basicShader);
+	_modelForward->Draw(basicShader);
+	_modelMobile->Draw(basicShader);
 
 	//map->Draw();
 

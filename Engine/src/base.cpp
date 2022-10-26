@@ -71,7 +71,7 @@ void Base::Update(){
 	float speed = 50.0f;
 	float rotationSpeed = 100.0f; //dejamos como esta
 	while (!glfwWindowShouldClose(_window->GetWindow())){
-		_renderer->BeginFrame(1.0f,1.0f,1.0f);
+		_renderer->BeginFrame(0.0f,0.0f,0.0f);
 		//_camera->transform.position.x += speed;
 		//std::cout << _camera->transform.position.x << std::endl;
 		camFrustum = _camera->CreateFrustumFromCamera(1280.0f / 720.0f, glm::radians(45.0f), 0.1f, 100.0f);

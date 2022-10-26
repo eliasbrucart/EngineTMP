@@ -388,7 +388,7 @@ vector<Texture> ModelImp::LoadMaterialTextures(aiMaterial* mat, aiTextureType ty
 //}
 
 void ModelImp::Draw(Shader& shader, Frustum frustum) {
-	sceneNode->Draw(shader, frustum);
+	sceneNode->Draw(shader);
 	//UpdateSelfAndChild();
 	//UpdateModel();
 	//UpdateVectors();

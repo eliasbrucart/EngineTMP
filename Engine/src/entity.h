@@ -23,8 +23,8 @@ namespace Engine
 		void setRot(float x, float y, float z);
 		void setScale(glm::vec3 localScale);
 		void setScale(float x, float y, float z);
-		void setColor(glm::vec4 color);
-		void setColor(float r, float g, float b, float a);
+		void setColor(glm::vec3 color);
+		void setColor(float r, float g, float b);
 		void setWorldModelWithParentModel(glm::mat4 localModel);
 		void invertX();
 		void invertY();
@@ -33,7 +33,7 @@ namespace Engine
 
 		void UseLocalMatrix();
 
-		glm::vec4 getColor();
+		glm::vec3 getColor();
 		glm::vec3 getPos();
 		glm::vec3 getPosFromTransformMatrix();
 		glm::vec3 getRot();
@@ -88,7 +88,7 @@ namespace Engine
 		glm::mat4 localRotateZ;
 		glm::mat4 localScale;
 
-		glm::vec4 color;
+		glm::vec3 color;
 
 		unsigned int VAO, VBO, EBO, _vertices;
 

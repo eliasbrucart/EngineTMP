@@ -23,7 +23,7 @@ namespace Engine
 
 		updateModelMatrix();
 
-		setColor(glm::vec4(1.0f));
+		setColor(glm::vec3(1.0f));
 
 		useLocalMatrix = false;
 	}
@@ -251,13 +251,13 @@ namespace Engine
 	{
 		setScale(glm::vec3(x, y, z));
 	}
-	void Entity::setColor(glm::vec4 color)
+	void Entity::setColor(glm::vec3 color)
 	{
 		this->color = color;
 	}
-	void Entity::setColor(float r, float g, float b, float a)
+	void Entity::setColor(float r, float g, float b)
 	{
-		color = glm::vec4(r, g, b, a);
+		color = glm::vec3(r, g, b);
 	}
 	void Entity::setWorldModelWithParentModel(glm::mat4 parentModel)
 	{
@@ -265,7 +265,7 @@ namespace Engine
 
 		updateModelMatrix();
 	}
-	glm::vec4 Entity::getColor()
+	glm::vec3 Entity::getColor()
 	{
 		return color;
 	}

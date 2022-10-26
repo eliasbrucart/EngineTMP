@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "shader.h"
 #include "camera.h"
+#include "material.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -35,6 +36,8 @@ namespace Engine {
 
 		bool _canDraw;
 
+		Material* _material;
+
 	public:
 		Node();
 		~Node();
@@ -52,10 +55,11 @@ namespace Engine {
 		AABB* GetLocalBoundingVolume();
 		AABB* GetVolume();
 		void SetRenderer(Renderer* renderer);
+		void SetMaterial();
 		Node* GetChildrenWithName(string name);
 		void GenerateAABB();
 		void UpdateAABBchildren(Node* child);
-		void Draw(Shader& shader, Frustum& frustum);
+		void Draw(Shader& shader);
 		void DrawPlane(Shader& shader);
 		void SetCanDraw(bool value);
 		bool GetCanDraw();

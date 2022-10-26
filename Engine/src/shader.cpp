@@ -126,6 +126,11 @@ void Shader::SetMeshAttribPointers(const char* name, unsigned int dataAmount, un
 	//CreateAttribPointer(attribute, dataAmount, vertexSize, offsetOfVertex);
 }
 
+void Shader::SetUniformModelColor(const char* name, glm::vec3 color) {
+	unsigned int attribute = glGetUniformLocation(_id, name);
+	glUniform3fv(attribute, 1, glm::value_ptr(color));
+}
+
 unsigned int Shader::GetMatrixAttributes(const char* name) {
 	unsigned int matrixLoc = glGetUniformLocation(_id, name);
 	return matrixLoc;

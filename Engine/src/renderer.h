@@ -45,7 +45,7 @@ namespace Engine {
 		void DrawPointLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightColor, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic,int cantOfLights, int numberOfLight);
 		void DrawSpotLight(Shader& shader, glm::vec3 lightPos, glm::vec3 lightDir, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic, float cutOff, float outerCutOff);
 		void DrawSprite(Shader &shader, unsigned int &vao, unsigned int &vbo, float* vertices, int verticesAmount, unsigned int* indices, int indicesAmmount, glm::mat4 model, Material* material);
-		void DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, int verticesAmount, const void* dataVertices, int indicesAmmount, unsigned int vertexSize, unsigned int offsetOfVertex, unsigned int offsetOfNormal, unsigned int offsetOfTexture, glm::mat4 model);
+		void DrawMesh(Shader& shader, unsigned int& vao, unsigned int& vbo, int verticesAmount, const void* dataVertices, int indicesAmmount, unsigned int vertexSize, unsigned int offsetOfVertex, unsigned int offsetOfNormal, unsigned int offsetOfTexture, glm::vec3 color, Material* material, glm::mat4 model);
 		void DrawCamera(Shader& shader, glm::vec3 camPos, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 	};
 }
