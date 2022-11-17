@@ -8,7 +8,7 @@ Mesh::Mesh() {
 
 }
 
-Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader& shader, Renderer* renderer) : Entity2D() {
+Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Shader& shader, Renderer* renderer) : Entity() {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
@@ -79,11 +79,12 @@ bool Mesh::GetCanDraw() {
 	return _canDraw;
 }
 
+//Sin uso temporalmente
 void Mesh::Draw(Shader& shader, Frustum frustum) {
-	UpdateMatrices();
+	//UpdateMatrices();
 	//UpdateSelfAndChild();
 	//UpdateVectors();
-	UpdateModel();
+	//UpdateModel();
 	//Pasar este codigo a renderer y que reciba como parametros todos los datos necesarios
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;

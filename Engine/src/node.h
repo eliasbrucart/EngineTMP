@@ -49,12 +49,13 @@ namespace Engine {
 		void SetVolume(AABB* volume);
 		void SetName(string name);
 		void UpdateNode();
+		void UpdateNodeChildren();
 		std::vector<Node*> GetChildrens();
 		Node* GetParent();
 		string GetName();
 		AABB* GetLocalBoundingVolume();
 		AABB* GetVolume();
-		void SetRenderer(Renderer* renderer);
+		void Init(Renderer* renderer);
 		void SetMaterial();
 		Node* GetChildrenWithName(string name);
 		void GenerateAABB();
@@ -65,6 +66,8 @@ namespace Engine {
 		bool GetCanDraw();
 		void StopDrawNodeAndChildrens(Node* node);
 		void BSP(vector<Plane*> planes, Camera* camera);
+		void SetMeshPos(float x, float y, float z, int meshIndex);
+		void SetMeshScale(float x, float y, float z, int meshIndex);
 	};
 }
 

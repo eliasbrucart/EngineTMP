@@ -51,6 +51,7 @@ namespace Engine {
 		unsigned int TextureModel(const char* texture);
 
 		std::vector<Mesh> _meshes;
+		std::vector<Node*> _bspPlanes;
 
 		Node* sceneNode;
 	public:
@@ -58,13 +59,14 @@ namespace Engine {
 		ModelImp(string path, const char* modelTexture, Shader& shader, Renderer* renderer);
 		ModelImp(string path, Shader& shader, Renderer* renderer);
 		~ModelImp();
-		void MoveModel(glm::vec3 direction);
-		void ScaleModel(float x, float y, float z);
-		void RotateModelX(float x);
-		void RotateModelY(float y);
-		void RotateModelZ(float z);
+		//void MoveModel(glm::vec3 direction);
+		//void ScaleModel(float x, float y, float z);
+		//void RotateModelX(float x);
+		//void RotateModelY(float y);
+		//void RotateModelZ(float z);
 		Mesh* _rootNodeMesh;
 		Node* GetSceneNode();
+		std::vector<Node*> GetPlanesLoaded();
 		//void SetModelPath(string path);
 		//void SetTexturePath(const char* texturePath);
 		void Draw(Shader& shader, Frustum frustum);

@@ -8,6 +8,7 @@
 #include "AABB.h"
 #include "node.h"
 #include "renderer.h"
+#include "shader.h"
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -28,10 +29,11 @@ namespace Engine {
 		void CheckCameraWithPlanes();
 		void CheckBSP(Node* node);
 		//void CheckPlaneWithCamera(Camera* camera);
-		void AddPlane(Node* plane);
-		void SetUpPlaneRenderer(Renderer* renderer);
+		void AddPlane(std::vector<Node*> planes);
+		void InitPlanes(Renderer* renderer);
 		void AddNode(Node* model);
 		void AddCamera(Camera* camera);
+		void DrawPlanes(Shader& shader);
 	};
 }
 

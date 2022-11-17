@@ -1,6 +1,8 @@
 #include "Game.h"
 
 float speed = 10.0f;
+float rotSpeed = 20.0f;
+float movementSpeed = 1.5f;
 
 using namespace std;
 using namespace Engine;
@@ -95,10 +97,12 @@ Game::~Game() {
 }
 
 void Game::InitGame() {
+#pragma region INIT
+
 	//_sprite = new Sprite(true, "res/textures/container2.png", GetRenderer(), basicShader);
 	//player = new Animation();
 
-	//_sprite = new Sprite(true, "res/textures/container2.png", "res/textures/container2_specular.png", GetRenderer(), basicShader, MaterialType::lambertPro);
+	_sprite = new Sprite(true, "res/textures/container2.png", "res/textures/container2_specular.png", GetRenderer(), basicShader, MaterialType::lambertPro);
 
 	//map = new Tilemap(glm::vec2(10, 10), textureShader, "res/textures/Dungeon_Tileset.png", GetRenderer());
 	//map->LoadMap("res/tilemap/Map2.tmx");
@@ -125,51 +129,18 @@ void Game::InitGame() {
 	_model = new ModelInstance(modelpath, basicShader, GetRenderer());
 
 	_modelLeft = _model->GetRootNode()->GetChildrenWithName("Left");
-	_modelLeft->SetRenderer(GetRenderer());
-	//_modelLeft->SetMaterial();
+	_modelLeft->Init(GetRenderer());
 	_modelRight = _model->GetRootNode()->GetChildrenWithName("Right");
-	_modelRight->SetRenderer(GetRenderer());
-	//_modelRight->SetMaterial();
+	_modelRight->Init(GetRenderer());
 	_modelForward = _model->GetRootNode()->GetChildrenWithName("Forward");
-	_modelForward->SetRenderer(GetRenderer());
-	//_modelForward->SetMaterial();
+	_modelForward->Init(GetRenderer());
 	_modelMobile = _model->GetRootNode()->GetChildrenWithName("Mobile");
-	_modelMobile->SetRenderer(GetRenderer());
-	//_modelMobile->SetMaterial();
-
-	_bspPlanes[0] = _model->GetRootNode()->GetChildrenWithName("bspPlane1");
-	_bspPlanes[0]->SetRenderer(GetRenderer());
-	//_bspPlanes[0]->SetMaterial();
-	_bspPlanes[1] = _model->GetRootNode()->GetChildrenWithName("bspPlane2");
-	_bspPlanes[1]->SetRenderer(GetRenderer());
-	//_bspPlanes[1]->SetMaterial();
-	_bspPlanes[2] = _model->GetRootNode()->GetChildrenWithName("bspPlane3");
-	_bspPlanes[2]->SetRenderer(GetRenderer());
-	//_bspPlanes[2]->SetMaterial();
-
-	//_modelA = new ModelImp(modelpath, basicShader, GetRenderer());
-	//_modelA->transform.position = glm::vec3(-0.5f, -0.5f, -1.0f);
-	//_modelA->transform.scale = glm::vec3(1.0f);
-
-	//_modelA->AddChild(_model);
-
-	//_modelA->UpdateSelfAndChild();
-
-	//_model = new ModelImp("res/models/ejemplo/source/Jack Sparrow/Jack Sparrow.obj", basicShader);
-	//_model = new ModelImp("res/models/backpack/backpack.obj", "res/models/backpack2/textures/1001_metallic.jpg", basicShader);
-	//_model->SetTexturePath("res/models/backpack2/textures/1001_albedo.jpg");
-	//_model->SetShader(GetRenderer()->GetShader());
-
-	//_light[3]->transform.position = pointLightPositions[3];
-
-	//for (int i = 0; i < 3; i++) {
-	//	_light[i]->transform.position = pointLightPositions[i];
-	//}
+	_modelMobile->Init(GetRenderer());
 
 	_shape->Init();
 	_shape2->Init();
 
-	//_sprite->Init();
+	_sprite->Init();
 
 
 	//_model->SetParent(_shape);
@@ -183,23 +154,14 @@ void Game::InitGame() {
 
 	_spotLight->Init();
 	_spotLight->transform.position = glm::vec3(0.0f, 0.0f, -2.0f);
-	//_spotLight->SetDirection(_camera->GetCameraFront());
-	//_spotLight->SetAmbient(glm::vec3(0.0f));
-	//_spotLight->SetDiffuse(glm::vec3(1.0f));
-	//_spotLight->SetSpecular(glm::vec3(1.0f));
-	//_spotLight->SetConstant(1.0f);
-	//_spotLight->SetLinear(0.09f);
-	//_spotLight->SetQuadratic(0.032f);
-	//_spotLight->SetCutOff(glm::cos(glm::radians(12.5f)));
-	//_spotLight->SetOuterCutOff(glm::cos(glm::radians(15.0f)));
 
 
 	_shape->Color(1.0f, 0.0f, 0.0f);
-	_shape->transform.position = glm::vec3(0.0f, 0.0f, -10.0f);
+	_shape->transform.position = glm::vec3(0.0f, 0.0f, -20.0f);
 	_shape->transform.scale = glm::vec3(3.0f, 3.0f, 3.0f);
 
 	_shape2->Color(0.0f, 0.0f, 1.0f);
-	_shape2->transform.position = glm::vec3(-12.0f, 0.0f, -10.0f);
+	_shape2->transform.position = glm::vec3(-12.0f, 0.0f, -20.0f);
 	_shape2->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
 	//player->Init(_sprite, glm::ivec2(6,3));
@@ -212,8 +174,8 @@ void Game::InitGame() {
 
 	//ahora se pueden mover las cosas estilo unity
 	//_sprite->Color(1.0f, 1.0f, 1.0f);
-	//_sprite->transform.position = glm::vec3(15.0f, 0.0f, -10.0f);
-	//_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
+	_sprite->transform.position = glm::vec3(15.0f, 0.0f, -20.0f);
+	_sprite->transform.scale = glm::vec3(5.0f, 5.0f, 5.0f);
 
 	//BSP
 	_bsp = new BSPAlgorithm();
@@ -226,9 +188,12 @@ void Game::InitGame() {
 	_bsp->AddCamera(_camera);
 
 	//Agregar planos
-	_bsp->AddPlane(_bspPlanes[0]);
-	_bsp->AddPlane(_bspPlanes[1]);
-	_bsp->AddPlane(_bspPlanes[2]);
+	std::cout << "Get planes loaded: " << _model->GetPlanesLoaded().size() << std::endl;
+	_bsp->AddPlane(_model->GetPlanesLoaded());
+
+	_bsp->InitPlanes(GetRenderer());
+
+#pragma endregion
 }
 void Game::PlayerInputs() {
 	if (input.GetKey(KeyCode::I)) {
@@ -256,7 +221,7 @@ void Game::PlayerInputs() {
 	}
 	else if (input.GetKey(KeyCode::G)) {
 		direction.x += speed * time.GetDeltaTime();
-		_modelMobile->setPos(direction.x, direction.y, direction.z);
+		_modelMobile->SetPos(direction.x, direction.y, direction.z);
 		//_bspPlanes[0]->setPos(_bspPlanes[0]->getPos(_bspPlanes[0]->getModel() + direction.x));
 		//_model->MoveModel(direction);
 		//_modelA->Translate(direction.x, direction.y, direction.z);
@@ -267,34 +232,34 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::F)) {
 		direction.x -= speed * time.GetDeltaTime();
 		//_bspPlanes[1]->setPos(direction.x, direction.y, direction.z);
-		_modelMobile->setPos(direction.x, direction.y, direction.z);
+		_modelMobile->SetPos(direction.x, direction.y, direction.z);
 		//_modelLeft->setPos(direction);
 		//_bspPlanes[1]->setPos(_bspPlanes[1]->getPos(_bspPlanes[1]->getModel() + direction.x));
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x -= speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::T)) {
-		direction.y += speed * time.GetDeltaTime();
-		_modelMobile->setPos(direction.x, direction.y, direction.z);
+		direction.y += movementSpeed * time.GetDeltaTime();
+		_modelMobile->SetPos(direction.x, direction.y, direction.z);
 		//_bspPlanes[2]->Translate(direction.x, direction.y, direction.z);
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::C)) {
-		direction.y -= speed * time.GetDeltaTime();
-		_modelMobile->setPos(direction.x, direction.y, direction.z);
+		direction.y -= movementSpeed * time.GetDeltaTime();
+		_modelMobile->SetPos(direction.x, direction.y, direction.z);
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::K)) {
-		direction.z -= speed * time.GetDeltaTime();
-		_modelMobile->setPos(direction.x, direction.y, direction.z);
+		direction.z -= movementSpeed * time.GetDeltaTime();
+		_modelMobile->SetPos(direction.x, direction.y, direction.z);
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
 	else if (input.GetKey(KeyCode::R)) {
-		direction.z += speed * time.GetDeltaTime();
-		_modelMobile->setPos(direction.x, direction.y, direction.z);
+		direction.z += movementSpeed * time.GetDeltaTime();
+		_modelMobile->SetPos(direction.x, direction.y, direction.z);
 		//_model->MoveModel(direction);
 		//_shape->transform.position.x += speed * time.GetDeltaTime();
 	}
@@ -330,21 +295,23 @@ void Game::PlayerInputs() {
 	else if (input.GetKey(KeyCode::X)) {
 		//_planes[0].SetNormal(glm::vec3(-0.100f, 0.23f, 0.96f));
 		//_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, -1.0f));
-		//rot.x += speed * time.GetDeltaTime();
+		rot.x += rotSpeed * time.GetDeltaTime();
 		//_modelA->RotateModelX(rot.x);
-		//_model->RotateModelX(rot.x);
+		_modelMobile->SetRot(rot.x, rot.y, rot.z);
 	}
 	else if (input.GetKey(KeyCode::Y)) {
-		rot.y += speed * time.GetDeltaTime();
+		rot.y += rotSpeed * time.GetDeltaTime();
 		//_modelA->RotateModelY(rot.y);
 		//_model->RotateModelY(rot.y);
+		_modelMobile->SetRot(rot.x, rot.y, rot.z);
 	}
 	else if (input.GetKey(KeyCode::Z)) {
 		//_planes[0].SetNormal(glm::vec3(0.57f, 0.0f, 0.81f));
 		//_planes[0].SetNormal(glm::vec3(0.0f, 0.0f, 1.0f));
-		//rot.z += speed * time.GetDeltaTime();
+		rot.z += rotSpeed * time.GetDeltaTime();
 		//_modelA->RotateModelZ(rot.z);
 		//_model->RotateModelZ(rot.z);
+		_modelMobile->SetRot(rot.x, rot.y, rot.z);
 	}
 	else if (input.GetKey(KeyCode::A)) {
 		_camera->transform.position.x -= speed * time.GetDeltaTime();
@@ -450,9 +417,9 @@ void Game::UpdateGame() {
 	_modelForward->UpdateNode();
 	_modelMobile->UpdateNode();
 	
-	for (int i = 0; i < 3; i++) {
-		_bspPlanes[i]->UpdateNode();
-	}
+	//for (int i = 0; i < 3; i++) {
+	//	_bspPlanes[i]->UpdateNode();
+	//}
 
 	_camera->UpdateRotation();
 	_camera->SetLookAt(_camera->GetCameraFront());
@@ -494,16 +461,15 @@ void Game::UpdateGame() {
 	for (int i = 0; i < 4; i++)
 		_light[i]->DrawPointLight(i);
 
-	//_sprite->DrawSprite();
+	_sprite->DrawSprite();
 
-	for (int i = 0; i < 3; i++) {
-		_bspPlanes[i]->DrawPlane(basicShader);
-	}
 
 	_modelLeft->Draw(basicShader);
 	_modelRight->Draw(basicShader);
 	_modelForward->Draw(basicShader);
 	_modelMobile->Draw(basicShader);
+
+	_bsp->DrawPlanes(basicShader);
 
 	//map->Draw();
 

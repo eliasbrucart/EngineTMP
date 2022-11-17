@@ -24,7 +24,7 @@ private:
 	Node* _modelLeft = NULL;
 	Node* _modelRight = NULL;
 	Node* _modelForward = NULL;
-	Node* _modelMobile = NULL;
+	//Node* _modelMobile = NULL;
 	Node* _bspPlanes[3] = {NULL, NULL, NULL};
 	BSPAlgorithm* _bsp = NULL;
 	//Plane _planes[3];

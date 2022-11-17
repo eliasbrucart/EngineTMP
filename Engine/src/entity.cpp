@@ -21,9 +21,9 @@ namespace Engine
 		v3localRot = glm::vec3(0.0f);
 		v3localScale = glm::vec3(1.0f);
 
-		updateModelMatrix();
+		UpdateModelMatrix();
 
-		setColor(glm::vec3(1.0f));
+		SetColor(glm::vec3(1.0f));
 
 		useLocalMatrix = false;
 	}
@@ -33,14 +33,14 @@ namespace Engine
 
 	}
 
-	glm::vec3 Entity::getForward()
+	glm::vec3 Entity::GetForward()
 	{
-		glm::quat rotation = eulerToQuat(v3localRot);
+		glm::quat rotation = EulerToQuat(v3localRot);
 
-		return quatToVec(rotation, glm::vec3(0.f, 0.f, 1.f));
+		return QuatToVec(rotation, glm::vec3(0.f, 0.f, 1.f));
 	}
 
-	glm::vec3 Entity::toEulerRad(glm::quat rot)
+	glm::vec3 Entity::ToEulerRad(glm::quat rot)
 	{
 		float sqw = rot.w * rot.w;
 		float sqx = rot.x * rot.x;
@@ -57,7 +57,7 @@ namespace Engine
 			v.x = glm::pi<float>() / 2.f;
 			v.z = 0.f;
 
-			return normalizeAngles(v * 57.29578f);
+			return NormalizeAngles(v * 57.29578f);
 		}
 		if (test < -0.4995f * unit)
 		{
@@ -65,7 +65,7 @@ namespace Engine
 			v.x = -glm::pi<float>() / 2.f;
 			v.z = 0.f;
 
-			return normalizeAngles(v * 57.29578f);
+			return NormalizeAngles(v * 57.29578f);
 		}
 
 		glm::vec4 q = glm::vec4(rot.w, rot.z, rot.x, rot.y);
@@ -73,19 +73,19 @@ namespace Engine
 		v.x = asin(2.f * (q.x * q.z - q.w * q.y));
 		v.z = atan2(2.f * q.x * q.y + 2.f * q.z * q.w, 1.f - 2.f * (q.y * q.y + q.z * q.z));
 
-		return normalizeAngles(v * 57.29578f);
+		return NormalizeAngles(v * 57.29578f);
 	}
 
-	glm::vec3 Entity::normalizeAngles(glm::vec3 angles)
+	glm::vec3 Entity::NormalizeAngles(glm::vec3 angles)
 	{
-		angles.x = normalizeAngle(angles.x);
-		angles.y = normalizeAngle(angles.y);
-		angles.z = normalizeAngle(angles.z);
+		angles.x = NormalizeAngle(angles.x);
+		angles.y = NormalizeAngle(angles.y);
+		angles.z = NormalizeAngle(angles.z);
 
 		return angles;
 	}
 
-	float Entity::normalizeAngle(float angle)
+	float Entity::NormalizeAngle(float angle)
 	{
 		while (angle > 360.f)
 			angle -= 360.f;
@@ -95,9 +95,9 @@ namespace Engine
 		return angle;
 	}
 
-	glm::quat Entity::getRotationByMatrix(glm::mat4 mat)
+	glm::quat Entity::GetRotationByMatrix(glm::mat4 mat)
 	{
-		glm::vec3 s = getScale(mat);
+		glm::vec3 s = GetScale(mat);
 
 		float m00 = mat[0].x / s.x;
 		float m01 = mat[0].y / s.y;
@@ -127,7 +127,7 @@ namespace Engine
 		return q;
 	}
 
-	glm::quat Entity::eulerToQuat(glm::vec3 euler)
+	glm::quat Entity::EulerToQuat(glm::vec3 euler)
 	{
 		euler *= deg2rad;
 
@@ -146,7 +146,7 @@ namespace Engine
 		return q;
 	}
 
-	glm::vec3 Entity::quatToVec(glm::quat quat, glm::vec3 vec)
+	glm::vec3 Entity::QuatToVec(glm::quat quat, glm::vec3 vec)
 	{
 		float x2 = quat.x * 2.f;
 		float y2 = quat.y * 2.f;
@@ -168,7 +168,7 @@ namespace Engine
 		return res;
 	}
 
-	void Entity::updateModelMatrix()
+	void Entity::UpdateModelMatrix()
 	{
 		if (useLocalMatrix)
 		{
@@ -180,38 +180,38 @@ namespace Engine
 			worldModel = localTranslate * localRotateX * localRotateY * localRotateZ * localScale;
 		}
 	}
-	void Entity::setPos(glm::vec3 pos)
+	void Entity::SetPos(glm::vec3 pos)
 	{
 		v3localPos = pos;
 		localTranslate = glm::translate(glm::mat4(1.0f), v3localPos);
-		updateModelMatrix();
+		UpdateModelMatrix();
 	}
-	void Entity::setPos(float x, float y, float z)
+	void Entity::SetPos(float x, float y, float z)
 	{
-		setPos(glm::vec3(x, y, z));
+		SetPos(glm::vec3(x, y, z));
 	}
-	void Entity::setRot(glm::vec3 rot)
+	void Entity::SetRot(glm::vec3 rot)
 	{
-		setRotX(rot.x);
-		setRotY(rot.y);
-		setRotZ(rot.z);
-		updateModelMatrix();
+		SetRotX(rot.x);
+		SetRotY(rot.y);
+		SetRotZ(rot.z);
+		UpdateModelMatrix();
 	}
-	void Entity::setRotRadians(glm::vec3 rot)
+	void Entity::SetRotRadians(glm::vec3 rot)
 	{
-		setRotX(glm::radians(rot.x));
-		setRotY(glm::radians(rot.y));
-		setRotZ(glm::radians(rot.z));
-		updateModelMatrix();
+		SetRotX(glm::radians(rot.x));
+		SetRotY(glm::radians(rot.y));
+		SetRotZ(glm::radians(rot.z));
+		UpdateModelMatrix();
 	}
-	void Entity::setRot(float x, float y, float z)
+	void Entity::SetRot(float x, float y, float z)
 	{
-		setRotX(x);
-		setRotY(y);
-		setRotZ(z);
-		updateModelMatrix();
+		SetRotX(x);
+		SetRotY(y);
+		SetRotZ(z);
+		UpdateModelMatrix();
 	}
-	void Entity::setRotX(float x)
+	void Entity::SetRotX(float x)
 	{
 		v3localRot.x = x;
 		glm::vec3 axis;
@@ -221,7 +221,7 @@ namespace Engine
 
 		localRotateX = glm::rotate(glm::mat4(1.0f), x, axis);
 	}
-	void Entity::setRotY(float y)
+	void Entity::SetRotY(float y)
 	{
 		v3localRot.y = y;
 		glm::vec3 axis;
@@ -231,7 +231,7 @@ namespace Engine
 
 		localRotateY = glm::rotate(glm::mat4(1.0f), y, axis);
 	}
-	void Entity::setRotZ(float z)
+	void Entity::SetRotZ(float z)
 	{
 		v3localRot.z = z;
 		glm::vec3 axis;
@@ -241,62 +241,62 @@ namespace Engine
 
 		localRotateZ = glm::rotate(glm::mat4(1.0f), z, axis);
 	}
-	void Entity::setScale(glm::vec3 localScale)
+	void Entity::SetScale(glm::vec3 localScale)
 	{
 		v3localScale = localScale;
 		this->localScale = glm::scale(glm::mat4(1.0f), v3localScale);
-		updateModelMatrix();
+		UpdateModelMatrix();
 	}
-	void Entity::setScale(float x, float y, float z)
+	void Entity::SetScale(float x, float y, float z)
 	{
-		setScale(glm::vec3(x, y, z));
+		SetScale(glm::vec3(x, y, z));
 	}
-	void Entity::setColor(glm::vec3 color)
+	void Entity::SetColor(glm::vec3 color)
 	{
 		this->color = color;
 	}
-	void Entity::setColor(float r, float g, float b)
+	void Entity::SetColor(float r, float g, float b)
 	{
 		color = glm::vec3(r, g, b);
 	}
-	void Entity::setWorldModelWithParentModel(glm::mat4 parentModel)
+	void Entity::UpdateWorldModelMatrix(glm::mat4 parentModel)
 	{
 		this->parentModel = parentModel;
 
-		updateModelMatrix();
+		UpdateModelMatrix();
 	}
-	glm::vec3 Entity::getColor()
+	glm::vec3 Entity::GetColor()
 	{
 		return color;
 	}
-	glm::vec3 Entity::getPos()
+	glm::vec3 Entity::GetPos()
 	{
 		return v3localPos;
 		//return worldModel[3];
 	}
-	glm::vec3 Entity::getPosFromTransformMatrix()
+	glm::vec3 Entity::GetPosFromTransformMatrix()
 	{
 		return worldModel[3];
 	}
-	glm::vec3 Entity::getRot()
+	glm::vec3 Entity::GetRot()
 	{
 		return v3localRot;
 	}
-	glm::vec3 Entity::getScale()
+	glm::vec3 Entity::GetScale()
 	{
 		return v3localScale;
 	}
-	glm::vec3 Entity::getPos(glm::mat4 mat)
+	glm::vec3 Entity::GetPos(glm::mat4 mat)
 	{
 		return glm::vec3(mat[3][0], mat[3][1], mat[3][2]);
 	}
 
-	glm::vec3 Entity::getRot(glm::mat4 mat)
+	glm::vec3 Entity::GetRot(glm::mat4 mat)
 	{
-		return toEulerRad(getRotationByMatrix(mat));
+		return ToEulerRad(GetRotationByMatrix(mat));
 	}
 
-	glm::vec3 Entity::getScale(glm::mat4 mat)
+	glm::vec3 Entity::GetScale(glm::mat4 mat)
 	{
 		glm::vec4 m0 = glm::vec4(mat[0].x, mat[0].y, mat[0].z, mat[0].w);
 		glm::vec4 m1 = glm::vec4(mat[1].x, mat[1].y, mat[1].z, mat[1].w);
@@ -304,34 +304,34 @@ namespace Engine
 
 		return glm::vec3(glm::length(m0), glm::length(m1), glm::length(m2));
 	}
-	glm::mat4 Entity::getModel()
+	glm::mat4 Entity::GetModel()
 	{
 		return worldModel;
 	}
-	glm::mat4 Entity::getLocalModel()
+	glm::mat4 Entity::GetLocalModel()
 	{
 		return localModel;
 	}
-	void Entity::invertX()
+	void Entity::InvertX()
 	{
-		setRotY(-3.14169265f);
-		updateModelMatrix();
+		SetRotY(-3.14169265f);
+		UpdateModelMatrix();
 	}
-	void Entity::invertY()
+	void Entity::InvertY()
 	{
-		setRotZ(-3.14169265f);
-		updateModelMatrix();
+		SetRotZ(-3.14169265f);
+		UpdateModelMatrix();
 	}
-	void Entity::invertZ()
+	void Entity::InvertZ()
 	{
-		setRotX(-3.14169265f);
-		updateModelMatrix();
+		SetRotX(-3.14169265f);
+		UpdateModelMatrix();
 	}
-	void Entity::setMatrix(glm::mat4 mat)
+	void Entity::SetMatrix(glm::mat4 mat)
 	{
-		setPos(getPos(mat));
-		setRotRadians(getRot(mat));
-		setScale(getScale(mat));
+		SetPos(GetPos(mat));
+		SetRotRadians(GetRot(mat));
+		SetScale(GetScale(mat));
 	}
 	void Entity::UseLocalMatrix()
 	{

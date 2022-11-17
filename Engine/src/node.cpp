@@ -58,11 +58,14 @@ void Node::UpdateNode() {
 		_volume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
 	}
 
-	for (int i = 0; i < _children.size(); i++) {
-		_children[i]->setWorldModelWithParentModel(worldModel);
-		_children[i]->UpdateNode();
-
-		UpdateAABBchildren(_children[i]);
+	if (!_children.empty()) {
+		for (int i = 0; i < _children.size(); i++) {
+			_children[i]->UpdateWorldModelMatrix(worldModel);
+		
+			UpdateAABBchildren(_children[i]);
+		
+			_children[i]->UpdateNode();
+		}
 	}
 }
 
@@ -86,11 +89,11 @@ AABB* Node::GetVolume() {
 	return _volume;
 }
 
-void Node::SetRenderer(Renderer* renderer) {
+void Node::Init(Renderer* renderer) {
 	_renderer = renderer;
 	UseLocalMatrix();
 	for (int i = 0; i < _children.size(); i++) {
-		_children[i]->SetRenderer(renderer);
+		_children[i]->Init(renderer);
 	}
 
 	GenerateAABB();
@@ -190,7 +193,7 @@ void Node::Draw(Shader& shader) {
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
-		//_children[i]->setWorldModelWithParentModel(worldModel);
+		_children[i]->UpdateWorldModelMatrix(worldModel);
 		_children[i]->Draw(shader);
 	}
 }
@@ -205,7 +208,7 @@ void Node::DrawPlane(Shader& shader) {
 	}
 
 	for (int i = 0; i < _children.size(); i++) {
-		//_children[i]->setWorldModelWithParentModel(worldModel);
+		_children[i]->UpdateWorldModelMatrix(worldModel);
 		_children[i]->DrawPlane(shader);
 	}
 }
@@ -246,4 +249,16 @@ void Node::BSP(vector<Plane*> planes, Camera* camera) {
 	for (int j = 0; j < _children.size(); j++) {
 		_children[j]->BSP(planes, camera);
 	}
+}
+
+void Node::SetMeshPos(float x, float y, float z, int meshIndex) {
+	SetPos(x,y,z);
+	_meshes[meshIndex].SetPos(x,y,z);
+	UpdateNode();
+}
+
+void Node::SetMeshScale(float x, float y, float z, int meshIndex) {
+	SetScale(x,y,z);
+	_meshes[meshIndex].SetScale(x,y,z);
+	UpdateNode();
 }

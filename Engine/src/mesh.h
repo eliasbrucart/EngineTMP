@@ -5,6 +5,7 @@
 
 #include "shader.h"
 #include "entity2D.h"
+#include "entity.h"
 #include "renderer.h"
 
 #include <vector>
@@ -27,7 +28,7 @@ namespace Engine {
 		string path;
 	};
 
-	class ENGINE_API Mesh : public Entity2D {
+	class ENGINE_API Mesh : public Entity{
 	private:
 
 		unsigned int _positionAttrib;

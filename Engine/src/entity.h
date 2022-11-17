@@ -16,58 +16,58 @@ namespace Engine
 	public:
 		Entity();
 		~Entity();
-		void setPos(glm::vec3 pos);
-		void setPos(float x, float y, float z);
-		void setRot(glm::vec3 rot);
-		void setRotRadians(glm::vec3 rot);
-		void setRot(float x, float y, float z);
-		void setScale(glm::vec3 localScale);
-		void setScale(float x, float y, float z);
-		void setColor(glm::vec3 color);
-		void setColor(float r, float g, float b);
-		void setWorldModelWithParentModel(glm::mat4 localModel);
-		void invertX();
-		void invertY();
-		void invertZ();
-		void setMatrix(glm::mat4 mat);
+		void SetPos(glm::vec3 pos);
+		void SetPos(float x, float y, float z);
+		void SetRot(glm::vec3 rot);
+		void SetRotRadians(glm::vec3 rot);
+		void SetRot(float x, float y, float z);
+		void SetScale(glm::vec3 localScale);
+		void SetScale(float x, float y, float z);
+		void SetColor(glm::vec3 color);
+		void SetColor(float r, float g, float b);
+		void UpdateWorldModelMatrix(glm::mat4 localModel);
+		void InvertX();
+		void InvertY();
+		void InvertZ();
+		void SetMatrix(glm::mat4 mat);
 
 		void UseLocalMatrix();
 
-		glm::vec3 getColor();
-		glm::vec3 getPos();
-		glm::vec3 getPosFromTransformMatrix();
-		glm::vec3 getRot();
-		glm::vec3 getScale();
-		glm::mat4 getModelConst() const
+		glm::vec3 GetColor();
+		glm::vec3 GetPos();
+		glm::vec3 GetPosFromTransformMatrix();
+		glm::vec3 GetRot();
+		glm::vec3 GetScale();
+		glm::mat4 GetModelConst() const
 		{
 			return worldModel;
 		}
-		glm::vec3 getRightConst() const
+		glm::vec3 GetRightConst() const
 		{
 			return worldModel[0];
 		}
-		glm::vec3 getUpConst() const
+		glm::vec3 GetUpConst() const
 		{
 			return worldModel[1];
 		}
-		glm::vec3 getForwardConst() const
+		glm::vec3 GetForwardConst() const
 		{
 			return worldModel[2];
 		}
-		glm::vec3 getForward();
-		glm::vec3 getPos(glm::mat4 mat);
-		glm::vec3 getRot(glm::mat4 mat);
-		glm::vec3 getScale(glm::mat4 mat);
+		glm::vec3 GetForward();
+		glm::vec3 GetPos(glm::mat4 mat);
+		glm::vec3 GetRot(glm::mat4 mat);
+		glm::vec3 GetScale(glm::mat4 mat);
 
-		glm::vec3 toEulerRad(glm::quat rot);
-		glm::vec3 normalizeAngles(glm::vec3 angles);
-		float normalizeAngle(float angle);
-		glm::quat getRotationByMatrix(glm::mat4 mat);
-		glm::quat eulerToQuat(glm::vec3 euler);
-		glm::vec3 quatToVec(glm::quat quat, glm::vec3 vec);
+		glm::vec3 ToEulerRad(glm::quat rot);
+		glm::vec3 NormalizeAngles(glm::vec3 angles);
+		float NormalizeAngle(float angle);
+		glm::quat GetRotationByMatrix(glm::mat4 mat);
+		glm::quat EulerToQuat(glm::vec3 euler);
+		glm::vec3 QuatToVec(glm::quat quat, glm::vec3 vec);
 
-		glm::mat4 getModel();
-		glm::mat4 getLocalModel();
+		glm::mat4 GetModel();
+		glm::mat4 GetLocalModel();
 
 	protected:
 		renderer* _renderer;
@@ -92,11 +92,11 @@ namespace Engine
 
 		unsigned int VAO, VBO, EBO, _vertices;
 
-		void updateModelMatrix();
+		void UpdateModelMatrix();
 	private:
-		void setRotX(float x);
-		void setRotY(float y);
-		void setRotZ(float z);
+		void SetRotX(float x);
+		void SetRotY(float y);
+		void SetRotZ(float z);
 
 		bool useLocalMatrix;
 	};

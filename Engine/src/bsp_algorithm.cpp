@@ -45,24 +45,22 @@ BSPAlgorithm::~BSPAlgorithm() {
 
 void BSPAlgorithm::BSP() {
 	for (int i = 0; i < _nodes.size(); i++) {
-		//_nodes[i]->BSP(_planes, _camera);
 		CheckBSP(_nodes[i]);
-		//std::cout << "vector models get meshes: " << _models[i]->GetMeshes().size() << std::endl;
 	}
 }
 
 void BSPAlgorithm::CheckBSP(Node* node) {
-	node->SetCanDraw(true);
+	node->SetCanDraw(true); //bool para controlar el dibujado de cada nodo.
 
-	if (node->GetVolume() == NULL) {
+	if (node->GetVolume() == NULL && !node->GetChildrens().empty()) {
 		for (int i = 0; i < node->GetChildrens().size(); i++) {
-			node->UpdateAABBchildren(node->GetChildrens()[i]);
+			node->UpdateAABBchildren(node->GetChildrens()[i]); //Actualizamos el AABB de los hijos del nodo.
 		}
 	}
 
 	for (int i = 0; i < _planes.size(); i++) {
-
-		if (node->GetVolume()->GetGlobalAABBWithMatrix(node->getModel()).IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
+		//Si el AABB del nodo no esta del mismo lado que el plano con respecto a la posiciona de la camara, dejo de dibujarlo.
+		if (node->GetVolume()->GetGlobalAABBWithMatrix(node->GetModel()).IsOnOrForwardPlan(_planes[i]) != _planes[i]->GetSide(_camera->transform.position)) {
 			node->SetCanDraw(false);
 			break;
 		}
@@ -151,23 +149,23 @@ void BSPAlgorithm::CheckBSP(Node* node) {
 
 void BSPAlgorithm::CheckCameraWithPlanes() {
 	for (int i = 0; i < _planes.size(); i++) {
-		if (!_planes[i]->GetSide(_camera->transform.position)) //Esto tiene que ir separado del calculo del algoritmo
+		if (!_planes[i]->GetSide(_camera->transform.position))
 			_planes[i]->Flip();
 	}
 }
 
-void BSPAlgorithm::AddPlane(Node* plane) {
-	_planeModel.push_back(plane);
-	for (int i = 0; i < _planeModel.size(); i++) {
-		glm::vec3 planeNormal = glm::normalize(_planeModel[i]->getForwardConst());
-		Plane* bspPlane = new Plane(_planeModel[i]->getPos(), planeNormal);
+void BSPAlgorithm::AddPlane(std::vector<Node*> planes) {
+	_planeModel = planes;
+	for (int i = 0; i < planes.size(); i++) {
+		glm::vec3 planeNormal = glm::normalize(_planeModel[i]->GetForwardConst());
+		Plane* bspPlane = new Plane(_planeModel[i]->GetPos(), planeNormal);
 		_planes.push_back(bspPlane);
 	}
 }
 
-void BSPAlgorithm::SetUpPlaneRenderer(Renderer* renderer) {
+void BSPAlgorithm::InitPlanes(Renderer* renderer) {
 	for (int i = 0; i < _planeModel.size(); i++) {
-		_planeModel[i]->SetRenderer(renderer);
+		_planeModel[i]->Init(renderer);
 	}
 }
 
@@ -189,4 +187,10 @@ void BSPAlgorithm::AddNode(Node* node) {
 
 void BSPAlgorithm::AddCamera(Camera* camera) {
 	_camera = camera;
+}
+
+void BSPAlgorithm::DrawPlanes(Shader& shader) {
+	for (int i = 0; i < _planeModel.size(); i++) {
+		_planeModel[i]->DrawPlane(shader);
+	}
 }

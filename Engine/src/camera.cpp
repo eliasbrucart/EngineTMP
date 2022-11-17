@@ -200,9 +200,9 @@ Frustum Camera::CreateFrustumFromCamera(float aspect, float fovY, float zNear, f
 	_frustum.topFace = {transform.position, glm::cross(_cameraRight, frontMultFar - _cameraUp * halfVSide)};
 	_frustum.bottomFace = { transform.position, glm::cross(frontMultFar + _cameraUp * halfVSide, _cameraRight) };
 
-	std::cout << "_camera right x: " << _cameraRight.x << std::endl;
-	std::cout << "_camera right y: " << _cameraRight.y << std::endl;
-	std::cout << "_camera right z: " << _cameraRight.z << std::endl;
+	//std::cout << "_camera right x: " << _cameraRight.x << std::endl;
+	//std::cout << "_camera right y: " << _cameraRight.y << std::endl;
+	//std::cout << "_camera right z: " << _cameraRight.z << std::endl;
 
 	return _frustum;
 }

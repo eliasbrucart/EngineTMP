@@ -18,3 +18,7 @@ Node* ModelInstance::GetRootNode() {
 
 	return _rootNode;
 }
+
+std::vector<Node*> ModelInstance::GetPlanesLoaded() {
+	return _model->GetPlanesLoaded();
+}

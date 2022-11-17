@@ -18,6 +18,7 @@ namespace Engine {
 		ModelInstance(std::string path, Shader& shader, Renderer* renderer);
 		~ModelInstance();
 		Node* GetRootNode();
+		std::vector<Node*> GetPlanesLoaded();
 	};
 }
 
