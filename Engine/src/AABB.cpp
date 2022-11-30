@@ -55,6 +55,17 @@ bool AABB::IsOnFrustum(Frustum& camFrustum, Entity2D* mesh) {
 		globalAABB.IsOnOrForwardPlan(&camFrustum.farFace));
 }
 
+bool AABB::IsOnFrustum(Frustum& camFrustum, glm::mat4 worldModel) {
+	AABB actualVolume = GetGlobalAABBWithMatrix(worldModel);
+
+	return (actualVolume.IsOnOrForwardPlan(&camFrustum.leftFace) &&
+		actualVolume.IsOnOrForwardPlan(&camFrustum.rightFace) &&
+		actualVolume.IsOnOrForwardPlan(&camFrustum.topFace) &&
+		actualVolume.IsOnOrForwardPlan(&camFrustum.bottomFace) &&
+		actualVolume.IsOnOrForwardPlan(&camFrustum.nearFace) &&
+		actualVolume.IsOnOrForwardPlan(&camFrustum.farFace));
+}
+
 bool AABB::IsOnBSP(std::vector<Plane*> planes, Entity2D* mesh) {
 	glm::vec3 globalCenter{ mesh->model.trs * glm::vec4(_center, 1.0f) };
 

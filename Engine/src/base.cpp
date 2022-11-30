@@ -70,27 +70,27 @@ int Base::Init(){
 
 	InitGame();
 #pragma region Init
-	//_modelMobile->GetChildrens()[4]->SetMeshPos(0.0f, 0.0f, 1.0f, 0); //Cabeza
-	//_modelMobile->GetChildrens()[4]->SetMeshScale(3.0f, 1.0f, 3.0f, 0);
-	//_modelMobile->GetChildrens()[1]->SetMeshPos(0.0f, 0.0f, -2.5f, 0); //Cadera
-	//_modelMobile->GetChildrens()[3]->SetMeshPos(0.0f, 0.0f, -1.0f, 0); //Torzo
-	//_modelMobile->GetChildrens()[3]->SetMeshScale(0.3f, 0.4f, 1.0f, 0);
-	////
-	//_modelMobile->GetChildrens()[5]->SetMeshPos(0.0f, -1.4f, -1.0f, 0); //Brazo izquiedo
-	//_modelMobile->GetChildrens()[5]->SetMeshScale(0.6f, 1.9f, 0.6f, 0);
-	//_modelMobile->GetChildrens()[2]->SetMeshPos(0.0f, 1.5f, -1.0f, 0); //Brazo derecho
+	_modelMobile->GetChildrens()[4]->SetMeshPos(0.0f, 0.0f, 1.0f, 0); //Cabeza
+	_modelMobile->GetChildrens()[4]->SetMeshScale(3.0f, 1.0f, 3.0f, 0);
+	_modelMobile->GetChildrens()[1]->SetMeshPos(0.0f, 0.0f, -2.5f, 0); //Cadera
+	_modelMobile->GetChildrens()[3]->SetMeshPos(0.0f, 0.0f, -1.0f, 0); //Torzo
+	_modelMobile->GetChildrens()[3]->SetMeshScale(0.3f, 0.4f, 1.0f, 0);
 	//
-	//_modelMobile->GetChildrens()[0]->SetMeshPos(0.0f, 3.0f, -1.0f, 0); //Mano derecha
-	//_modelMobile->GetChildrens()[6]->SetMeshPos(0.0f, -3.0f, -1.0f, 0); //Mano izquierda
-	//_modelMobile->GetChildrens()[6]->SetMeshScale(1.01f, 1.0f, 0.85f, 0);
+	_modelMobile->GetChildrens()[5]->SetMeshPos(0.0f, -1.4f, -1.0f, 0); //Brazo izquiedo
+	_modelMobile->GetChildrens()[5]->SetMeshScale(0.6f, 1.9f, 0.6f, 0);
+	_modelMobile->GetChildrens()[2]->SetMeshPos(0.0f, 1.5f, -1.0f, 0); //Brazo derecho
+	
+	_modelMobile->GetChildrens()[0]->SetMeshPos(0.0f, 3.0f, -1.0f, 0); //Mano derecha
+	_modelMobile->GetChildrens()[6]->SetMeshPos(0.0f, -3.0f, -1.0f, 0); //Mano izquierda
+	_modelMobile->GetChildrens()[6]->SetMeshScale(1.01f, 1.0f, 0.85f, 0);
+	
+	_modelMobile->GetChildrens()[8]->SetMeshPos(0.0f, 0.7f, -3.7f, 0); //Pie derecho
+	_modelMobile->GetChildrens()[8]->SetMeshScale(0.5f, 0.5f, 1.20f, 0);
+	_modelMobile->GetChildrens()[7]->SetMeshPos(0.0f, -0.7f, -3.7f, 0); //Pie izquierdo
+	_modelMobile->GetChildrens()[7]->SetMeshScale(0.5f, 0.5f, 1.0f, 0);
 	//
-	//_modelMobile->GetChildrens()[8]->SetMeshPos(0.0f, 0.7f, -3.7f, 0); //Pie derecho
-	//_modelMobile->GetChildrens()[8]->SetMeshScale(0.5f, 0.5f, 1.20f, 0);
-	//_modelMobile->GetChildrens()[7]->SetMeshPos(0.0f, -0.7f, -3.7f, 0); //Pie izquierdo
-	//_modelMobile->GetChildrens()[7]->SetMeshScale(0.5f, 0.5f, 1.0f, 0);
+	_modelMobile->SetRotRadians(glm::vec3(270.0f, 0.0f, 0.0f));
 	//
-	//_modelMobile->SetRotRadians(glm::vec3(270.0f, 0.0f, 0.0f));
-
 	//_modelMobile->GenerateAABB();
 #pragma endregion
 }
@@ -102,8 +102,8 @@ void Base::Update(){
 		_renderer->BeginFrame(0.0f,0.0f,0.0f);
 		//_camera->transform.position.x += speed;
 		//std::cout << _camera->transform.position.x << std::endl;
-		camFrustum = _camera->CreateFrustumFromCamera(1280.0f / 720.0f, glm::radians(45.0f), 0.1f, 100.0f);
 		UpdateGame();
+		camFrustum = _camera->CreateFrustumFromCamera(1280.0f / 720.0f, glm::radians(35.0f), 0.1f, 50.0f);
 		time.CalculateFPS();
 		time.Tick();
 		_renderer->EndFrame(_window->GetWindow());

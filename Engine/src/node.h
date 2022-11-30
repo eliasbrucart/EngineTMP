@@ -60,7 +60,7 @@ namespace Engine {
 		Node* GetChildrenWithName(string name);
 		void GenerateAABB();
 		void UpdateAABBchildren(Node* child);
-		void Draw(Shader& shader);
+		void Draw(Shader& shader, Frustum frustum);
 		void DrawPlane(Shader& shader);
 		void SetCanDraw(bool value);
 		bool GetCanDraw();
@@ -68,6 +68,7 @@ namespace Engine {
 		void BSP(vector<Plane*> planes, Camera* camera);
 		void SetMeshPos(float x, float y, float z, int meshIndex);
 		void SetMeshScale(float x, float y, float z, int meshIndex);
+		void IsOnFrustum(Frustum& frustum);
 	};
 }
 

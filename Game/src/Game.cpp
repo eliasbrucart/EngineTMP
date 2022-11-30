@@ -411,12 +411,11 @@ void Game::UpdateGame() {
 	//	child->setRotRadians(child->getRot());
 	//}
 
-
 	_modelLeft->UpdateNode();
 	_modelRight->UpdateNode();
 	_modelForward->UpdateNode();
 	_modelMobile->UpdateNode();
-	
+
 	//for (int i = 0; i < 3; i++) {
 	//	_bspPlanes[i]->UpdateNode();
 	//}
@@ -424,8 +423,8 @@ void Game::UpdateGame() {
 	_camera->UpdateRotation();
 	_camera->SetLookAt(_camera->GetCameraFront());
 
-	_bsp->CheckCameraWithPlanes();
-	_bsp->BSP();
+	//_bsp->CheckCameraWithPlanes();
+	//_bsp->BSP();
 
 	_camera->Draw(basicShader);
 
@@ -439,6 +438,11 @@ void Game::UpdateGame() {
 	//Directional light
 	_dirLight->DrawDirectionalLight();
 	_spotLight->DrawSpotLight();
+
+	//_modelMobile->IsOnFrustum(camFrustum);
+	//_modelLeft->IsOnFrustum(camFrustum);
+	//_modelRight->IsOnFrustum(camFrustum);
+	//_modelForward->IsOnFrustum(camFrustum);
 
 	//_planes[0] = _camera->GetFar();
 	//_planes[1] = _camera->GetRight();
@@ -464,10 +468,10 @@ void Game::UpdateGame() {
 	_sprite->DrawSprite();
 
 
-	_modelLeft->Draw(basicShader);
-	_modelRight->Draw(basicShader);
-	_modelForward->Draw(basicShader);
-	_modelMobile->Draw(basicShader);
+	_modelLeft->Draw(basicShader, camFrustum);
+	_modelRight->Draw(basicShader, camFrustum);
+	_modelForward->Draw(basicShader, camFrustum);
+	_modelMobile->Draw(basicShader, camFrustum);
 
 	_bsp->DrawPlanes(basicShader);
 

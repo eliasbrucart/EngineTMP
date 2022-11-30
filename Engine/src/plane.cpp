@@ -21,7 +21,7 @@ Plane::Plane(const glm::vec3& p1, const glm::vec3& normal) : Entity() {
 //	_normal = glm::normalize(normal);
 //	_distance = -glm::dot(normal, point);
 //}
-//
+
 Plane::Plane(glm::vec3 a, glm::vec3 b, glm::vec3 c) : Entity() {
 	_normal = glm::normalize(glm::cross(b - a, c - a));
 	_distance = -glm::dot(_normal, a);

@@ -183,8 +183,8 @@ void Node::UpdateAABBchildren(Node* child) {
 	}
 }
 
-void Node::Draw(Shader& shader) {
-	if (_meshes.size() > 0 && _canDraw) {
+void Node::Draw(Shader& shader, Frustum frustum) {
+	if (_meshes.size() > 0 && _volume->IsOnFrustum(frustum, worldModel)) {
 		shader.Use(worldModel);
 		for (int i = 0; i < _meshes.size(); i++) {
 			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), color, _material, worldModel);
@@ -194,7 +194,7 @@ void Node::Draw(Shader& shader) {
 
 	for (int i = 0; i < _children.size(); i++) {
 		_children[i]->UpdateWorldModelMatrix(worldModel);
-		_children[i]->Draw(shader);
+		_children[i]->Draw(shader, frustum);
 	}
 }
 
@@ -261,4 +261,11 @@ void Node::SetMeshScale(float x, float y, float z, int meshIndex) {
 	SetScale(x,y,z);
 	_meshes[meshIndex].SetScale(x,y,z);
 	UpdateNode();
+}
+
+void Node::IsOnFrustum(Frustum& frustum) {
+	if (_volume->IsOnFrustum(frustum, worldModel))
+		_canDraw = true;
+	else
+		_canDraw = false;
 }
