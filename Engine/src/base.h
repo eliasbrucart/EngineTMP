@@ -36,7 +36,6 @@ namespace Engine {
 		Renderer* GetRenderer();
 		Window* GetWindow();
 		CollisionManager* collisionmanager;
-		Frustum camFrustum;
 		Node* _modelMobile = NULL;
 
 		Time time;

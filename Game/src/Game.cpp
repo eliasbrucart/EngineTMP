@@ -1,8 +1,8 @@
 #include "Game.h"
 
 float speed = 10.0f;
-float rotSpeed = 20.0f;
-float movementSpeed = 1.5f;
+float rotSpeed = 200.0f;
+float movementSpeed = 20.0f;
 
 using namespace std;
 using namespace Engine;
@@ -14,7 +14,7 @@ glm::vec3 pointLightPositions[4] = {
 		glm::vec3(15.0f, 0.05f, -2.0f)
 };
 
-float rotationSpeed = 100.0f; //dejamos como esta
+float rotationSpeed = 20.0f; //dejamos como esta
 
 glm::vec3 direction = glm::vec3(0.0f);
 glm::vec3 scale = glm::vec3(0.0f);
@@ -129,13 +129,13 @@ void Game::InitGame() {
 	_model = new ModelInstance(modelpath, basicShader, GetRenderer());
 
 	_modelLeft = _model->GetRootNode()->GetChildrenWithName("Left");
-	_modelLeft->Init(GetRenderer());
+	_modelLeft->Init(GetRenderer(), basicShader);
 	_modelRight = _model->GetRootNode()->GetChildrenWithName("Right");
-	_modelRight->Init(GetRenderer());
+	_modelRight->Init(GetRenderer(), basicShader);
 	_modelForward = _model->GetRootNode()->GetChildrenWithName("Forward");
-	_modelForward->Init(GetRenderer());
+	_modelForward->Init(GetRenderer(), basicShader);
 	_modelMobile = _model->GetRootNode()->GetChildrenWithName("Mobile");
-	_modelMobile->Init(GetRenderer());
+	_modelMobile->Init(GetRenderer(), basicShader);
 
 	_shape->Init();
 	_shape2->Init();
@@ -383,6 +383,8 @@ void Game::UpdateGame() {
 
 	PlayerInputs();
 
+	camFrustum = _camera->CreateFrustumFromCamera(1280.0f / 720.0f, glm::radians(43.0f), 0.1f, 100.0f);
+
 	//if (!player->GetCurrentAnimation().loop && player->GetCurrentAnimation().hasEnded) {
 	//	player->SetAnimation(2);
 	//}
@@ -411,10 +413,10 @@ void Game::UpdateGame() {
 	//	child->setRotRadians(child->getRot());
 	//}
 
-	_modelLeft->UpdateNode();
-	_modelRight->UpdateNode();
-	_modelForward->UpdateNode();
-	_modelMobile->UpdateNode();
+	_modelLeft->UpdateNode(camFrustum);
+	_modelRight->UpdateNode(camFrustum);
+	_modelForward->UpdateNode(camFrustum);
+	_modelMobile->UpdateNode(camFrustum);
 
 	//for (int i = 0; i < 3; i++) {
 	//	_bspPlanes[i]->UpdateNode();
@@ -468,10 +470,10 @@ void Game::UpdateGame() {
 	_sprite->DrawSprite();
 
 
-	_modelLeft->Draw(basicShader, camFrustum);
-	_modelRight->Draw(basicShader, camFrustum);
-	_modelForward->Draw(basicShader, camFrustum);
-	_modelMobile->Draw(basicShader, camFrustum);
+	//_modelLeft->Draw(basicShader);
+	//_modelRight->Draw(basicShader);
+	//_modelForward->Draw(basicShader);
+	//_modelMobile->Draw(basicShader);
 
 	_bsp->DrawPlanes(basicShader);
 

@@ -27,6 +27,7 @@ private:
 	//Node* _modelMobile = NULL;
 	Node* _bspPlanes[3] = {NULL, NULL, NULL};
 	BSPAlgorithm* _bsp = NULL;
+	Frustum camFrustum;
 	//Plane _planes[3];
 	//ModelImp* _modelA = NULL;
 	//Animation* player = NULL;

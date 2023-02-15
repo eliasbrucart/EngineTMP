@@ -7,7 +7,6 @@
 #include "glm.hpp"
 #include "renderer.h"
 #include "shader.h"
-#include "camera.h"
 #include "material.h"
 #include <string>
 #include <vector>
@@ -33,11 +32,18 @@ namespace Engine {
 		AABB* _volume;
 
 		Renderer* _renderer;
+		Shader _shader;
 
 		bool _canDraw;
 
 		Material* _material;
 
+		int _totalNodes;
+		int _displayNodes;
+		int flag;
+		bool yaConto;
+
+		std::vector<Node*> _nodesInCamera;
 	public:
 		Node();
 		~Node();
@@ -49,6 +55,7 @@ namespace Engine {
 		void SetVolume(AABB* volume);
 		void SetName(string name);
 		void UpdateNode();
+		void UpdateNode(Frustum& frustum);
 		void UpdateNodeChildren();
 		std::vector<Node*> GetChildrens();
 		Node* GetParent();
@@ -56,11 +63,12 @@ namespace Engine {
 		AABB* GetLocalBoundingVolume();
 		AABB* GetVolume();
 		void Init(Renderer* renderer);
+		void Init(Renderer* renderer, Shader& shader);
 		void SetMaterial();
 		Node* GetChildrenWithName(string name);
 		void GenerateAABB();
 		void UpdateAABBchildren(Node* child);
-		void Draw(Shader& shader, Frustum frustum);
+		void Draw(Shader& shader);
 		void DrawPlane(Shader& shader);
 		void SetCanDraw(bool value);
 		bool GetCanDraw();
@@ -68,7 +76,6 @@ namespace Engine {
 		void BSP(vector<Plane*> planes, Camera* camera);
 		void SetMeshPos(float x, float y, float z, int meshIndex);
 		void SetMeshScale(float x, float y, float z, int meshIndex);
-		void IsOnFrustum(Frustum& frustum);
 	};
 }
 

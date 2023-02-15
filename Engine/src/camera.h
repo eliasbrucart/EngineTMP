@@ -1,5 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+#include <iostream>
+#include <algorithm>
 #include "export.h"
 #include "renderer.h"
 #include "shader.h"
@@ -32,6 +34,10 @@ namespace Engine {
 		Plane nearFace;
 	};
 
+	//Vector de string para almacenar los nombres de los nodos y asi comprobar por nombre si fueron agregados o no
+	static std::vector<std::string> _nodesInFrustum;
+	static int counterNodes = 0;
+
 	class ENGINE_API Camera : public Entity2D{
 	private:
 		Renderer* _renderer;
@@ -48,6 +54,7 @@ namespace Engine {
 		float _rotationAngle;
 		glm::vec3 _worldUp;
 		Frustum _frustum;
+		//static std::vector<Node*> _nodesInCamera;
 	public:
 		glm::vec3 _cameraFront;
 		glm::vec3 _cameraUp;
@@ -81,6 +88,10 @@ namespace Engine {
 		Plane GetRight();
 		Plane GetFar();
 		void Draw(Shader& shader);
+		static void CountNodesInFrustum(string nameNode);
+		//static void AddNodesToCounter(Node* node);
+		static void RemoveNodesInCounter(string nameNode);
+		//static void RemoveNodesToCounter(Node* node);
 	};
 
 }

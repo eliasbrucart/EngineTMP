@@ -5,6 +5,7 @@
 #include "bounding_volume.h"
 #include "plane.h"
 #include "entity2D.h"
+//No incluir node aca, porque se rompe todo
 
 namespace Engine {
 	class ENGINE_API AABB : public BoundingVolume {

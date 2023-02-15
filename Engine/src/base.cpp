@@ -103,7 +103,14 @@ void Base::Update(){
 		//_camera->transform.position.x += speed;
 		//std::cout << _camera->transform.position.x << std::endl;
 		UpdateGame();
-		camFrustum = _camera->CreateFrustumFromCamera(1280.0f / 720.0f, glm::radians(35.0f), 0.1f, 50.0f);
+		if (_modelMobile->GetChildrens()[0]->GetCanDraw()) {
+			_modelMobile->GetChildrens()[2]->SetCanDraw(true);
+			_modelMobile->GetChildrens()[3]->SetCanDraw(true);
+		}
+		else if (_modelMobile->GetChildrens()[6]->GetCanDraw()) {
+			_modelMobile->GetChildrens()[5]->SetCanDraw(true);
+			_modelMobile->GetChildrens()[3]->SetCanDraw(true);
+		}
 		time.CalculateFPS();
 		time.Tick();
 		_renderer->EndFrame(_window->GetWindow());

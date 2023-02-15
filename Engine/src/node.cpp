@@ -5,6 +5,9 @@ using namespace Engine;
 Node::Node() {
 	_canDraw = true;
 	_material = new Material(MaterialType::lambert);
+	flag = 0;
+	_canDraw = false;
+	yaConto = false;
 }
 
 Node::~Node() {
@@ -69,6 +72,67 @@ void Node::UpdateNode() {
 	}
 }
 
+void Node::UpdateNode(Frustum& frustum) {
+	//std::cout << "display nodes: " << _displayNodes << std::endl;
+	//std::cout << "total nodes: " << _totalNodes << std::endl;
+
+	//std::cout << "flag: " << flag << std::endl;
+
+	_canDraw = false;
+	flag = 1;
+
+	//std::cout << "nodes in frustum camera: " << _nodesInCamera.size() << std::endl;
+
+	if (_meshes.size() > 0) {
+		_volume->UpdateAABB(_localBoundingVolume->min, _localBoundingVolume->max);
+	}
+
+	if (!_children.empty()) {
+		for (int i = 0; i < _children.size(); i++) {
+			if (_children[i] != NULL) {
+				_children[i]->UpdateWorldModelMatrix(worldModel);
+				_children[i]->UpdateNode(frustum);
+				if (_children[i]->_canDraw && flag != 0) {
+					_canDraw = true;
+					Draw(_shader);
+					flag = 0;
+				}
+				else {
+					_canDraw = false;
+					flag = 1;
+					//Camera::RemoveNodesInCounter();
+					//if (_displayNodes > 0)
+					//	_displayNodes--;
+				}
+			}
+		}
+	}
+
+	if (_meshes.size() > 0 && _volume->IsOnFrustum(frustum, worldModel) && flag != 0) {
+		_canDraw = true;
+		Draw(_shader);
+		flag = 0;
+	}
+	else{
+		_canDraw = false;
+		flag = 1;
+		Camera::RemoveNodesInCounter(_nameNode);
+		//if (_displayNodes > 0) {
+		//	_displayNodes--;
+		//}
+		yaConto = false;
+	}
+
+	if (_canDraw && flag == 0 && !yaConto) {
+		//_displayNodes++;
+		Camera::CountNodesInFrustum(_nameNode);
+		yaConto = true;
+	}
+	else {
+		return;
+	}
+}
+
 std::vector<Node*> Node::GetChildrens() {
 	return _children;
 }
@@ -94,9 +158,24 @@ void Node::Init(Renderer* renderer) {
 	UseLocalMatrix();
 	for (int i = 0; i < _children.size(); i++) {
 		_children[i]->Init(renderer);
+		_totalNodes++;
 	}
 
 	GenerateAABB();
+	_totalNodes++;
+}
+
+void Node::Init(Renderer* renderer, Shader& shader) {
+	_renderer = renderer;
+	_shader = shader;
+	UseLocalMatrix();
+	for (int i = 0; i < _children.size(); i++) {
+		_children[i]->Init(renderer, shader);
+		_totalNodes++;
+	}
+
+	GenerateAABB();
+	_totalNodes++;
 }
 
 void Node::SetMaterial() {
@@ -183,18 +262,20 @@ void Node::UpdateAABBchildren(Node* child) {
 	}
 }
 
-void Node::Draw(Shader& shader, Frustum frustum) {
-	if (_meshes.size() > 0 && _volume->IsOnFrustum(frustum, worldModel)) {
-		shader.Use(worldModel);
-		for (int i = 0; i < _meshes.size(); i++) {
-			_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), color, _material, worldModel);
-			//_meshes[i].Draw(shader, frustum);
+void Node::Draw(Shader& shader) {
+	if (_canDraw) {
+		if (_meshes.size() > 0) {
+			shader.Use(worldModel);
+			for (int i = 0; i < _meshes.size(); i++) {
+				_renderer->DrawMesh(shader, _meshes[i]._vao, _meshes[i]._vbo, _meshes[i].vertices.size() * sizeof(Vertex), &_meshes[i].vertices[0], _meshes[i].indices.size(), sizeof(Vertex), 0, offsetof(Vertex, Normal), offsetof(Vertex, TexCoords), color, _material, worldModel);
+				//_meshes[i].Draw(shader, frustum);
+			}
 		}
-	}
 
-	for (int i = 0; i < _children.size(); i++) {
-		_children[i]->UpdateWorldModelMatrix(worldModel);
-		_children[i]->Draw(shader, frustum);
+		//for (int i = 0; i < _children.size(); i++) {
+		//	_children[i]->UpdateWorldModelMatrix(worldModel);
+		//	_children[i]->Draw(shader);
+		//}
 	}
 }
 
@@ -261,11 +342,4 @@ void Node::SetMeshScale(float x, float y, float z, int meshIndex) {
 	SetScale(x,y,z);
 	_meshes[meshIndex].SetScale(x,y,z);
 	UpdateNode();
-}
-
-void Node::IsOnFrustum(Frustum& frustum) {
-	if (_volume->IsOnFrustum(frustum, worldModel))
-		_canDraw = true;
-	else
-		_canDraw = false;
 }
